@@ -1,4 +1,4 @@
-import 'package:ai_tutor_quiz/presentation/screens/main_tutor_quiz/home_page.dart';
+import 'package:ai_tutor_quiz/presentation/pages/screens/main_tutor_quiz/home_page.dart';
 import 'package:flutter/material.dart';
 
 void main() {
