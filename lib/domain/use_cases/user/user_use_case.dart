@@ -1,10 +1,14 @@
 import 'package:ai_tutor_quiz/domain/entities/entities.dart';
 
-class UserUseCase {
-  final UserGateway userGateway;
-  UserUseCase({required this.userGateway});
+import '../../repositories/repositories.dart';
+import '../base_usecase.dart';
 
-  Future<User> getUser() async {
-    return await userGateway.getUser();
+class UserUseCase extends BaseUseCase<User, String> {
+  final UserRepository _userRepository;
+  UserUseCase(this._userRepository);
+
+  @override
+  Future<User> call({String? params}) {
+    return _userRepository.getUser(userId: params!);
   }
 }
