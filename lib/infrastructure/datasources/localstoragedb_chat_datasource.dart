@@ -1,11 +1,9 @@
 import 'dart:io';
 
-import 'package:ai_tutor_quiz/domain/entities/chat/message.dart';
-import 'package:ai_tutor_quiz/domain/entities/chat/topic.dart';
-import 'package:google_generative_ai/google_generative_ai.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 
+import 'package:ai_tutor_quiz/domain/entities/entities.dart';
 import '../../domain/datasources/datasources.dart';
 
 class LocalStorageDbChatDatasource
@@ -13,9 +11,7 @@ class LocalStorageDbChatDatasource
   // MessageDatasource
   @override
   Future<Message?> getMessage(
-      {required String prompt,
-      required String? imgUrl,
-      required List<Content> history}) {
+      {required String prompt, required String? imgUrl, required Topic topic}) {
     throw UnimplementedError();
   }
 

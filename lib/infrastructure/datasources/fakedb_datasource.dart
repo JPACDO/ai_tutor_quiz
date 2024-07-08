@@ -4,7 +4,6 @@ import 'package:ai_tutor_quiz/domain/entities/chat/message.dart';
 
 import 'package:ai_tutor_quiz/domain/entities/chat/topic.dart';
 import 'package:ai_tutor_quiz/infrastructure/datasources/datasources.dart';
-import 'package:google_generative_ai/google_generative_ai.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -104,9 +103,7 @@ class FakeDbDatasource extends LocalStorageDbChatDatasource {
 
   @override
   Future<Message?> getMessage(
-      {required String prompt,
-      required String? imgUrl,
-      List<Content>? history}) {
+      {required String prompt, required String? imgUrl, Topic? topic}) {
     throw UnimplementedError();
   }
 

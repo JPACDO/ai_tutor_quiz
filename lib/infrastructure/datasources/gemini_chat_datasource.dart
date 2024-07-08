@@ -28,9 +28,17 @@ class GeminiChatDatasource extends MessageDatasource {
   Future<Message?> getMessage(
       {required String prompt,
       required String? imgUrl,
-      required List<Content> history}) async {
+      required Topic topic}) async {
     if (imgUrl == null) {
       // return await getSimpleResponseForText(prompt);
+
+      List<Content> history = topic.messages.isEmpty
+          ? []
+          : topic.messages
+              .map((e) => (e!.sender == SenderType.user)
+                  ? Content.text(e.content)
+                  : Content.model([TextPart(e.content)]))
+              .toList();
       return await getSimpleResponseStream(prompt, history);
     }
 
@@ -51,8 +59,8 @@ class GeminiChatDatasource extends MessageDatasource {
             'The Json values must be understandable to someone who speaks Spanish. ';
     // 'The values of the Json must be in Spanish. ';
     String mainPrompt =
-        // 'You are a virtual tutor who helps me to study.I would like you to answer and explain me to the following question : $entradaDeTexto. \n $formato';
-        'You are a virtual tutor who helps me to study.I would like you to answer  me to the following question : $entradaDeTexto. The reply  must be understandable to someone who speaks Spanish. ';
+        'You are a virtual tutor who helps me to study.I would like you to answer and explain me to the following question : $entradaDeTexto. \n $formato';
+    // 'You are a virtual tutor who helps me to study.I would like you to answer  me to the following question : $entradaDeTexto. The reply  must be understandable to someone who speaks Spanish. ';
     // final mainText = TextPart(mainPrompt);
     // final additionalTextParts = [formato].map((t) => TextPart(t)).join("\n");
 
@@ -67,13 +75,13 @@ class GeminiChatDatasource extends MessageDatasource {
       if (response.text == null) return null;
       print(response.text);
 
-      // final String? jsonExtractor = extraerJSON(response.text!);
-      // print("NUEVO JSON");
-      // print(jsonExtractor);
-      // if (jsonExtractor == null) return null;
+      final String? jsonExtractor = extraerJSON(response.text!);
+      print("NUEVO JSON");
+      print(jsonExtractor);
+      if (jsonExtractor == null) return null;
 
-      final String jsonExtractor =
-          '{"responseData":"${response.text!.replaceAll("\"", "\\\"").replaceAll("\n", "\\n")}", "suggestions": [], "resumenQuestion": "", "resumenAnswer": ""}';
+      // final String jsonExtractor =
+      //     '{"responseData":"${response.text!.replaceAll("\"", "\\\"").replaceAll("\n", "\\n")}", "suggestions": [], "resumenQuestion": "", "resumenAnswer": ""}';
 
       final geminiMsgResponse = geminiMsgResponseFromJson(jsonExtractor);
 
@@ -94,14 +102,21 @@ class GeminiChatDatasource extends MessageDatasource {
     ]);
     var content = Content.text(entradaDeTexto);
     var response = await chat.sendMessage(content);
+    try {
+      print(response.text);
+      if (response.text == null) return null;
 
-    print(response.text);
-    final String jsonExtractor =
-        '{"responseData":"${response.text!.replaceAll("\"", "\\\"").replaceAll("\n", "\\n")}", "suggestions": [], "resumenQuestion": "", "resumenAnswer": ""}';
+      final String jsonExtractor =
+          '{"responseData":"${response.text!.replaceAll("\"", "\\\"").replaceAll("\n", "\\n")}", "suggestions": [], "resumenQuestion": "", "resumenAnswer": ""}';
 
-    final geminiMsgResponse = geminiMsgResponseFromJson(jsonExtractor);
+      final geminiMsgResponse = geminiMsgResponseFromJson(jsonExtractor);
 
-    return geminiMsgResponse.toDomain();
+      return geminiMsgResponse.toDomain();
+    } catch (e) {
+      print('ERROR RESPONSE:');
+      print(e);
+      return null;
+    }
   }
 
   Future<Message?> comparateImages(

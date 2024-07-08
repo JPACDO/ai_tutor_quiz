@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:ai_tutor_quiz/domain/entities/entities.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:url_launcher/url_launcher.dart';
+// import 'package:markdown_widget/markdown_widget.dart';
 
 class NoMyMessageBubble extends StatelessWidget {
   final Message message;
@@ -28,11 +30,16 @@ class NoMyMessageBubble extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
             child: Markdown(
-              data: message.content,
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              selectable: true,
-            ),
+                data: message.content,
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                selectable: true,
+                onTapLink: (text, href, title) async {
+                  // print('text: $text, href: $href, title: $title');
+                  if (!await launchUrl(Uri.parse(href!))) {
+                    throw Exception('Could not launch $href');
+                  }
+                }),
             // SelectableText(
             //   message.content,
             // ),

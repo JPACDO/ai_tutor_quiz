@@ -1,12 +1,10 @@
+import 'package:flutter/widgets.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:ai_tutor_quiz/domain/entities/entities.dart';
 import 'package:ai_tutor_quiz/domain/use_cases/use_case.dart';
 import 'package:ai_tutor_quiz/infrastructure/repositories/repositories.dart';
-import 'package:ai_tutor_quiz/presentation/providers/chat/model_provider.dart';
 import 'package:ai_tutor_quiz/presentation/providers/providers.dart';
-import 'package:flutter/widgets.dart';
-import 'package:google_generative_ai/google_generative_ai.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'chat_provider.g.dart';
 
@@ -63,9 +61,7 @@ class Chat extends _$Chat {
   }
 
   Future<void> getResponseMessage(
-      {required String prompt,
-      String? imgUrl,
-      required List<Content> history}) async {
+      {required String prompt, String? imgUrl, required Topic topic}) async {
     // //////// GUARDAR IMAGEN ANTES DE ENVIAR MENSAJE EN EL CODIGO SCREEN
     // addMessage(
     //     message: Message(
@@ -77,7 +73,7 @@ class Chat extends _$Chat {
 
     final message = await ref
         .read(getBotMessageProvider) // useCase  getBotMessage
-        .call(params: prompt, imgUrl: imgUrl, chatSession: history);
+        .call(params: prompt, imgUrl: imgUrl, topic: topic);
 
     // final message = await ref
     //     .read(chatStreamProvider.notifier)

@@ -1,10 +1,8 @@
-import 'package:ai_tutor_quiz/presentation/providers/chat/chat_provider.dart';
-import 'package:ai_tutor_quiz/presentation/providers/chat/topics_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ai_tutor_quiz/domain/entities/entities.dart';
 import 'package:ai_tutor_quiz/presentation/widgets/widgets.dart';
-import 'package:google_generative_ai/google_generative_ai.dart';
+import 'package:ai_tutor_quiz/presentation/providers/providers.dart';
 
 class TopicScreen extends ConsumerWidget {
   const TopicScreen({required this.topicId, super.key});
@@ -88,16 +86,9 @@ class _ChatViewState extends ConsumerState<_ChatView> {
                         sender: SenderType.user,
                         imgUrl: null));
 
-                List<Content> isBlank = chatTopic.messages.isEmpty
-                    ? []
-                    : chatTopic.messages
-                        .map((e) => (e!.sender == SenderType.user)
-                            ? Content.text(e.content)
-                            : Content.model([TextPart(e.content)]))
-                        .toList();
                 await ref
                     .read(chatProvider.notifier)
-                    .getResponseMessage(prompt: value, history: isBlank);
+                    .getResponseMessage(prompt: value, topic: chatTopic);
 
                 // await ref
                 //     .read(topicsProvider.notifier)

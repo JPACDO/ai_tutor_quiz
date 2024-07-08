@@ -1,4 +1,3 @@
-import 'package:google_generative_ai/google_generative_ai.dart';
 import 'package:image_picker/image_picker.dart';
 
 import 'package:ai_tutor_quiz/domain/entities/entities.dart';
@@ -19,11 +18,9 @@ class MessageRepositoryImpl extends MessageRepository {
 
   @override
   Future<Message?> getBotMessage(
-      {required String prompt,
-      String? imgUrl,
-      required List<Content> history}) async {
+      {required String prompt, String? imgUrl, required Topic topic}) async {
     return await _geminiChatDatasource.getMessage(
-        prompt: prompt, imgUrl: imgUrl, history: history);
+        prompt: prompt, imgUrl: imgUrl, topic: topic);
   }
 
   @override
