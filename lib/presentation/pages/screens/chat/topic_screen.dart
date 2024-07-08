@@ -65,12 +65,16 @@ class _ChatViewState extends ConsumerState<_ChatView> {
                     itemBuilder: (context, index) {
                       final message = messagesList[index];
                       if (message == null) {
-                        return const Center(child: CircularProgressIndicator());
+                        return const Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Center(child: CircularProgressIndicator()),
+                        );
                       }
                       return (message.sender == SenderType.user)
                           ? MyMessageBubble(message: message)
                           : NoMyMessageBubble(message: message);
                     })),
+            const SizedBox(height: 5),
 
             /// Caja de texto de mensajes
             MessageFieldBox(
@@ -95,6 +99,7 @@ class _ChatViewState extends ConsumerState<_ChatView> {
                 //     .updateTopic(topic: chatTopic);
               },
             ),
+            const SizedBox(height: 10),
           ],
         ),
       ),

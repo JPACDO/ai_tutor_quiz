@@ -27,23 +27,17 @@ class NoMyMessageBubble extends StatelessWidget {
                 topRight: Radius.circular(20),
                 bottomRight: Radius.circular(20),
               )),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-            child: Markdown(
-                data: message.content,
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                selectable: true,
-                onTapLink: (text, href, title) async {
-                  // print('text: $text, href: $href, title: $title');
-                  if (!await launchUrl(Uri.parse(href!))) {
-                    throw Exception('Could not launch $href');
-                  }
-                }),
-            // SelectableText(
-            //   message.content,
-            // ),
-          ),
+          child: Markdown(
+              data: message.content,
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              selectable: true,
+              onTapLink: (text, href, title) async {
+                // print('text: $text, href: $href, title: $title');
+                if (!await launchUrl(Uri.parse(href!))) {
+                  throw Exception('Could not launch $href');
+                }
+              }),
         ),
         const SizedBox(height: 5),
         (message.imgUrl != null) ? _ImageBubble(message.imgUrl!) : Container(),

@@ -29,6 +29,7 @@ class TopicsViewState extends ConsumerState<TopicsView> {
         title: const Text('Topics View'),
       ),
       body: GridView.builder(
+        padding: const EdgeInsets.all(20),
         itemCount: topics.length,
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
