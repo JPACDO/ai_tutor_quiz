@@ -126,10 +126,10 @@ class GeminiChatDatasource extends MessageDatasource {
     ]);
 
     // var content = Content.text(mainPrompt);
-    var content = await promtToContent(mainPrompt, imageUrl);
-
-    var response = await chat.sendMessage(content);
     try {
+      var content = await promtToContent(mainPrompt, imageUrl);
+
+      var response = await chat.sendMessage(content);
       print(response.text);
       if (response.text == null) return null;
 

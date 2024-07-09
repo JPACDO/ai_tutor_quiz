@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ai_tutor_quiz/domain/entities/entities.dart';
@@ -114,8 +116,22 @@ class _ChatViewState extends ConsumerState<_ChatView> {
   }
 
   _sendToIA(String value, Topic chatTopic, String? imagePath) async {
-    await ref
-        .read(chatProvider.notifier)
-        .getResponseMessage(prompt: value, topic: chatTopic, imgUrl: imagePath);
+    try {
+      final result = await InternetAddress.lookup('google.com');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        // print('connected');
+        await ref.read(chatProvider.notifier).getResponseMessage(
+            prompt: value, topic: chatTopic, imgUrl: imagePath);
+      }
+    } on SocketException catch (_) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text('No internet connection'),
+        duration: Duration(seconds: 2),
+        backgroundColor: Colors.red,
+      ));
+      // print('error');
+      return;
+    }
   }
 }
