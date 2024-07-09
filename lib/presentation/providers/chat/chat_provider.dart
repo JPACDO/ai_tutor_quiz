@@ -85,7 +85,9 @@ class Chat extends _$Chat {
     ref.read(chatScrollControllerProvider.notifier).moveScrollToBottom();
   }
 
-  Future<String> saveImageOfMessage({required XFile img}) async {
+  Future<String?> saveImageOfMessage({required XFile? img}) async {
+    if (img == null) return null;
+
     return await ref
         .read(localStorageDbChatDatasourceProvider)
         .saveImageOfMessage(img: img);

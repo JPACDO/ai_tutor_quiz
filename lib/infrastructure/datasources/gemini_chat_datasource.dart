@@ -29,35 +29,54 @@ class GeminiChatDatasource extends MessageDatasource {
       {required String prompt,
       required String? imgUrl,
       required Topic topic}) async {
-    if (imgUrl == null) {
-      // return await getSimpleResponseForText(prompt);
+    // if (imgUrl == null) {
+    // return await getSimpleResponseForText(prompt);
 
-      List<Content> history = topic.messages.isEmpty
-          ? []
-          : topic.messages
-              .map((e) => (e!.sender == SenderType.user)
-                  ? Content.text(e.content)
-                  : Content.model([TextPart(e.content)]))
-              .toList();
-      return await getSimpleResponseStream(prompt, history);
+    List<Content> history = [];
+
+    if (topic.messages.isNotEmpty) {
+      for (var message in topic.messages) {
+        if (message!.sender == SenderType.user) {
+          final Content content =
+              await promtToContent(message.content, message.imgUrl);
+          history.add(content);
+        } else {
+          history.add(Content.model([TextPart(message.content)]));
+        }
+      }
     }
 
-    return await getRessponseForImage(prompt, imgUrl);
+    // topic.messages.isEmpty
+    //     ? []
+    //     : topic.messages
+    //         .map((e) => (e!.sender == SenderType.user)
+    //             ? Content.text(e.content)
+    //             : Content.model([TextPart(e.content)]))
+    //         .toList();
+
+    return await getSimpleResponseStream(
+        entradaDeTexto: prompt,
+        history: history,
+        languaje: 'Spanish',
+        imageUrl: imgUrl);
+    // }
+
+    // return await getRessponseForImage(prompt, imgUrl);
   }
 
   Future<Message?> getSimpleResponseForText(String entradaDeTexto) async {
-    final String formato =
-        'Reply to me using a valid JSON using the following structure: ' +
-            '{"responseData": \$responseData, "suggestions": \$suggestions , "resumenQuestion": \$resumenQuietion , "resumenAnswer": \$resumenAnswer} ' +
-            // 'responseData should be of Markdown format. ' +
-            // 'resumenQuestion and resumenAnswer should be of String type. ' +
-            'suggestions should be of type List<String>. ' +
-            'suggestions are a list of possible questions to continue the conversation. ' +
-            'resumenQuestion should be a summary of the question. ' +
-            'resumenAnswer should be a summary of the $entradaDeTexto. ' +
-            'The json keys must not change. ' +
-            'The Json values must be understandable to someone who speaks Spanish. ';
-    // 'The values of the Json must be in Spanish. ';
+    final String formato = 'Reply to me using a valid JSON using the following structure: ' +
+        '{"responseData": \$responseData, "suggestions": \$suggestions , "resumenQuestion": \$resumenQuietion , "resumenAnswer": \$resumenAnswer} ' +
+        // 'responseData should be of Markdown format. ' +
+        // 'resumenQuestion and resumenAnswer should be of String type. ' +
+        'suggestions should be of type List<String>. ' +
+        'suggestions are a list of possible questions to continue the conversation. ' +
+        'resumenQuestion should be a summary of the question. ' +
+        'resumenAnswer should be a summary of the $entradaDeTexto. ' +
+        'The json keys must not change. ' +
+        // 'The Json values must be understandable to someone who speaks Spanish. ';
+        'The Json values ​​must be in the same language as that used in the question, unless a different one is indicated in the question.';
+
     String mainPrompt =
         'You are a virtual tutor who helps me to study.I would like you to answer and explain me to the following question : $entradaDeTexto. \n $formato';
     // 'You are a virtual tutor who helps me to study.I would like you to answer  me to the following question : $entradaDeTexto. The reply  must be understandable to someone who speaks Spanish. ';
@@ -94,13 +113,21 @@ class GeminiChatDatasource extends MessageDatasource {
   }
 
   Future<Message?> getSimpleResponseStream(
-      String entradaDeTexto, List<Content> history) async {
+      {required String entradaDeTexto,
+      required List<Content> history,
+      String languaje = 'Spanish',
+      String? imageUrl}) async {
+    String mainPrompt = '$entradaDeTexto ';
+
     var chat = model.startChat(history: [
       ...history
       // Content.text('Hello, I have 2 dogs in my house.'),
       // Content.model([TextPart('Great to meet you. What would you like to know?')])
     ]);
-    var content = Content.text(entradaDeTexto);
+
+    // var content = Content.text(mainPrompt);
+    var content = await promtToContent(mainPrompt, imageUrl);
+
     var response = await chat.sendMessage(content);
     try {
       print(response.text);
@@ -115,6 +142,15 @@ class GeminiChatDatasource extends MessageDatasource {
     } catch (e) {
       print('ERROR RESPONSE:');
       print(e);
+      if (e.toString() ==
+          "GenerativeAIException: Candidate was blocked due to recitation") {
+        const String jsonExtractor =
+            '{"responseData":"Try to rephrase your question", "suggestions": [], "resumenQuestion": "", "resumenAnswer": ""}';
+
+        final geminiMsgResponse = geminiMsgResponseFromJson(jsonExtractor);
+
+        return geminiMsgResponse.toDomain();
+      }
       return null;
     }
   }
@@ -160,9 +196,31 @@ class GeminiChatDatasource extends MessageDatasource {
     print(response.text);
 
     if (response.text == null) return null;
-    final geminiMsgResponse = geminiMsgResponseFromJson(response.text!);
+
+    final String jsonExtractor =
+        '{"responseData":"${response.text!.replaceAll("\"", "\\\"").replaceAll("\n", "\\n")}", "suggestions": [], "resumenQuestion": "", "resumenAnswer": ""}';
+
+    final geminiMsgResponse = geminiMsgResponseFromJson(jsonExtractor);
 
     return geminiMsgResponse.toDomain();
+  }
+
+  Future<Content> promtToContent(String promp, String? imageUrl) async {
+    if (imageUrl == null) {
+      return Content.text(promp);
+    } else {
+      final File imageProvider = File(imageUrl);
+
+      final imgBuffer = await imageProvider.readAsBytes();
+
+      final imageParts = [
+        DataPart('image/jpeg', imgBuffer),
+      ];
+
+      final prompt = TextPart(promp);
+
+      return Content.multi([prompt, ...imageParts]);
+    }
   }
 
   @override

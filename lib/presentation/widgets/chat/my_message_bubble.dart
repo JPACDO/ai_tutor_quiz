@@ -5,8 +5,11 @@ import 'package:flutter/material.dart';
 
 class MyMessageBubble extends StatelessWidget {
   final Message message;
+  final bool isLast;
+  final Function()? onResent;
 
-  const MyMessageBubble({super.key, required this.message});
+  const MyMessageBubble(
+      {super.key, required this.message, this.isLast = false, this.onResent});
 
   @override
   Widget build(BuildContext context) {
@@ -15,6 +18,7 @@ class MyMessageBubble extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
+        (message.imgUrl != null) ? _ImageBubble(message.imgUrl!) : Container(),
         Container(
           margin: const EdgeInsets.only(left: 20),
           decoration: BoxDecoration(
@@ -31,8 +35,11 @@ class MyMessageBubble extends StatelessWidget {
             ),
           ),
         ),
+        isLast
+            ? ElevatedButton(
+                onPressed: onResent, child: const Icon(Icons.refresh_sharp))
+            : Container(),
         const SizedBox(height: 5),
-        (message.imgUrl != null) ? _ImageBubble(message.imgUrl!) : Container(),
         const SizedBox(height: 10),
       ],
     );
@@ -46,13 +53,32 @@ class _ImageBubble extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(20),
+    return InkWell(
+      onTap: () {
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            content: InteractiveViewer(
+              panEnabled: false, // Set it to false
+              boundaryMargin: EdgeInsets.all(100),
+              minScale: 0.5,
+              maxScale: 2,
+              child: Image.file(
+                File(imageUrl),
+              ),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(),
+                child: const Text('Ok'),
+              ),
+            ],
+          ),
+        );
+      },
       child: Image.file(
         File(imageUrl),
-        width: size.width * 0.7,
+        width: 150,
         height: 150,
       ),
     );

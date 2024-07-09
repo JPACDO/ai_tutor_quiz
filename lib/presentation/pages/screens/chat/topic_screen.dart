@@ -70,8 +70,14 @@ class _ChatViewState extends ConsumerState<_ChatView> {
                           child: Center(child: CircularProgressIndicator()),
                         );
                       }
+
                       return (message.sender == SenderType.user)
-                          ? MyMessageBubble(message: message)
+                          ? MyMessageBubble(
+                              message: message,
+                              isLast: index == 0,
+                              onResent: () => _sendToIA(
+                                  message.content, chatTopic, message.imgUrl),
+                            )
                           : NoMyMessageBubble(message: message);
                     })),
             const SizedBox(height: 5),
@@ -79,20 +85,21 @@ class _ChatViewState extends ConsumerState<_ChatView> {
             /// Caja de texto de mensajes
             MessageFieldBox(
               // onValue: (value) => chatProvider.sendMessage(value),
-              onValue: (value) async {
-                value = value.trim();
-                if (value.isEmpty) return;
-                // TODO: verificar imagen
+              onValue: (value, image) async {
+                // value = value.trim();
+                // if (value.isEmpty) return;
+                final imagepath =
+                    await ref.read(chatProvider.notifier).saveImageOfMessage(
+                          img: image,
+                        );
                 ref.read(chatProvider.notifier).addMessage(
                     message: Message(
                         id: '1',
                         content: value,
                         sender: SenderType.user,
-                        imgUrl: null));
+                        imgUrl: imagepath));
 
-                await ref
-                    .read(chatProvider.notifier)
-                    .getResponseMessage(prompt: value, topic: chatTopic);
+                await _sendToIA(value, chatTopic, imagepath);
 
                 // await ref
                 //     .read(topicsProvider.notifier)
@@ -104,5 +111,11 @@ class _ChatViewState extends ConsumerState<_ChatView> {
         ),
       ),
     );
+  }
+
+  _sendToIA(String value, Topic chatTopic, String? imagePath) async {
+    await ref
+        .read(chatProvider.notifier)
+        .getResponseMessage(prompt: value, topic: chatTopic, imgUrl: imagePath);
   }
 }

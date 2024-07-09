@@ -1,8 +1,12 @@
+import 'dart:io';
+
 import 'package:ai_tutor_quiz/presentation/widgets/shared/expanded_icon.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 class MessageFieldBox extends StatefulWidget {
-  final ValueChanged<String> onValue;
+  // final ValueChanged<String> onValue;
+  final Function(String, XFile?) onValue;
 
   const MessageFieldBox({super.key, required this.onValue});
 
@@ -14,6 +18,9 @@ class _MessageFieldBoxState extends State<MessageFieldBox> {
   final textController = TextEditingController();
   final focusNode = FocusNode();
   bool isFocused = false;
+  int maxLines = 1;
+  bool expanded = false;
+  XFile? image;
 
   @override
   void initState() {
@@ -30,8 +37,17 @@ class _MessageFieldBoxState extends State<MessageFieldBox> {
 
   void _onFocusChange() {
     debugPrint("Focus: ${focusNode.hasFocus.toString()}");
+
     setState(() {
       isFocused = focusNode.hasFocus;
+
+      if (isFocused) {
+        maxLines = 5;
+      } else {
+        maxLines = textController.text.isEmpty ? 1 : 5;
+      }
+
+      expanded = maxLines == 5;
     });
   }
 
@@ -42,7 +58,7 @@ class _MessageFieldBoxState extends State<MessageFieldBox> {
       borderRadius: BorderRadius.only(
         topRight: const Radius.circular(40),
         bottomRight: const Radius.circular(40),
-        topLeft: isFocused ? const Radius.circular(40) : Radius.zero,
+        topLeft: expanded ? const Radius.circular(40) : Radius.zero,
       ),
     );
 
@@ -56,14 +72,18 @@ class _MessageFieldBoxState extends State<MessageFieldBox> {
       //   icon: const Icon(Icons.image_outlined),
       //   onPressed: () {},
       // ),
-      suffixIcon: isFocused
+      suffixIcon: expanded
           ? null
           : IconButton(
               icon: const Icon(Icons.send_outlined),
               onPressed: () {
                 final textValue = textController.value.text;
+                if (textValue.trim().isEmpty) return;
+
                 textController.clear();
-                widget.onValue(textValue);
+                widget.onValue(textValue, image);
+                image = null;
+                setState(() {});
               },
             ),
     );
@@ -75,9 +95,24 @@ class _MessageFieldBoxState extends State<MessageFieldBox> {
       ),
       child: Column(
         children: [
+          image == null
+              ? Container()
+              : Image.file(
+                  File(image!.path),
+                  width: 100,
+                  height: 100,
+                  fit: BoxFit.cover,
+                ),
           Row(
             children: [
-              isFocused ? Container() : const _NoFocused(),
+              expanded
+                  ? Container()
+                  : _NoFocused(
+                      onImageSelected: (value) {
+                        image = value;
+                        setState(() {});
+                      },
+                    ),
               Flexible(
                 child: TextFormField(
                   // onTapOutside: (event) {
@@ -86,19 +121,35 @@ class _MessageFieldBoxState extends State<MessageFieldBox> {
                   focusNode: focusNode,
                   controller: textController,
                   decoration: inputDecoration,
-                  maxLines: null,
+                  maxLines: maxLines,
+                  // style: const TextStyle(fontSize: 20.0),
+                  keyboardType: TextInputType.multiline,
                   onFieldSubmitted: (value) {
+                    if (value.trim().isEmpty) return;
+
                     textController.clear();
                     focusNode.requestFocus();
-                    widget.onValue(value);
+                    widget.onValue(value, image);
+                    image = null;
+                    setState(() {});
                   },
                 ),
               ),
             ],
           ),
-          isFocused
+          expanded
               ? _InFocus(
-                  textController: textController, onValue: widget.onValue)
+                  textController: textController,
+                  onValue: (value) {
+                    widget.onValue(value, image);
+                    image = null;
+                    setState(() {});
+                  },
+                  onImageSelected: (value) {
+                    image = value;
+                    setState(() {});
+                  },
+                )
               : Container(),
         ],
       ),
@@ -108,13 +159,14 @@ class _MessageFieldBoxState extends State<MessageFieldBox> {
 
 class _InFocus extends StatelessWidget {
   const _InFocus({
-    super.key,
     required this.textController,
     required this.onValue,
+    required this.onImageSelected,
   });
 
   final TextEditingController textController;
   final ValueChanged<String> onValue;
+  final ValueChanged<XFile?> onImageSelected;
 
   @override
   Widget build(BuildContext context) {
@@ -123,13 +175,13 @@ class _InFocus extends StatelessWidget {
         Expanded(
           child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
             IconButton(
-                onPressed: () {
-                  print('camera');
+                onPressed: () async {
+                  onImageSelected(await _getImageFromCamera());
                 },
                 icon: const Icon(Icons.camera_alt_outlined)),
             IconButton(
-                onPressed: () {
-                  print('image');
+                onPressed: () async {
+                  onImageSelected(await _getImageFromGallery());
                 },
                 icon: const Icon(Icons.image_outlined)),
           ]),
@@ -138,6 +190,7 @@ class _InFocus extends StatelessWidget {
           icon: const Icon(Icons.send_outlined),
           onPressed: () {
             final textValue = textController.value.text;
+            if (textController.text.trim().isEmpty) return;
             textController.clear();
             onValue(textValue);
           },
@@ -150,8 +203,9 @@ class _InFocus extends StatelessWidget {
 
 class _NoFocused extends StatelessWidget {
   const _NoFocused({
-    super.key,
+    required this.onImageSelected,
   });
+  final ValueChanged<XFile?> onImageSelected;
 
   @override
   Widget build(BuildContext context) {
@@ -167,17 +221,27 @@ class _NoFocused extends StatelessWidget {
         iconClosed: const Icon(Icons.photo_camera_back),
         children: [
           IconButton(
-              onPressed: () {
-                print('camera');
+              onPressed: () async {
+                onImageSelected(await _getImageFromCamera());
               },
               icon: const Icon(Icons.camera_alt_outlined)),
           IconButton(
-              onPressed: () {
-                print('image');
+              onPressed: () async {
+                onImageSelected(await _getImageFromGallery());
               },
               icon: const Icon(Icons.image_outlined)),
         ],
       ),
     );
   }
+}
+
+Future<XFile?> _getImageFromGallery() async {
+  final ImagePicker picker = ImagePicker();
+  return await picker.pickImage(source: ImageSource.gallery);
+}
+
+Future<XFile?> _getImageFromCamera() async {
+  final ImagePicker picker = ImagePicker();
+  return await picker.pickImage(source: ImageSource.camera);
 }
