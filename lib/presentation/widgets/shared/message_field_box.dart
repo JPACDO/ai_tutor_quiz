@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:ai_tutor_quiz/presentation/widgets/shared/expanded_icon.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:image_picker/image_picker.dart';
 
 class MessageFieldBox extends StatefulWidget {
@@ -97,12 +98,12 @@ class _MessageFieldBoxState extends State<MessageFieldBox> {
         children: [
           image == null
               ? Container()
-              : Image.file(
-                  File(image!.path),
-                  width: 100,
-                  height: 100,
-                  fit: BoxFit.cover,
-                ),
+              : ImagePreview(
+                  image: image!,
+                  removeImg: () {
+                    image = null;
+                    setState(() {});
+                  }),
           Row(
             children: [
               expanded
@@ -154,6 +155,63 @@ class _MessageFieldBoxState extends State<MessageFieldBox> {
         ],
       ),
     );
+  }
+}
+
+class ImagePreview extends StatelessWidget {
+  const ImagePreview({
+    super.key,
+    required this.image,
+    required this.removeImg,
+  });
+
+  final XFile image;
+  final Function() removeImg;
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(children: [
+      InkWell(
+        onTap: () {
+          showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+              content: InteractiveViewer(
+                panEnabled: false, // Set it to false
+                boundaryMargin: EdgeInsets.all(100),
+                minScale: 0.5,
+                maxScale: 2,
+                child: Image.file(
+                  File(image.path),
+                ),
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: const Text('Ok'),
+                ),
+              ],
+            ),
+          );
+        },
+        child: Image.file(
+          File(image.path),
+          width: 100,
+          height: 100,
+          fit: BoxFit.cover,
+        ),
+      ),
+      IconButton(
+          padding: EdgeInsets.zero,
+          style: ButtonStyle(
+              backgroundColor:
+                  MaterialStateProperty.all(Colors.black.withAlpha(100))),
+          onPressed: removeImg,
+          icon: const Icon(
+            Icons.close,
+            color: Colors.white,
+          ))
+    ]);
   }
 }
 
