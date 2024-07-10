@@ -33,11 +33,11 @@ GoRouter appRouter(AppRouterRef ref) {
       ),
       GoRoute(
           path: '/topic',
-          name: TopicScreen.name,
+          name: ChatScreen.name,
           builder: (context, state) {
             final topic = state.extra as Topic;
 
-            return TopicScreen(topicId: topic.idDb);
+            return ChatScreen(topicId: topic.idDb);
           }),
       GoRoute(
         path: '/',

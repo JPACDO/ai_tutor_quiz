@@ -8,10 +8,10 @@ class GetAllGroupQuizUseCase extends BaseUseCase<List<GroupQuiz>, String> {
 
   GetAllGroupQuizUseCase(this._groupQuizRepository);
 
-  /// [params] is userId
+  /// [prompt] is userId
   @override
-  Future<List<GroupQuiz>> call({String? params}) {
-    if (params == null) return Future.value([]);
-    return _groupQuizRepository.getAllGroupQuiz(userId: params);
+  Future<List<GroupQuiz>> call({String? prompt}) {
+    if (prompt == null) return Future.value([]);
+    return _groupQuizRepository.getAllGroupQuiz(userId: prompt);
   }
 }

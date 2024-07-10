@@ -6,8 +6,8 @@ import 'package:ai_tutor_quiz/domain/entities/entities.dart';
 import 'package:ai_tutor_quiz/presentation/widgets/widgets.dart';
 import 'package:ai_tutor_quiz/presentation/providers/providers.dart';
 
-class TopicScreen extends ConsumerWidget {
-  const TopicScreen({required this.topicId, super.key});
+class ChatScreen extends ConsumerWidget {
+  const ChatScreen({required this.topicId, super.key});
   static const name = 'topic-screen';
 
   final String? topicId;
@@ -20,7 +20,7 @@ class TopicScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Topic ${topic.name}'),
+        title: Text(topic.name),
       ),
       body: _ChatView(topic: topic),
     );

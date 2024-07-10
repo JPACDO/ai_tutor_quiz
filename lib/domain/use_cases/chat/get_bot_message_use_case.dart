@@ -7,11 +7,11 @@ class GetBotMessageUseCase implements BaseUseCase<Message?, String> {
 
   GetBotMessageUseCase(this._messageRepository);
 
-  /// [params] is the prompt to get the bot response
+  /// [prompt] is the prompt to get the bot response
   @override
-  Future<Message?> call({String? params, String? imgUrl, Topic? topic}) {
-    if (params == null) return Future.value(null);
+  Future<Message?> call({String? prompt, String? imgUrl, Topic? topic}) {
+    if (prompt == null) return Future.value(null);
     return _messageRepository.getBotMessage(
-        prompt: params, imgUrl: imgUrl, topic: topic!);
+        prompt: prompt, imgUrl: imgUrl, topic: topic!);
   }
 }

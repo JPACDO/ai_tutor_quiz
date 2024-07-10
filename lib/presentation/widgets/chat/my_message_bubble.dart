@@ -22,21 +22,22 @@ class MyMessageBubble extends StatelessWidget {
         Container(
           margin: const EdgeInsets.only(left: 20),
           decoration: BoxDecoration(
-              color: colors.primary.withAlpha(30),
+              // color: colors.primary.withAlpha(30),
+              border: Border.all(color: colors.primary),
               borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(20),
                 topRight: Radius.circular(20),
                 bottomLeft: Radius.circular(20),
               )),
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
             child: SelectableText(
               message.content,
             ),
           ),
         ),
         isLast
-            ? ElevatedButton(
+            ? OutlinedButton(
                 onPressed: onResent, child: const Icon(Icons.refresh_sharp))
             : Container(),
         const SizedBox(height: 5),
@@ -60,7 +61,7 @@ class _ImageBubble extends StatelessWidget {
           builder: (context) => AlertDialog(
             content: InteractiveViewer(
               panEnabled: false, // Set it to false
-              boundaryMargin: EdgeInsets.all(100),
+              boundaryMargin: const EdgeInsets.all(100),
               minScale: 0.5,
               maxScale: 2,
               child: Image.file(

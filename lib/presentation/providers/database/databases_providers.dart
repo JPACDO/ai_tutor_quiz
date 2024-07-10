@@ -1,6 +1,6 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import '../../../../infrastructure/datasources/datasources.dart';
+import '../../../infrastructure/datasources/datasources.dart';
 
 part 'databases_providers.g.dart';
 

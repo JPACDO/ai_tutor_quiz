@@ -8,9 +8,9 @@ class AddNewTopicsUseCase implements BaseUseCase<Topic, Topic> {
 
   AddNewTopicsUseCase(this._topicRepository);
 
-  /// [params] is the topic to be added
+  /// [prompt] is the topic to be added
   @override
-  Future<Topic> call({Topic? params}) {
-    return _topicRepository.addNewTopic(topic: params!);
+  Future<Topic> call({Topic? prompt}) {
+    return _topicRepository.addNewTopic(topic: prompt!);
   }
 }

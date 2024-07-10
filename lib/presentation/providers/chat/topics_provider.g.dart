@@ -50,7 +50,7 @@ final addNewTopicProvider = AutoDisposeProvider<AddNewTopicsUseCase>.internal(
 );
 
 typedef AddNewTopicRef = AutoDisposeProviderRef<AddNewTopicsUseCase>;
-String _$topicsHash() => r'7c35b1efbe59962111499b0ad77c6cb66a9b7cac';
+String _$topicsHash() => r'9b73592a77f0a7824ad8598d2a470d5f6caa7786';
 
 /// See also [Topics].
 @ProviderFor(Topics)

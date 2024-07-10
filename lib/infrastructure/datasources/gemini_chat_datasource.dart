@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:ai_tutor_quiz/domain/datasources/quiz/question_datasource.dart';
 import 'package:ai_tutor_quiz/infrastructure/helpers/extraer_json_from_text.dart';
 import 'package:ai_tutor_quiz/infrastructure/mappers/chat/msg_mapper.dart';
 import 'package:ai_tutor_quiz/infrastructure/models/gemini_response/gemini_msg_chat_response.dart';
@@ -11,7 +12,7 @@ import 'package:image_picker/image_picker.dart';
 
 import '../../domain/entities/entities.dart';
 
-class GeminiChatDatasource extends MessageDatasource {
+class GeminiChatDatasource implements MessageDatasource, QuestionDatasource {
   final model = GenerativeModel(
     model: 'gemini-1.5-flash',
     apiKey: Env.geminiKey,
@@ -225,6 +226,12 @@ class GeminiChatDatasource extends MessageDatasource {
 
   @override
   Future<String> saveImageOfMessage({required XFile img}) {
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<List<Question>> getQuizFromBot({required String prompt}) {
+    // TODO: implement getQuizFromBot
     throw UnimplementedError();
   }
 }

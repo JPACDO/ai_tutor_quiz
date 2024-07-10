@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:ai_tutor_quiz/presentation/widgets/shared/expanded_icon.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:image_picker/image_picker.dart';
 
 class MessageFieldBox extends StatefulWidget {
@@ -178,7 +177,7 @@ class ImagePreview extends StatelessWidget {
             builder: (context) => AlertDialog(
               content: InteractiveViewer(
                 panEnabled: false, // Set it to false
-                boundaryMargin: EdgeInsets.all(100),
+                boundaryMargin: const EdgeInsets.all(100),
                 minScale: 0.5,
                 maxScale: 2,
                 child: Image.file(

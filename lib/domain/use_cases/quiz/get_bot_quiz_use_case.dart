@@ -2,14 +2,14 @@ import '../../entities/entities.dart';
 import '../../repositories/quiz/quiz_repository.dart';
 import '../base_usecase.dart';
 
-class GetBotQuizUseCase extends BaseUseCase<Quiz?, String> {
+class GetBotQuizUseCase extends BaseUseCase<List<Question>, String> {
   final QuizRepository _quizRepository;
   GetBotQuizUseCase(this._quizRepository);
 
-  /// [params] = prompt
+  /// [prompt] = prompt
   @override
-  Future<Quiz?> call({String? params}) async {
-    if (params == null) return Future.value(null);
-    return await _quizRepository.getBotQuiz(prompt: params);
+  Future<List<Question>> call({String? prompt}) async {
+    if (prompt == null) return Future.value([]);
+    return await _quizRepository.getBotQuiz(prompt: prompt);
   }
 }

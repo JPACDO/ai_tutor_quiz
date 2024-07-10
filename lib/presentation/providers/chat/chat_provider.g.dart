@@ -36,7 +36,7 @@ final getBotMessageProvider = Provider<GetBotMessageUseCase>.internal(
 );
 
 typedef GetBotMessageRef = ProviderRef<GetBotMessageUseCase>;
-String _$chatHash() => r'f067149588004f0f6b785681b91d9240deb7aa23';
+String _$chatHash() => r'e853a925a32f8e74789a146e3cd509f9bdc1b394';
 
 /// See also [Chat].
 @ProviderFor(Chat)

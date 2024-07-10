@@ -24,7 +24,8 @@ class HomeScreenState extends ConsumerState<HomeScreen>
   @override
   void initState() {
     super.initState();
-    pageController = PageController(keepPage: true);
+    pageController =
+        PageController(initialPage: widget.pageIndex, keepPage: true);
   }
 
   @override

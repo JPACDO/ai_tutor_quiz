@@ -1,18 +1,20 @@
-import 'dart:io';
-
-import 'package:ai_tutor_quiz/domain/entities/entities.dart';
+import 'package:ai_tutor_quiz/presentation/providers/quiz/quiz_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 // import 'package:markdown_widget/markdown_widget.dart';
+import 'package:ai_tutor_quiz/domain/entities/entities.dart';
+import 'package:ai_tutor_quiz/presentation/pages/screens/home_screen.dart';
 
-class NoMyMessageBubble extends StatelessWidget {
+class NoMyMessageBubble extends ConsumerWidget {
   final Message message;
 
   const NoMyMessageBubble({super.key, required this.message});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final colors = Theme.of(context).colorScheme;
 
     return Column(
@@ -21,7 +23,8 @@ class NoMyMessageBubble extends StatelessWidget {
         Container(
           margin: const EdgeInsets.only(right: 20),
           decoration: BoxDecoration(
-              color: colors.secondary.withAlpha(30),
+              // color: colors.secondary.withAlpha(30),
+              border: Border.all(color: colors.secondary),
               borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(20),
                 topRight: Radius.circular(20),
@@ -39,46 +42,19 @@ class NoMyMessageBubble extends StatelessWidget {
                 }
               }),
         ),
+        OutlinedButton.icon(
+          onPressed: () {
+            ref.read(promptQuizProvider.notifier).setPrompt(message.content);
+            context.pushNamed(HomeScreen.name, pathParameters: {'page': '1'});
+          },
+          icon: const Icon(
+            Icons.rocket_launch,
+          ),
+          label: const Text('Generate Quiz'),
+        ),
         const SizedBox(height: 5),
-        (message.imgUrl != null) ? _ImageBubble(message.imgUrl!) : Container(),
         const SizedBox(height: 10),
       ],
-    );
-  }
-}
-
-class _ImageBubble extends StatelessWidget {
-  final String imageUrl;
-
-  const _ImageBubble(this.imageUrl);
-
-  @override
-  Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(20),
-      child: Image.file(
-        File(imageUrl),
-        width: size.width * 0.7,
-        height: 150,
-      ),
-      //  Image.network(
-      //   imageUrl,
-      //   width: size.width * 0.7,
-      //   height: 150,
-      //   fit: BoxFit.cover,
-      //   loadingBuilder: (context, child, loadingProgress) {
-      //     if (loadingProgress == null) return child;
-
-      //     return Container(
-      //       width: size.width * 0.7,
-      //       height: 150,
-      //       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-      //       child: const Text('...imagen'),
-      //     );
-      //   },
-      // )
     );
   }
 }

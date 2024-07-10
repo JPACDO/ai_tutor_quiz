@@ -1,8 +1,7 @@
 import '../../entities/entities.dart';
 
 abstract class QuizRepository {
-  Future<Quiz?> getBotQuiz({required String prompt});
-  Future<List<Quiz>> getAllQuiz({required String topicId});
-  Future<bool> saveQuiz({required Quiz quiz});
-  Future<bool> deleteQuiz({String id});
+  Future<List<Question>> getBotQuiz({required String prompt});
+  Future<bool> saveQuiz({required Question quiz});
+  Future<bool> deleteQuiz({required String id});
 }

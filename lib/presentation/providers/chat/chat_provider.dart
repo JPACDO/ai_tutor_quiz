@@ -73,7 +73,7 @@ class Chat extends _$Chat {
 
     final message = await ref
         .read(getBotMessageProvider) // useCase  getBotMessage
-        .call(params: prompt, imgUrl: imgUrl, topic: topic);
+        .call(prompt: prompt, imgUrl: imgUrl, topic: topic);
 
     // final message = await ref
     //     .read(chatStreamProvider.notifier)

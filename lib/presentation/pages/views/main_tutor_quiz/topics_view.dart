@@ -69,7 +69,7 @@ class _TopicCard extends StatelessWidget {
         ),
       ),
       onTap: () {
-        context.pushNamed(TopicScreen.name, extra: topic);
+        context.pushNamed(ChatScreen.name, extra: topic);
       },
     );
   }
