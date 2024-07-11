@@ -192,9 +192,9 @@ class _ModalBottomSheetState extends ConsumerState<_ModalBottomSheet> {
             // const SizedBox(height: 10),
             // TextFormField(),
             const SizedBox(height: 20),
-            Text(
+            const Text(
               'Number of Questions ( Max $maxNumberOfQuestions ):',
-              style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+              style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 10),
             Center(

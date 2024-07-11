@@ -35,7 +35,7 @@ final getBotQuizProvider = AutoDisposeProvider<GetBotQuizUseCase>.internal(
 );
 
 typedef GetBotQuizRef = AutoDisposeProviderRef<GetBotQuizUseCase>;
-String _$quizPHash() => r'311e88faba427c751509a1989fe502b6bb4658eb';
+String _$quizPHash() => r'75186b41c16e86c86334a0bc29de6ec6136bff72';
 
 /// See also [QuizP].
 @ProviderFor(QuizP)
@@ -78,5 +78,21 @@ final quizParamsProvider = NotifierProvider<QuizParams, Quiz>.internal(
 );
 
 typedef _$QuizParams = Notifier<Quiz>;
+String _$quizUserResponseHash() => r'e242aaa0dac3c835b7638786428877be22f2615a';
+
+/// See also [QuizUserResponse].
+@ProviderFor(QuizUserResponse)
+final quizUserResponseProvider =
+    NotifierProvider<QuizUserResponse, List<int?>>.internal(
+  QuizUserResponse.new,
+  name: r'quizUserResponseProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$quizUserResponseHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef _$QuizUserResponse = Notifier<List<int?>>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

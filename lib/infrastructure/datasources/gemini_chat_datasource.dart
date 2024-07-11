@@ -266,8 +266,11 @@ class GeminiChatDatasource implements MessageDatasource, QuestionDatasource {
 
     try {
       response = await chat.sendMessage(content);
+      extraerJSON(response.text!);
     } catch (e) {
-      return [];
+      print('ERROR RESPONSE:');
+      print(e);
+      rethrow;
     }
 
     for (var i = 0; i < quiz.numberOfQuestions; i++) {
@@ -288,6 +291,8 @@ class GeminiChatDatasource implements MessageDatasource, QuestionDatasource {
 
         questionsGenerated.add(geminiQuizResponse.toDomain());
       } catch (e) {
+        print('ERROR RESPONSE in FOR:');
+        print(e);
         continue;
       }
     }

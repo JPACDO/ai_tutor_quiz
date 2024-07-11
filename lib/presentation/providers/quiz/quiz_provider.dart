@@ -26,12 +26,17 @@ class QuizP extends _$QuizP {
     return [];
   }
 
-  Future<void> getQuiz({required String prompt}) async {
+  Future<List<Question>> getQuiz({required String prompt}) async {
     final quiz = ref.read(quizParamsProvider);
-    final quizList =
-        await ref.read(getBotQuizProvider)(prompt: prompt, quiz: quiz);
+    try {
+      final quizList =
+          await ref.read(getBotQuizProvider)(prompt: prompt, quiz: quiz);
 
-    state = [...quizList];
+      state = [...quizList];
+      return state;
+    } catch (e) {
+      rethrow;
+    }
   }
 }
 
@@ -64,5 +69,24 @@ class QuizParams extends _$QuizParams {
   void setParams(Quiz quiz) {
     print(quiz);
     state = quiz;
+  }
+}
+
+@Riverpod(keepAlive: true)
+class QuizUserResponse extends _$QuizUserResponse {
+  @override
+  List<int?> build() {
+    return [];
+  }
+
+  void setResponse({required int index, required int response}) {
+    if (index >= state.length) {
+      state.addAll(List.filled(index - state.length + 1, null));
+    }
+
+    // Añade el valor al índice especificado
+    state[index] = response;
+    state = [...state];
+    print(state);
   }
 }
