@@ -50,7 +50,7 @@ class NoMyMessageBubble extends ConsumerWidget {
           icon: const Icon(
             Icons.rocket_launch,
           ),
-          label: const Text('Generate Quiz'),
+          label: const Text('Quiz'),
         ),
         const SizedBox(height: 5),
         const SizedBox(height: 10),

@@ -1,5 +1,5 @@
 abstract class BaseUseCase<Type, Params> {
-  Future<Type> call({Params prompt});
+  Future<Type> call({required Params prompt});
 }
 
 

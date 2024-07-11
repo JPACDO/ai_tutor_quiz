@@ -1,9 +1,13 @@
+// ignore_for_file: prefer_interpolation_to_compose_strings
+
 import 'dart:io';
 
 import 'package:ai_tutor_quiz/domain/datasources/quiz/question_datasource.dart';
 import 'package:ai_tutor_quiz/infrastructure/helpers/extraer_json_from_text.dart';
 import 'package:ai_tutor_quiz/infrastructure/mappers/chat/msg_mapper.dart';
+import 'package:ai_tutor_quiz/infrastructure/mappers/quiz/question_mapper.dart';
 import 'package:ai_tutor_quiz/infrastructure/models/gemini_response/gemini_msg_chat_response.dart';
+import 'package:ai_tutor_quiz/infrastructure/models/gemini_response/gemini_question_response.dart';
 import 'package:flutter/services.dart';
 import 'package:ai_tutor_quiz/config/constants/enviroment.dart';
 import 'package:google_generative_ai/google_generative_ai.dart';
@@ -56,7 +60,7 @@ class GeminiChatDatasource implements MessageDatasource, QuestionDatasource {
     //         .toList();
 
     return await getSimpleResponseStream(
-        entradaDeTexto: prompt,
+        prompt: prompt,
         history: history,
         languaje: 'Spanish',
         imageUrl: imgUrl);
@@ -65,60 +69,60 @@ class GeminiChatDatasource implements MessageDatasource, QuestionDatasource {
     // return await getRessponseForImage(prompt, imgUrl);
   }
 
-  Future<Message?> getSimpleResponseForText(String entradaDeTexto) async {
-    final String formato = 'Reply to me using a valid JSON using the following structure: ' +
-        '{"responseData": \$responseData, "suggestions": \$suggestions , "resumenQuestion": \$resumenQuietion , "resumenAnswer": \$resumenAnswer} ' +
-        // 'responseData should be of Markdown format. ' +
-        // 'resumenQuestion and resumenAnswer should be of String type. ' +
-        'suggestions should be of type List<String>. ' +
-        'suggestions are a list of possible questions to continue the conversation. ' +
-        'resumenQuestion should be a summary of the question. ' +
-        'resumenAnswer should be a summary of the $entradaDeTexto. ' +
-        'The json keys must not change. ' +
-        // 'The Json values must be understandable to someone who speaks Spanish. ';
-        'The Json values ​​must be in the same language as that used in the question, unless a different one is indicated in the question.';
+  // Future<Message?> getSimpleResponseForText(String entradaDeTexto) async {
+  //   final String formato = 'Reply to me using a valid JSON using the following structure: ' +
+  //       '{"responseData": \$responseData, "suggestions": \$suggestions , "resumenQuestion": \$resumenQuietion , "resumenAnswer": \$resumenAnswer} ' +
+  //       // 'responseData should be of Markdown format. ' +
+  //       // 'resumenQuestion and resumenAnswer should be of String type. ' +
+  //       'suggestions should be of type List<String>. ' +
+  //       'suggestions are a list of possible questions to continue the conversation. ' +
+  //       'resumenQuestion should be a summary of the question. ' +
+  //       'resumenAnswer should be a summary of the $entradaDeTexto. ' +
+  //       'The json keys must not change. ' +
+  //       // 'The Json values must be understandable to someone who speaks Spanish. ';
+  //       'The Json values ​​must be in the same language as that used in the question, unless a different one is indicated in the question.';
 
-    String mainPrompt =
-        'You are a virtual tutor who helps me to study.I would like you to answer and explain me to the following question : $entradaDeTexto. \n $formato';
-    // 'You are a virtual tutor who helps me to study.I would like you to answer  me to the following question : $entradaDeTexto. The reply  must be understandable to someone who speaks Spanish. ';
-    // final mainText = TextPart(mainPrompt);
-    // final additionalTextParts = [formato].map((t) => TextPart(t)).join("\n");
+  //   String mainPrompt =
+  //       'You are a virtual tutor who helps me to study.I would like you to answer and explain me to the following question : $entradaDeTexto. \n $formato';
+  //   // 'You are a virtual tutor who helps me to study.I would like you to answer  me to the following question : $entradaDeTexto. The reply  must be understandable to someone who speaks Spanish. ';
+  //   // final mainText = TextPart(mainPrompt);
+  //   // final additionalTextParts = [formato].map((t) => TextPart(t)).join("\n");
 
-    final content = [Content.text(mainPrompt)];
+  //   final content = [Content.text(mainPrompt)];
 
-    final GenerateContentResponse response;
+  //   final GenerateContentResponse response;
 
-    response = await model.generateContent(
-        content); // generationConfig: GenerationConfig(responseMimeType: 'application/json')
+  //   response = await model.generateContent(
+  //       content); // generationConfig: GenerationConfig(responseMimeType: 'application/json')
 
-    try {
-      if (response.text == null) return null;
-      print(response.text);
+  //   try {
+  //     if (response.text == null) return null;
+  //     print(response.text);
 
-      final String? jsonExtractor = extraerJSON(response.text!);
-      print("NUEVO JSON");
-      print(jsonExtractor);
-      if (jsonExtractor == null) return null;
+  //     final String? jsonExtractor = extraerJSON(response.text!);
+  //     print("NUEVO JSON");
+  //     print(jsonExtractor);
+  //     if (jsonExtractor == null) return null;
 
-      // final String jsonExtractor =
-      //     '{"responseData":"${response.text!.replaceAll("\"", "\\\"").replaceAll("\n", "\\n")}", "suggestions": [], "resumenQuestion": "", "resumenAnswer": ""}';
+  //     // final String jsonExtractor =
+  //     //     '{"responseData":"${response.text!.replaceAll("\"", "\\\"").replaceAll("\n", "\\n")}", "suggestions": [], "resumenQuestion": "", "resumenAnswer": ""}';
 
-      final geminiMsgResponse = geminiMsgResponseFromJson(jsonExtractor);
+  //     final geminiMsgResponse = geminiMsgResponseFromJson(jsonExtractor);
 
-      return geminiMsgResponse.toDomain();
-    } catch (e) {
-      print('ERROR RESPONSE:');
-      print(e);
-      return null;
-    }
-  }
+  //     return geminiMsgResponse.toDomain();
+  //   } catch (e) {
+  //     print('ERROR RESPONSE:');
+  //     print(e);
+  //     return null;
+  //   }
+  // }
 
   Future<Message?> getSimpleResponseStream(
-      {required String entradaDeTexto,
+      {required String prompt,
       required List<Content> history,
       String languaje = 'Spanish',
       String? imageUrl}) async {
-    String mainPrompt = '$entradaDeTexto ';
+    String mainPrompt = '$prompt ';
 
     var chat = model.startChat(history: [
       ...history
@@ -156,55 +160,55 @@ class GeminiChatDatasource implements MessageDatasource, QuestionDatasource {
     }
   }
 
-  Future<Message?> comparateImages(
-      String entradaDeTexto, String pathImg1, String pathImg2) async {
-    final img1Bytes = await rootBundle.load(pathImg1);
-    final img2Bytes = await rootBundle.load(pathImg2);
+  // Future<Message?> comparateImages(
+  //     String entradaDeTexto, String pathImg1, String pathImg2) async {
+  //   final img1Bytes = await rootBundle.load(pathImg1);
+  //   final img2Bytes = await rootBundle.load(pathImg2);
 
-    final img1Buffer = img1Bytes.buffer.asUint8List();
-    final img2Buffer = img2Bytes.buffer.asUint8List();
+  //   final img1Buffer = img1Bytes.buffer.asUint8List();
+  //   final img2Buffer = img2Bytes.buffer.asUint8List();
 
-    final imageParts = [
-      DataPart('image/jpeg', img1Buffer),
-      DataPart('image/jpeg', img2Buffer),
-    ];
+  //   final imageParts = [
+  //     DataPart('image/jpeg', img1Buffer),
+  //     DataPart('image/jpeg', img2Buffer),
+  //   ];
 
-    final prompt = TextPart(entradaDeTexto);
-    final response = await modelProvision.generateContent([
-      Content.multi([prompt, ...imageParts])
-    ]);
-    print(response.text);
-    if (response.text == null) return null;
-    final geminiMsgResponse = geminiMsgResponseFromJson(response.text!);
+  //   final prompt = TextPart(entradaDeTexto);
+  //   final response = await modelProvision.generateContent([
+  //     Content.multi([prompt, ...imageParts])
+  //   ]);
+  //   print(response.text);
+  //   if (response.text == null) return null;
+  //   final geminiMsgResponse = geminiMsgResponseFromJson(response.text!);
 
-    return geminiMsgResponse.toDomain();
-  }
+  //   return geminiMsgResponse.toDomain();
+  // }
 
-  Future<Message?> getRessponseForImage(
-      String entradaDeTexto, String pathImg) async {
-    final File imageProvider = File(pathImg);
+  // Future<Message?> getRessponseForImage(
+  //     String entradaDeTexto, String pathImg) async {
+  //   final File imageProvider = File(pathImg);
 
-    final imgBuffer = await imageProvider.readAsBytes();
+  //   final imgBuffer = await imageProvider.readAsBytes();
 
-    final imageParts = [
-      DataPart('image/jpeg', imgBuffer),
-    ];
+  //   final imageParts = [
+  //     DataPart('image/jpeg', imgBuffer),
+  //   ];
 
-    final prompt = TextPart(entradaDeTexto);
-    final response = await modelProvision.generateContent([
-      Content.multi([prompt, ...imageParts])
-    ]);
-    print(response.text);
+  //   final prompt = TextPart(entradaDeTexto);
+  //   final response = await modelProvision.generateContent([
+  //     Content.multi([prompt, ...imageParts])
+  //   ]);
+  //   print(response.text);
 
-    if (response.text == null) return null;
+  //   if (response.text == null) return null;
 
-    final String jsonExtractor =
-        '{"responseData":"${response.text!.replaceAll("\"", "\\\"").replaceAll("\n", "\\n")}", "suggestions": [], "resumenQuestion": "", "resumenAnswer": ""}';
+  //   final String jsonExtractor =
+  //       '{"responseData":"${response.text!.replaceAll("\"", "\\\"").replaceAll("\n", "\\n")}", "suggestions": [], "resumenQuestion": "", "resumenAnswer": ""}';
 
-    final geminiMsgResponse = geminiMsgResponseFromJson(jsonExtractor);
+  //   final geminiMsgResponse = geminiMsgResponseFromJson(jsonExtractor);
 
-    return geminiMsgResponse.toDomain();
-  }
+  //   return geminiMsgResponse.toDomain();
+  // }
 
   Future<Content> promtToContent(String promp, String? imageUrl) async {
     if (imageUrl == null) {
@@ -230,8 +234,88 @@ class GeminiChatDatasource implements MessageDatasource, QuestionDatasource {
   }
 
   @override
-  Future<List<Question>> getQuizFromBot({required String prompt}) {
-    // TODO: implement getQuizFromBot
-    throw UnimplementedError();
+  Future<List<Question>> getQuizFromBot(
+      {required String prompt, required Quiz quiz}) async {
+    final List<String> questionsType =
+        quiz.type.map((e) => e.toString()).toList();
+    final String formato =
+        'Reply to me using a valid JSON using the following structure:' + // However, reemplace the line break by \\n
+            // 'The mayor JSON should be of the following structure: ' +
+            // '{"1": \$questionJSON, "2": \$questionJSON ... } ' +
+            // "questionJSON is a json with the following structure. " +
+            '{"question": \$question, "alternatives": \$alternatives ,answer: \$answer ,"type": \$type} ' +
+            'question should be a string. ' +
+            'alternatives should be of type List<String>, ' +
+            'if the question is of the "${QuizType.openAnswer}" type, the list should only have one alternative, which contains a very short explanation to the question'
+                'answer must be of type integer, it must indicate the index of the correct answer in the list of alternatives. ' +
+            'type should be a String from this list: $questionsType. ' +
+            'The json keys must not change. ' +
+            'The  values of  question and alternatives must be in the same language as that used in the question, unless a different one is indicated in the question.';
+
+    String mainPrompt =
+        'You are a virtual tutor who helps me to study.I would like you to generate questions about: $prompt.' +
+            'this questions should be of type: $questionsType.' +
+            'Generate me just one question for now, then I will ask you more.  \n $formato';
+
+    final content = Content.text(mainPrompt);
+
+    var chat = model.startChat(history: []);
+
+    final List<Question> questionsGenerated = [];
+
+    GenerateContentResponse response;
+
+    for (var i = 0; i < quiz.numberOfQuestions; i++) {
+      if (i == 0) {
+        response = await chat.sendMessage(content);
+        if (response.text == null) {
+          i = 0;
+          continue;
+        }
+
+        final String? jsonExtractor = extraerJSON(response.text!);
+
+        if (jsonExtractor == null) {
+          i = 0;
+          continue;
+        }
+
+        final geminiQuizResponse =
+            geminiQuestionResponseFromJson(jsonExtractor);
+
+        if (geminiQuizResponse == null) {
+          i = 0;
+          continue;
+        }
+
+        questionsGenerated.add(geminiQuizResponse.toDomain());
+        continue;
+      }
+
+      response =
+          await chat.sendMessage(Content.text('one more question please'));
+      if (response.text == null) {
+        i--;
+        continue;
+      }
+
+      final String? jsonExtractor = extraerJSON(response.text!);
+
+      if (jsonExtractor == null) {
+        i--;
+        continue;
+      }
+
+      final geminiQuizResponse = geminiQuestionResponseFromJson(jsonExtractor);
+
+      if (geminiQuizResponse == null) {
+        i--;
+        continue;
+      }
+
+      questionsGenerated.add(geminiQuizResponse.toDomain());
+    }
+
+    return questionsGenerated;
   }
 }

@@ -4,8 +4,13 @@
 
 import 'dart:convert';
 
-GeminiMsgResponse geminiMsgResponseFromJson(String str) =>
-    GeminiMsgResponse.fromJson(json.decode(str));
+GeminiMsgResponse? geminiMsgResponseFromJson(String str) {
+  try {
+    return GeminiMsgResponse.fromJson(json.decode(str));
+  } catch (e) {
+    return null;
+  }
+}
 
 String geminiMsgResponseToJson(GeminiMsgResponse data) =>
     json.encode(data.toJson());

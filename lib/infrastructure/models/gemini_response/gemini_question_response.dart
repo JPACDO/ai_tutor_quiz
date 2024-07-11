@@ -6,13 +6,16 @@ import 'dart:convert';
 
 import 'package:ai_tutor_quiz/domain/entities/entities.dart';
 
-List<GeminiQuestionResponse> geminiQuizResponseFromJson(
-        String str, QuizType type) =>
-    List<GeminiQuestionResponse>.from(
-        json.decode(str).map((x) => GeminiQuestionResponse.fromJson(x)));
+GeminiQuestionResponse? geminiQuestionResponseFromJson(String str) {
+  try {
+    return GeminiQuestionResponse.fromJson(json.decode(str));
+  } catch (e) {
+    return null;
+  }
+}
 
-String geminiQuizResponseToJson(List<GeminiQuestionResponse> data) =>
-    json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
+String geminiQuestionResponseToJson(GeminiQuestionResponse data) =>
+    json.encode(data.toJson());
 
 class GeminiQuestionResponse {
   final String quiz;
@@ -28,18 +31,19 @@ class GeminiQuestionResponse {
   });
 
   factory GeminiQuestionResponse.fromJson(Map<String, dynamic> json) {
-    final alternativesJson = List<String>.from(json["opciones"].map((x) => x));
+    final alternativesJson =
+        List<String>.from(json["alternatives"].map((x) => x));
     return GeminiQuestionResponse(
-      quiz: json["pregunta"],
+      quiz: json["question"],
       alternatives: alternativesJson,
-      answer: json["respuesta"],
+      answer: json["answer"],
       type: QuizType.fromString(json["type"], alternativesJson.length),
     );
   }
   Map<String, dynamic> toJson() => {
-        "pregunta": quiz,
-        "opciones": List<dynamic>.from(alternatives.map((x) => x)),
-        "respuesta": answer,
+        "question": quiz,
+        "alternatives": List<dynamic>.from(alternatives.map((x) => x)),
+        "answer": answer,
         "type": type
       };
 }

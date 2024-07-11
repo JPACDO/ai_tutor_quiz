@@ -1,5 +1,4 @@
 import 'package:ai_tutor_quiz/domain/entities/entities.dart';
-import 'package:ai_tutor_quiz/domain/entities/quiz/question.dart';
 import 'package:ai_tutor_quiz/domain/use_cases/use_case.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:ai_tutor_quiz/infrastructure/repositories/quiz/quiz_repository_impl.dart';
@@ -28,7 +27,9 @@ class QuizP extends _$QuizP {
   }
 
   Future<void> getQuiz({required String prompt}) async {
-    final quizList = await ref.read(getBotQuizProvider)(prompt: prompt);
+    final quiz = ref.read(quizParamsProvider);
+    final quizList =
+        await ref.read(getBotQuizProvider)(prompt: prompt, quiz: quiz);
 
     state = [...quizList];
   }
@@ -54,13 +55,14 @@ class QuizParams extends _$QuizParams {
       type: {QuizType.multipleChoice},
       questions: [],
       language: 'From text',
-      difficulty: 'hard',
-      numberOfQuestions: 10,
+      difficulty: 'medium',
+      numberOfQuestions: 5,
       instaFeedback: false,
     );
   }
 
   void setParams(Quiz quiz) {
+    print(quiz);
     state = quiz;
   }
 }

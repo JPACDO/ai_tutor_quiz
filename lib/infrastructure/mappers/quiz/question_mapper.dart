@@ -1,6 +1,6 @@
 import 'package:ai_tutor_quiz/domain/entities/entities.dart';
 
-import '../../models/gemini_response/gemini_quiz_response.dart';
+import '../../models/gemini_response/gemini_question_response.dart';
 
 const empty = "";
 const zero = 0;

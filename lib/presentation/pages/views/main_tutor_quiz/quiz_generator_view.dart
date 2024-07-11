@@ -20,10 +20,8 @@ class _QuizGeneratorViewState extends ConsumerState<QuizGeneratorView> {
   }
 
   @override
-  Widget build(
-    BuildContext context,
-  ) {
-    final String prompt = ref.watch(promptQuizProvider);
+  Widget build(BuildContext context) {
+    final String prompt = ref.read(promptQuizProvider);
     _controller.text = prompt;
 
     final outlineInputBorder = OutlineInputBorder(
@@ -32,7 +30,7 @@ class _QuizGeneratorViewState extends ConsumerState<QuizGeneratorView> {
     );
 
     final inputDecoration = InputDecoration(
-      hintText: 'Message',
+      hintText: 'Content or topic',
       enabledBorder: outlineInputBorder,
       focusedBorder: outlineInputBorder,
       contentPadding: const EdgeInsets.all(20.0),
@@ -54,12 +52,16 @@ class _QuizGeneratorViewState extends ConsumerState<QuizGeneratorView> {
                   controller: _controller,
                   decoration: inputDecoration,
                   maxLines: null,
+                  onChanged: (value) {
+                    ref.read(promptQuizProvider.notifier).setPrompt(value);
+                  },
                 ),
                 Positioned(
                   right: -10,
                   top: -10,
                   child: IconButton(
                     onPressed: () {
+                      _controller.clear();
                       ref.read(promptQuizProvider.notifier).setPrompt('');
                     },
                     icon: const Icon(Icons.cancel_outlined),
@@ -71,6 +73,7 @@ class _QuizGeneratorViewState extends ConsumerState<QuizGeneratorView> {
                 )
               ]),
             ),
+            const SizedBox(height: 20),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -81,7 +84,18 @@ class _QuizGeneratorViewState extends ConsumerState<QuizGeneratorView> {
                     icon: const Icon(Icons.settings_outlined),
                     label: const Text('Quiz Settings')),
                 OutlinedButton.icon(
-                    onPressed: () {},
+                    onPressed: () async {
+                      final String prompt = await ref.read(promptQuizProvider);
+                      if (prompt.trim().isEmpty) {
+                        if (!context.mounted) return;
+                        _noContentDialog(context);
+                        return;
+                      }
+
+                      await ref
+                          .read(quizPProvider.notifier)
+                          .getQuiz(prompt: prompt);
+                    },
                     icon: const Icon(Icons.rocket_launch),
                     label: const Text('Generate Quiz')),
               ],
@@ -92,49 +106,158 @@ class _QuizGeneratorViewState extends ConsumerState<QuizGeneratorView> {
     );
   }
 
-  Future<dynamic> _menuQuizGenerator(BuildContext context) {
-    return showModalBottomSheet(
+  Future<dynamic> _noContentDialog(BuildContext context) {
+    return showDialog(
         context: context,
         builder: (context) {
-          return Container(
-            height: 300,
-            width: double.infinity,
-            padding: const EdgeInsets.all(20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  'Questions Type:',
-                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(height: 10),
-                Consumer(builder: (context, ref, child) {
-                  final quiz = ref.watch(quizParamsProvider);
-
-                  return Center(
-                    child: SegmentedButton(
-                        multiSelectionEnabled: true,
-                        showSelectedIcon: false,
-                        segments: QuizType.values.map((e) {
-                          return ButtonSegment<QuizType>(
-                              value: e, label: Text(e.toString()));
-                        }).toList(),
-                        selected: quiz.type,
-                        onSelectionChanged: (value) {
-                          ref
-                              .read(quizParamsProvider.notifier)
-                              .setParams(quiz.copyWith());
-                        }),
-                  );
-                }),
-                const SizedBox(height: 10),
-                const Text(
-                  'Quiz Language:',
-                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-                ),
-              ],
-            ),
+          return AlertDialog(
+            title: const Text('Please enter a content'),
+            actions: [
+              TextButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: const Text('Ok'))
+            ],
           );
         });
+  }
+
+  Future<dynamic> _menuQuizGenerator(BuildContext context) {
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return const SimpleDialog(children: [_ModalBottomSheet()]);
+        });
+    // return showModalBottomSheet(
+    //     context: context,
+    //     builder: (context) {
+    //       return const _ModalBottomSheet();
+    //     });
+  }
+}
+
+class _ModalBottomSheet extends ConsumerStatefulWidget {
+  const _ModalBottomSheet();
+
+  @override
+  ConsumerState<_ModalBottomSheet> createState() => _ModalBottomSheetState();
+}
+
+class _ModalBottomSheetState extends ConsumerState<_ModalBottomSheet> {
+  final TextEditingController _controller = TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
+    final quiz = ref.watch(quizParamsProvider);
+    _controller.text = quiz.numberOfQuestions.toString();
+    final int maxNumberOfQuestions = 10;
+
+    return SingleChildScrollView(
+      child: Container(
+        // height: 300,
+        width: double.infinity,
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'Questions Type:',
+              style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 10),
+            Center(
+              child: SegmentedButton(
+                  multiSelectionEnabled: true,
+                  showSelectedIcon: false,
+                  segments: QuizType.values.map((e) {
+                    return ButtonSegment<QuizType>(
+                        value: e,
+                        label: Text(
+                          e.toString(),
+                          textAlign: TextAlign.center,
+                        ));
+                  }).toList(),
+                  selected: quiz.type,
+                  onSelectionChanged: (value) {
+                    ref.read(quizParamsProvider.notifier).setParams(
+                          quiz.copyWith(type: value),
+                        );
+                  }),
+            ),
+            // const SizedBox(height: 10),
+            // const Text(
+            //   'Quiz Language:',
+            //   style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+            // ),
+            // const SizedBox(height: 10),
+            // TextFormField(),
+            const SizedBox(height: 20),
+            Text(
+              'Number of Questions ( Max $maxNumberOfQuestions ):',
+              style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 10),
+            Center(
+              child: SizedBox(
+                width: 150.0,
+                child: TextField(
+                  textAlign: TextAlign.center,
+                  controller: _controller,
+                  keyboardType: TextInputType.number,
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                    hintText: 'Number of Questions',
+                  ),
+                  onChanged: (value) {
+                    if (value.trim().isEmpty) return;
+
+                    if (int.tryParse(value) == null) {
+                      ref.read(quizParamsProvider.notifier).setParams(
+                            quiz.copyWith(
+                                numberOfQuestions: maxNumberOfQuestions),
+                          );
+                      return;
+                    }
+
+                    if (int.parse(value) > 5) {
+                      ref.read(quizParamsProvider.notifier).setParams(
+                            quiz.copyWith(
+                                numberOfQuestions: maxNumberOfQuestions),
+                          );
+                      return;
+                    }
+
+                    if (int.parse(value) < 1) {
+                      ref.read(quizParamsProvider.notifier).setParams(
+                            quiz.copyWith(numberOfQuestions: 1),
+                          );
+                      return;
+                    }
+
+                    ref.read(quizParamsProvider.notifier).setParams(
+                        quiz.copyWith(numberOfQuestions: int.parse(value)));
+                  },
+                ),
+              ),
+            ),
+            const SizedBox(height: 20),
+            const Text(
+              'Instant Feedback:',
+              style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 10),
+            Center(
+              child: Switch(
+                value: quiz.instaFeedback,
+                onChanged: (value) {
+                  ref
+                      .read(quizParamsProvider.notifier)
+                      .setParams(quiz.copyWith(instaFeedback: value));
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

@@ -3,7 +3,7 @@ import 'package:ai_tutor_quiz/domain/entities/entities.dart';
 enum QuizType {
   trueFalse("True/False"),
   multipleChoice("Multiple Choice"),
-  openAnswer("Written");
+  openAnswer("Open Answer");
 
   final String displayValue;
 

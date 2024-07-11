@@ -1,4 +1,4 @@
-import 'package:ai_tutor_quiz/domain/entities/quiz/question.dart';
+import 'package:ai_tutor_quiz/domain/entities/entities.dart';
 import 'package:ai_tutor_quiz/domain/repositories/repositories.dart';
 import 'package:ai_tutor_quiz/infrastructure/datasources/datasources.dart';
 
@@ -14,8 +14,10 @@ class QuizRepositoryImpl implements QuizRepository {
   }
 
   @override
-  Future<List<Question>> getBotQuiz({required String prompt}) async {
-    return await _geminiChatDatasource.getQuizFromBot(prompt: prompt);
+  Future<List<Question>> getBotQuiz(
+      {required String prompt, required Quiz quiz}) async {
+    return await _geminiChatDatasource.getQuizFromBot(
+        prompt: prompt, quiz: quiz);
   }
 
   @override
