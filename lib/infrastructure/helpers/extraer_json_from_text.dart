@@ -1,8 +1,12 @@
 String? extraerJSON(String texto) {
-  int inicio = texto.indexOf('{');
-  int fin = texto.lastIndexOf('}');
+  try {
+    int inicio = texto.indexOf('{');
+    int fin = texto.lastIndexOf('}');
 
-  String jsonExtraido = texto.substring(inicio, fin + 1);
+    String jsonExtraido = texto.substring(inicio, fin + 1);
 
-  return jsonExtraido;
+    return jsonExtraido;
+  } catch (e) {
+    return null;
+  }
 }

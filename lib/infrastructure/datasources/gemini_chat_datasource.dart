@@ -8,7 +8,6 @@ import 'package:ai_tutor_quiz/infrastructure/mappers/chat/msg_mapper.dart';
 import 'package:ai_tutor_quiz/infrastructure/mappers/quiz/question_mapper.dart';
 import 'package:ai_tutor_quiz/infrastructure/models/gemini_response/gemini_msg_chat_response.dart';
 import 'package:ai_tutor_quiz/infrastructure/models/gemini_response/gemini_question_response.dart';
-import 'package:flutter/services.dart';
 import 'package:ai_tutor_quiz/config/constants/enviroment.dart';
 import 'package:google_generative_ai/google_generative_ai.dart';
 import 'package:ai_tutor_quiz/domain/datasources/datasources.dart';
@@ -265,57 +264,34 @@ class GeminiChatDatasource implements MessageDatasource, QuestionDatasource {
 
     GenerateContentResponse response;
 
+    try {
+      response = await chat.sendMessage(content);
+    } catch (e) {
+      return [];
+    }
+
     for (var i = 0; i < quiz.numberOfQuestions; i++) {
-      if (i == 0) {
-        response = await chat.sendMessage(content);
-        if (response.text == null) {
-          i = 0;
-          continue;
+      try {
+        if (i != 0) {
+          response =
+              await chat.sendMessage(Content.text('one more question please'));
         }
 
         final String? jsonExtractor = extraerJSON(response.text!);
 
-        if (jsonExtractor == null) {
-          i = 0;
-          continue;
-        }
+        if (jsonExtractor == null) continue;
 
         final geminiQuizResponse =
             geminiQuestionResponseFromJson(jsonExtractor);
 
-        if (geminiQuizResponse == null) {
-          i = 0;
-          continue;
-        }
+        if (geminiQuizResponse == null) continue;
 
         questionsGenerated.add(geminiQuizResponse.toDomain());
+      } catch (e) {
         continue;
       }
-
-      response =
-          await chat.sendMessage(Content.text('one more question please'));
-      if (response.text == null) {
-        i--;
-        continue;
-      }
-
-      final String? jsonExtractor = extraerJSON(response.text!);
-
-      if (jsonExtractor == null) {
-        i--;
-        continue;
-      }
-
-      final geminiQuizResponse = geminiQuestionResponseFromJson(jsonExtractor);
-
-      if (geminiQuizResponse == null) {
-        i--;
-        continue;
-      }
-
-      questionsGenerated.add(geminiQuizResponse.toDomain());
     }
-
+    print(questionsGenerated);
     return questionsGenerated;
   }
 }

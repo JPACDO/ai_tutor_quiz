@@ -40,6 +40,12 @@ GoRouter appRouter(AppRouterRef ref) {
             return ChatScreen(topicId: topic.idDb);
           }),
       GoRoute(
+          path: '/quiz',
+          name: QuizScreen.name,
+          builder: (context, state) {
+            return const QuizScreen();
+          }),
+      GoRoute(
         path: '/',
         redirect: (_, __) => '/home/0',
       ),

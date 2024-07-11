@@ -8,7 +8,7 @@ import 'package:ai_tutor_quiz/presentation/providers/providers.dart';
 
 class ChatScreen extends ConsumerWidget {
   const ChatScreen({required this.topicId, super.key});
-  static const name = 'topic-screen';
+  static const name = 'chat-screen';
 
   final String? topicId;
 

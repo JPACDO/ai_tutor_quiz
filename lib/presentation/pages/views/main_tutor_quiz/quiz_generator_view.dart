@@ -1,7 +1,9 @@
 import 'package:ai_tutor_quiz/domain/entities/entities.dart';
+import 'package:ai_tutor_quiz/presentation/pages/screens/screens.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ai_tutor_quiz/presentation/providers/providers.dart';
+import 'package:go_router/go_router.dart';
 
 class QuizGeneratorView extends ConsumerStatefulWidget {
   const QuizGeneratorView({super.key});
@@ -92,9 +94,8 @@ class _QuizGeneratorViewState extends ConsumerState<QuizGeneratorView> {
                         return;
                       }
 
-                      await ref
-                          .read(quizPProvider.notifier)
-                          .getQuiz(prompt: prompt);
+                      if (!context.mounted) return;
+                      context.pushNamed(QuizScreen.name);
                     },
                     icon: const Icon(Icons.rocket_launch),
                     label: const Text('Generate Quiz')),
@@ -149,7 +150,7 @@ class _ModalBottomSheetState extends ConsumerState<_ModalBottomSheet> {
   Widget build(BuildContext context) {
     final quiz = ref.watch(quizParamsProvider);
     _controller.text = quiz.numberOfQuestions.toString();
-    final int maxNumberOfQuestions = 10;
+    const int maxNumberOfQuestions = 5;
 
     return SingleChildScrollView(
       child: Container(
@@ -193,7 +194,7 @@ class _ModalBottomSheetState extends ConsumerState<_ModalBottomSheet> {
             const SizedBox(height: 20),
             Text(
               'Number of Questions ( Max $maxNumberOfQuestions ):',
-              style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+              style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 10),
             Center(
