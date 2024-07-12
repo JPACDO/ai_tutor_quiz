@@ -44,17 +44,7 @@ class DrawerMenu extends ConsumerWidget {
                       onPressed: () {
                         ref
                             .read(colorThemeProvider.notifier)
-                            .changeColor(Colors.blue.shade100);
-                      },
-                      icon: const Icon(
-                        Icons.circle,
-                        color: Colors.blue,
-                      )),
-                  IconButton(
-                      onPressed: () {
-                        ref
-                            .read(colorThemeProvider.notifier)
-                            .changeColor(Colors.purple.shade100);
+                            .changeColor(Colors.purple);
                       },
                       icon: const Icon(
                         Icons.circle,
@@ -64,7 +54,17 @@ class DrawerMenu extends ConsumerWidget {
                       onPressed: () {
                         ref
                             .read(colorThemeProvider.notifier)
-                            .changeColor(Colors.green.shade100);
+                            .changeColor(Colors.blue);
+                      },
+                      icon: const Icon(
+                        Icons.circle,
+                        color: Colors.blue,
+                      )),
+                  IconButton(
+                      onPressed: () {
+                        ref
+                            .read(colorThemeProvider.notifier)
+                            .changeColor(Colors.green);
                       },
                       icon: const Icon(
                         Icons.circle,
@@ -74,7 +74,7 @@ class DrawerMenu extends ConsumerWidget {
                       onPressed: () {
                         ref
                             .read(colorThemeProvider.notifier)
-                            .changeColor(Colors.red.shade100);
+                            .changeColor(Colors.red);
                       },
                       icon: const Icon(
                         Icons.circle,

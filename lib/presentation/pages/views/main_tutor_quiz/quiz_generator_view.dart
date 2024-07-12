@@ -75,7 +75,7 @@ class _QuizGeneratorViewState extends ConsumerState<QuizGeneratorView> {
                       side: MaterialStateProperty.all(
                           BorderSide(color: colorBorder)),
                       backgroundColor: MaterialStateProperty.all(
-                          Theme.of(context).colorScheme.onPrimary),
+                          Theme.of(context).colorScheme.background),
                     ),
                   ),
                 )
@@ -129,10 +129,14 @@ class _QuizGeneratorViewState extends ConsumerState<QuizGeneratorView> {
   }
 
   Future<dynamic> _menuQuizGenerator(BuildContext context) {
+    final colorBg = Theme.of(context).colorScheme.background;
     return showDialog(
         context: context,
         builder: (context) {
-          return const SimpleDialog(children: [_ModalBottomSheet()]);
+          return SimpleDialog(
+              backgroundColor: colorBg,
+              surfaceTintColor: colorBg,
+              children: [_ModalBottomSheet()]);
         });
     // return showModalBottomSheet(
     //     context: context,
