@@ -1,5 +1,6 @@
 import 'package:ai_tutor_quiz/domain/entities/entities.dart';
 import 'package:ai_tutor_quiz/presentation/pages/screens/screens.dart';
+import 'package:ai_tutor_quiz/presentation/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ai_tutor_quiz/presentation/providers/providers.dart';
@@ -23,11 +24,13 @@ class _QuizGeneratorViewState extends ConsumerState<QuizGeneratorView> {
 
   @override
   Widget build(BuildContext context) {
+    final colorBorder = Theme.of(context).colorScheme.secondary;
+
     final String prompt = ref.read(promptQuizProvider);
     _controller.text = prompt;
 
     final outlineInputBorder = OutlineInputBorder(
-      borderSide: BorderSide(color: Theme.of(context).colorScheme.secondary),
+      borderSide: BorderSide(color: colorBorder),
       borderRadius: BorderRadius.circular(40.0),
     );
 
@@ -43,6 +46,7 @@ class _QuizGeneratorViewState extends ConsumerState<QuizGeneratorView> {
       appBar: AppBar(
         title: const Text('Quiz Generator'),
       ),
+      endDrawer: const DrawerMenu(),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
         child: Column(
@@ -68,8 +72,10 @@ class _QuizGeneratorViewState extends ConsumerState<QuizGeneratorView> {
                     },
                     icon: const Icon(Icons.cancel_outlined),
                     style: ButtonStyle(
-                      side: MaterialStateProperty.all(const BorderSide()),
-                      backgroundColor: MaterialStateProperty.all(Colors.white),
+                      side: MaterialStateProperty.all(
+                          BorderSide(color: colorBorder)),
+                      backgroundColor: MaterialStateProperty.all(
+                          Theme.of(context).colorScheme.onPrimary),
                     ),
                   ),
                 )

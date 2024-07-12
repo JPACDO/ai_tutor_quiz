@@ -1,7 +1,7 @@
 import 'package:ai_tutor_quiz/domain/entities/entities.dart';
 import 'package:ai_tutor_quiz/domain/use_cases/use_case.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:ai_tutor_quiz/infrastructure/repositories/quiz/quiz_repository_impl.dart';
+import 'package:ai_tutor_quiz/infrastructure/repositories/repositories.dart';
 import 'package:ai_tutor_quiz/presentation/providers/providers.dart';
 
 part 'quiz_provider.g.dart';
@@ -33,6 +33,8 @@ class QuizP extends _$QuizP {
           await ref.read(getBotQuizProvider)(prompt: prompt, quiz: quiz);
 
       state = [...quizList];
+      ref.read(quizUserResponseProvider.notifier).reset();
+
       return state;
     } catch (e) {
       rethrow;
@@ -88,5 +90,9 @@ class QuizUserResponse extends _$QuizUserResponse {
     state[index] = response;
     state = [...state];
     print(state);
+  }
+
+  void reset() {
+    state = [];
   }
 }

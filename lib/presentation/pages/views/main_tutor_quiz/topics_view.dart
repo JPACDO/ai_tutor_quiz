@@ -1,9 +1,10 @@
-import 'package:ai_tutor_quiz/domain/entities/entities.dart';
-import 'package:ai_tutor_quiz/presentation/pages/screens/screens.dart';
-import 'package:ai_tutor_quiz/presentation/providers/providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:ai_tutor_quiz/domain/entities/entities.dart';
+import 'package:ai_tutor_quiz/presentation/pages/screens/screens.dart';
+import 'package:ai_tutor_quiz/presentation/providers/providers.dart';
+import 'package:ai_tutor_quiz/presentation/widgets/widgets.dart';
 
 class TopicsView extends ConsumerStatefulWidget {
   const TopicsView({super.key});
@@ -25,6 +26,7 @@ class TopicsViewState extends ConsumerState<TopicsView> {
     // print(topics);
 
     return Scaffold(
+      endDrawer: const DrawerMenu(),
       appBar: AppBar(
         title: const Text('Topics View'),
       ),

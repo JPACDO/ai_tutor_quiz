@@ -35,7 +35,7 @@ final getBotQuizProvider = AutoDisposeProvider<GetBotQuizUseCase>.internal(
 );
 
 typedef GetBotQuizRef = AutoDisposeProviderRef<GetBotQuizUseCase>;
-String _$quizPHash() => r'75186b41c16e86c86334a0bc29de6ec6136bff72';
+String _$quizPHash() => r'fa9fb6bc613ce1a3e6a760a732659040f04ddbe8';
 
 /// See also [QuizP].
 @ProviderFor(QuizP)
@@ -78,7 +78,7 @@ final quizParamsProvider = NotifierProvider<QuizParams, Quiz>.internal(
 );
 
 typedef _$QuizParams = Notifier<Quiz>;
-String _$quizUserResponseHash() => r'e242aaa0dac3c835b7638786428877be22f2615a';
+String _$quizUserResponseHash() => r'ec29b5071ab68db977d62f8968aaa20b033577df';
 
 /// See also [QuizUserResponse].
 @ProviderFor(QuizUserResponse)

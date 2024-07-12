@@ -1,6 +1,7 @@
 import 'package:ai_tutor_quiz/config/routes/app_router.dart';
 import 'package:ai_tutor_quiz/config/themes/app_theme.dart';
 import 'package:ai_tutor_quiz/presentation/providers/providers.dart';
+import 'package:ai_tutor_quiz/presentation/providers/theme/color_theme_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -16,12 +17,13 @@ class MyApp extends ConsumerWidget {
     final isDarkMode = ref.watch(darkModeProvider);
 
     final appRouter = ref.watch(appRouterProvider);
+    final seedColor = ref.watch(colorThemeProvider);
 
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
       title: 'AI Tutor Quiz',
       routerConfig: appRouter,
-      theme: AppTheme(isDarkmode: isDarkMode).getTheme(),
+      theme: AppTheme(isDarkmode: isDarkMode, seedColor: seedColor).getTheme(),
     );
   }
 }

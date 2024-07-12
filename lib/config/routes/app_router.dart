@@ -44,7 +44,16 @@ GoRouter appRouter(AppRouterRef ref) {
           name: QuizScreen.name,
           builder: (context, state) {
             return const QuizScreen();
-          }),
+          },
+          routes: [
+            GoRoute(
+              path: 'result',
+              name: ResultQuizScreen.name,
+              builder: (context, state) {
+                return const ResultQuizScreen();
+              },
+            ),
+          ]),
       GoRoute(
         path: '/',
         redirect: (_, __) => '/home/0',
