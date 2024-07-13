@@ -133,10 +133,15 @@ class _QuizGeneratorViewState extends ConsumerState<QuizGeneratorView> {
     return showDialog(
         context: context,
         builder: (context) {
-          return SimpleDialog(
-              backgroundColor: colorBg,
-              surfaceTintColor: colorBg,
-              children: [_ModalBottomSheet()]);
+          return AlertDialog(
+            backgroundColor: colorBg,
+            surfaceTintColor: colorBg,
+            content: const _ModalBottomSheet(),
+            actions: [
+              TextButton(
+                  onPressed: () => context.pop(), child: const Text('CLOSE'))
+            ],
+          );
         });
     // return showModalBottomSheet(
     //     context: context,

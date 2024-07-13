@@ -53,23 +53,25 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
 
             for (var question in questions) {
               questionWidget.add(InteractiveQuestion(
-                  index: questions.indexOf(question),
-                  question: question,
-                  onNextPage: () {
-                    if (question == questions.last) {
-                      context.pushNamed(ResultQuizScreen.name);
-                      return;
-                    }
-                    pageController.nextPage(
-                        duration: const Duration(milliseconds: 500),
-                        curve: Curves.ease);
-                  },
-                  showNextButton: true));
+                index: questions.indexOf(question),
+                question: question,
+                onNextPage: () {
+                  if (question == questions.last) {
+                    context.pushNamed(ResultQuizScreen.name);
+                    return;
+                  }
+                  pageController.nextPage(
+                      duration: const Duration(milliseconds: 500),
+                      curve: Curves.ease);
+                },
+                showNextButton: true,
+                showAnswers: false,
+              ));
             }
             body = questions.isEmpty
                 ? const Center(child: CircularProgressIndicator())
                 : PageView(
-                    // physics: const NeverScrollableScrollPhysics(),
+                    physics: const NeverScrollableScrollPhysics(),
                     controller: pageController,
                     // index: pageIndex,
                     children: questionWidget,

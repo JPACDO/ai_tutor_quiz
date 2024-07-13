@@ -35,12 +35,11 @@ final getBotQuizProvider = AutoDisposeProvider<GetBotQuizUseCase>.internal(
 );
 
 typedef GetBotQuizRef = AutoDisposeProviderRef<GetBotQuizUseCase>;
-String _$quizPHash() => r'fa9fb6bc613ce1a3e6a760a732659040f04ddbe8';
+String _$quizPHash() => r'752ce81282bddea05944976f4e204f5619c262f2';
 
 /// See also [QuizP].
 @ProviderFor(QuizP)
-final quizPProvider =
-    AutoDisposeNotifierProvider<QuizP, List<Question>>.internal(
+final quizPProvider = NotifierProvider<QuizP, List<Question>>.internal(
   QuizP.new,
   name: r'quizPProvider',
   debugGetCreateSourceHash:
@@ -49,7 +48,7 @@ final quizPProvider =
   allTransitiveDependencies: null,
 );
 
-typedef _$QuizP = AutoDisposeNotifier<List<Question>>;
+typedef _$QuizP = Notifier<List<Question>>;
 String _$promptQuizHash() => r'1bc407baec22d2e2291a9f90aefa44f4701780fd';
 
 /// See also [PromptQuiz].
@@ -78,7 +77,7 @@ final quizParamsProvider = NotifierProvider<QuizParams, Quiz>.internal(
 );
 
 typedef _$QuizParams = Notifier<Quiz>;
-String _$quizUserResponseHash() => r'ec29b5071ab68db977d62f8968aaa20b033577df';
+String _$quizUserResponseHash() => r'44df1928ab6ba494b6f67472a58b250d8f560807';
 
 /// See also [QuizUserResponse].
 @ProviderFor(QuizUserResponse)

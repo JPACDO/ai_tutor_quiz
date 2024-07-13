@@ -19,7 +19,7 @@ GetBotQuizUseCase getBotQuiz(GetBotQuizRef ref) {
   return GetBotQuizUseCase(quizRepository);
 }
 
-@riverpod
+@Riverpod(keepAlive: true)
 class QuizP extends _$QuizP {
   @override
   List<Question> build() {
@@ -94,5 +94,32 @@ class QuizUserResponse extends _$QuizUserResponse {
 
   void reset() {
     state = [];
+  }
+
+  Map<String, int> calculateResult(List<Question> quiz) {
+    // final quiz = ref.read(quizPProvider);
+
+    final results = {
+      'correct': 0,
+      'total': 0,
+      'open': 0,
+    };
+
+    results['total'] = state.length;
+
+    for (var i = 0; i < state.length; i++) {
+      if (quiz[i].type == QuizType.openAnswer) {
+        results['open'] = results['open']! + 1;
+        results['correct'] = results['correct']! + 1;
+        continue;
+      }
+
+      if (quiz[i].correctAnswerIndex == state[i]) {
+        results['correct'] = results['correct']! + 1;
+        continue;
+      }
+    }
+
+    return results;
   }
 }

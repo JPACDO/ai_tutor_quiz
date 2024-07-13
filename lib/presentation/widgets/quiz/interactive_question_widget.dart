@@ -8,11 +8,13 @@ class InteractiveQuestion extends ConsumerStatefulWidget {
       {super.key,
       required this.index,
       required this.question,
+      required this.showAnswers,
       required this.onNextPage,
       required this.showNextButton});
   final int index;
   final Question question;
   final bool showNextButton;
+  final bool showAnswers;
   final VoidCallback onNextPage;
 
   @override
@@ -32,7 +34,7 @@ class _InteractiveQuestionState extends ConsumerState<InteractiveQuestion> {
         ? userResponse[widget.index]
         : null;
 
-    bool isLocked = (selected != null) && (instaFeed);
+    bool isLocked = (selected != null) && (instaFeed) || widget.showAnswers;
 
     final bool isOpenAnswer = widget.question.type == QuizType.openAnswer;
     final List<Widget> alternatives = [];
@@ -75,11 +77,13 @@ class _InteractiveQuestionState extends ConsumerState<InteractiveQuestion> {
               children: [
                 isOpenAnswer
                     ? TextFormField(
-                        maxLines: 6,
+                        maxLines: widget.showNextButton ? 6 : 1,
                       )
                     : alternativeWidget,
-                (showOpenAnswer &&
-                        widget.question.correctAnswerIndex == indexAlternative)
+                ((showOpenAnswer || !widget.showNextButton) &&
+                        widget.question.correctAnswerIndex ==
+                            indexAlternative &&
+                        isOpenAnswer)
                     ? alternativeWidget
                     : Container(),
               ],
@@ -119,10 +123,10 @@ class _InteractiveQuestionState extends ConsumerState<InteractiveQuestion> {
             const SizedBox(height: 20),
             ...alternatives,
             const SizedBox(height: 20),
-            Text(widget.question.correctAnswerIndex.toString()),
-            Text(widget.question.type.toString()),
+            // Text(widget.question.correctAnswerIndex.toString()),
+            // Text(widget.question.type.toString()),
             const SizedBox(height: 50),
-            (selected != null && widget.showNextButton || isOpenAnswer)
+            ((selected != null || isOpenAnswer) && widget.showNextButton)
                 ? Center(
                     child: FilledButton(
                         onPressed: () {
