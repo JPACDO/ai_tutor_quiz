@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ai_tutor_quiz/presentation/providers/providers.dart';
 import 'package:ai_tutor_quiz/presentation/widgets/widgets.dart';
+import 'package:go_router/go_router.dart';
 
 class ResultQuizScreen extends ConsumerWidget {
   const ResultQuizScreen({super.key});
@@ -13,20 +14,24 @@ class ResultQuizScreen extends ConsumerWidget {
     final quiz = ref.read(quizPProvider);
     final results =
         ref.read(quizUserResponseProvider.notifier).calculateResult(quiz);
-    final List<Widget> questionWidget = [];
+    final List<Widget> questionWidget = interactiveQuestions(
+        quiz: quiz, showNextButton: false, showAnswers: true);
 
-    for (var question in quiz) {
-      questionWidget.add(InteractiveQuestion(
-        index: quiz.indexOf(question),
-        question: question,
-        onNextPage: () {},
-        showNextButton: false,
-        showAnswers: true,
-      ));
-    }
+    // for (var question in quiz) {
+    //   questionWidget.add(InteractiveQuestion(
+    //     index: quiz.indexOf(question),
+    //     question: question,
+    //     onNextPage: () {},
+    //     showNextButton: false,
+    //     showAnswers: true,
+    //   ));
+    // }
 
     return Scaffold(
       appBar: AppBar(
+        leading: BackButton(
+          onPressed: () => context.go('/home/1'),
+        ),
         title: const Text('Result Quiz'),
       ),
       body: SingleChildScrollView(

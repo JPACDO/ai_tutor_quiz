@@ -49,13 +49,11 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
           if (snapchot.hasData) {
             final List<Question> questions = snapchot.data!;
 
-            final List<Widget> questionWidget = [];
-
-            for (var question in questions) {
-              questionWidget.add(InteractiveQuestion(
-                index: questions.indexOf(question),
-                question: question,
-                onNextPage: () {
+            final List<Widget> questionWidget = interactiveQuestions(
+                quiz: questions,
+                showNextButton: true,
+                showAnswers: false,
+                onNextPage: (Question question) {
                   if (question == questions.last) {
                     context.pushNamed(ResultQuizScreen.name);
                     return;
@@ -63,11 +61,25 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
                   pageController.nextPage(
                       duration: const Duration(milliseconds: 500),
                       curve: Curves.ease);
-                },
-                showNextButton: true,
-                showAnswers: false,
-              ));
-            }
+                });
+
+            // for (var question in questions) {
+            //   questionWidget.add(InteractiveQuestion(
+            //     index: questions.indexOf(question),
+            //     question: question,
+            //     onNextPage: () {
+            //       if (question == questions.last) {
+            //         context.pushNamed(ResultQuizScreen.name);
+            //         return;
+            //       }
+            //       pageController.nextPage(
+            //           duration: const Duration(milliseconds: 500),
+            //           curve: Curves.ease);
+            //     },
+            //     showNextButton: true,
+            //     showAnswers: false,
+            //   ));
+            // }
             body = questions.isEmpty
                 ? const Center(child: CircularProgressIndicator())
                 : PageView(

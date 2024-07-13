@@ -1,7 +1,26 @@
-import 'package:ai_tutor_quiz/domain/entities/entities.dart';
-import 'package:ai_tutor_quiz/presentation/providers/providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:ai_tutor_quiz/domain/entities/entities.dart';
+import 'package:ai_tutor_quiz/presentation/providers/providers.dart';
+
+List<InteractiveQuestion> interactiveQuestions(
+    {required List<Question> quiz,
+    Function(Question)? onNextPage,
+    required bool showNextButton,
+    required bool showAnswers}) {
+  final List<InteractiveQuestion> questionWidget = [];
+
+  for (var question in quiz) {
+    questionWidget.add(InteractiveQuestion(
+      index: quiz.indexOf(question),
+      question: question,
+      onNextPage: () => {if (onNextPage != null) onNextPage(question)},
+      showNextButton: showNextButton,
+      showAnswers: showAnswers,
+    ));
+  }
+  return questionWidget;
+}
 
 class InteractiveQuestion extends ConsumerStatefulWidget {
   const InteractiveQuestion(
