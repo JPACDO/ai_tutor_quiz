@@ -9,7 +9,7 @@ abstract class GroupQuestionsDatasource {
 
   Future<bool> deleteGroupQuestion({required String id});
 
-  Future<bool> newGroupQuestion({required GroupQuestions group});
+  Future<GroupQuestions> newGroupQuestion({required GroupQuestions group});
 
   Future<bool> updateGroupQuestion({required GroupQuestions group});
 

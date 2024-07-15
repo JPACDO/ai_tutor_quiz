@@ -6,16 +6,16 @@ import 'package:ai_tutor_quiz/presentation/widgets/widgets.dart';
 import 'package:ai_tutor_quiz/presentation/providers/providers.dart';
 import 'package:ai_tutor_quiz/presentation/pages/screens/screens.dart';
 
-class QuizScreen extends ConsumerStatefulWidget {
-  const QuizScreen({super.key});
+class QuizLoadScreen extends ConsumerStatefulWidget {
+  const QuizLoadScreen({super.key});
 
   static const name = 'quiz-screen';
 
   @override
-  ConsumerState<QuizScreen> createState() => _QuizScreenState();
+  ConsumerState<QuizLoadScreen> createState() => _QuizScreenState();
 }
 
-class _QuizScreenState extends ConsumerState<QuizScreen> {
+class _QuizScreenState extends ConsumerState<QuizLoadScreen> {
   final PageController pageController =
       PageController(initialPage: 0, keepPage: true);
 
@@ -65,6 +65,15 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
                 ref
                     .read(quizUserResponseProvider.notifier)
                     .setResponse(index: index, response: response);
+              },
+              onSave: (question) {
+                return showModalBottomSheet(
+                    context: context,
+                    builder: (context) {
+                      return SaveQuestionWidget(
+                        question: question,
+                      );
+                    });
               },
             );
 

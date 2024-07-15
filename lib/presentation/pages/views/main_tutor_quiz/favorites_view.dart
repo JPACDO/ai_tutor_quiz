@@ -39,6 +39,10 @@ class _SavedViewState extends ConsumerState<FavoritesView> {
               leading: const Icon(Icons.grading_rounded),
             );
           }),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => dialogCreateGroup(context),
+        child: const Icon(Icons.add),
+      ),
     );
   }
 }

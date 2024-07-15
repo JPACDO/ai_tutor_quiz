@@ -26,7 +26,7 @@ List<InteractiveQuestion> interactiveQuestions(
     required bool instaFeed,
     Function(int, int)? onPressAnswer,
     List<int?>? userResponse,
-    bool? showSaveicon,
+    Function(Question)? onSave,
     EdgeInsetsGeometry? padding}) {
   final List<InteractiveQuestion> questionWidget = [];
 
@@ -38,7 +38,7 @@ List<InteractiveQuestion> interactiveQuestions(
       showNextButton: showNextButton,
       showAnswers: showAnswers,
       padding: padding ?? const EdgeInsets.all(30.0),
-      showSaveicon: showSaveicon ?? true,
+      onSave: onSave,
       instaFeed: instaFeed,
       userResponse: userResponse,
       onPressAnswer: onPressAnswer ?? (index, response) {},
@@ -56,7 +56,7 @@ class InteractiveQuestion extends StatefulWidget {
       required this.showAnswers,
       required this.onNextPage,
       required this.showNextButton,
-      required this.showSaveicon,
+      required this.onSave,
       required this.instaFeed,
       required this.userResponse,
       required this.onPressAnswer});
@@ -66,7 +66,7 @@ class InteractiveQuestion extends StatefulWidget {
   final bool showAnswers;
   final VoidCallback onNextPage;
   final EdgeInsetsGeometry padding;
-  final bool showSaveicon;
+  final Function(Question)? onSave;
   final bool instaFeed;
   final List<int?>? userResponse;
   final Function(int, int) onPressAnswer;
@@ -179,11 +179,13 @@ class _InteractiveQuestionState extends State<InteractiveQuestion> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            widget.showSaveicon
+            widget.onSave != null
                 ? Align(
                     alignment: Alignment.centerRight,
                     child: IconButton.outlined(
-                      onPressed: () {},
+                      onPressed: () {
+                        widget.onSave!(widget.question);
+                      },
                       icon: const Icon(Icons.save),
                     ),
                   )

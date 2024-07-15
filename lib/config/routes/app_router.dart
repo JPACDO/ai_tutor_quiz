@@ -41,9 +41,9 @@ GoRouter appRouter(AppRouterRef ref) {
           }),
       GoRoute(
           path: '/quiz',
-          name: QuizScreen.name,
+          name: QuizLoadScreen.name,
           builder: (context, state) {
-            return const QuizScreen();
+            return const QuizLoadScreen();
           },
           routes: [
             GoRoute(

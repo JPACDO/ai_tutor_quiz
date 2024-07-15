@@ -15,7 +15,6 @@ class QuestionsOfList extends StatelessWidget {
       showNextButton: false,
       showAnswers: true,
       padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 5),
-      showSaveicon: false,
       instaFeed: true,
       onPressAnswer: (index, response) {},
       userResponse: [],

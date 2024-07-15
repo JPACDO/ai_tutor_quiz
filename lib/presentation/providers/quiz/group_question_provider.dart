@@ -53,20 +53,22 @@ class GroupQuestion extends _$GroupQuestion {
     final result = await ref.read(createGroupQuestionProvider).call(
           data: groupQuestion,
         );
-    if (!result) return;
-    state = [...state, groupQuestion];
+
+    state = [...state, result];
   }
 
-  void insertQuestionInGroup(
+  Future<bool> insertQuestionInGroup(
       {required Question question, required String groupId}) async {
     final result = await ref
         .read(addQuestionInGroupProvider)
         .call(data: question, groupId: groupId);
 
-    if (!result) return;
+    if (!result) return false;
 
     final newState = state.map((groupQuestion) => groupQuestion
         .copyWith(questions: [...groupQuestion.questions, question]));
     state = [...newState];
+
+    return true;
   }
 }

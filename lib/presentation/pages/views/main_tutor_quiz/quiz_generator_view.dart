@@ -101,7 +101,7 @@ class _QuizGeneratorViewState extends ConsumerState<QuizGeneratorView> {
                       }
 
                       if (!context.mounted) return;
-                      context.pushNamed(QuizScreen.name);
+                      context.pushNamed(QuizLoadScreen.name);
                     },
                     icon: const Icon(Icons.rocket_launch),
                     label: const Text('Generate Quiz')),
@@ -136,7 +136,7 @@ class _QuizGeneratorViewState extends ConsumerState<QuizGeneratorView> {
           return AlertDialog(
             backgroundColor: colorBg,
             surfaceTintColor: colorBg,
-            content: const _ModalBottomSheet(),
+            content: const _MenuDialog(),
             actions: [
               TextButton(
                   onPressed: () => context.pop(), child: const Text('CLOSE'))
@@ -151,14 +151,14 @@ class _QuizGeneratorViewState extends ConsumerState<QuizGeneratorView> {
   }
 }
 
-class _ModalBottomSheet extends ConsumerStatefulWidget {
-  const _ModalBottomSheet();
+class _MenuDialog extends ConsumerStatefulWidget {
+  const _MenuDialog();
 
   @override
-  ConsumerState<_ModalBottomSheet> createState() => _ModalBottomSheetState();
+  ConsumerState<_MenuDialog> createState() => _ModalBottomSheetState();
 }
 
-class _ModalBottomSheetState extends ConsumerState<_ModalBottomSheet> {
+class _ModalBottomSheetState extends ConsumerState<_MenuDialog> {
   final TextEditingController _controller = TextEditingController();
 
   @override

@@ -32,7 +32,8 @@ class GroupQuestionsRepositoryImpl implements GroupQuestionsRepository {
   }
 
   @override
-  Future<bool> newGroupQuestion({required GroupQuestions group}) async {
+  Future<GroupQuestions> newGroupQuestion(
+      {required GroupQuestions group}) async {
     return await _localStorageDbChatDatasource.newGroupQuestion(group: group);
   }
 

@@ -92,7 +92,7 @@ class LocalStorageDbChatDatasource
   }
 
   @override
-  Future<bool> newGroupQuestion({required GroupQuestions group}) {
+  Future<GroupQuestions> newGroupQuestion({required GroupQuestions group}) {
     // TODO: implement saveGroupQuiz
     throw UnimplementedError();
   }

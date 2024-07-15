@@ -21,7 +21,15 @@ class ResultQuizScreen extends ConsumerWidget {
       showNextButton: false,
       showAnswers: true,
       userResponse: ref.read(quizUserResponseProvider),
-      onPressAnswer: (index, response) {},
+      onSave: (question) {
+        return showModalBottomSheet(
+            context: context,
+            builder: (context) {
+              return SaveQuestionWidget(
+                question: question,
+              );
+            });
+      },
     );
 
     return Scaffold(

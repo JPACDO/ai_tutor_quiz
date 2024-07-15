@@ -190,13 +190,13 @@ class FakeDbDatasource extends LocalStorageDbChatDatasource {
   }
 
   @override
-  Future<bool> newGroupQuestion({required GroupQuestions group}) {
+  Future<GroupQuestions> newGroupQuestion({required GroupQuestions group}) {
     if (group.idDb != null) {
       throw Exception('ID debe ser nulo o no existir');
     }
     final newGroup = group.copyWith(idDb: DateTime.now().toString());
     dbGroups.add(newGroup);
-    return Future.value(true);
+    return Future.value(newGroup);
   }
 
   @override
