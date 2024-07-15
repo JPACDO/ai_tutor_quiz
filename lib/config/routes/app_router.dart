@@ -32,36 +32,51 @@ GoRouter appRouter(AppRouterRef ref) {
         // ],
       ),
       GoRoute(
-          path: '/topic',
-          name: ChatScreen.name,
-          builder: (context, state) {
-            final topic = state.extra as Topic;
+        path: '/topic',
+        name: ChatScreen.name,
+        builder: (context, state) {
+          final topic = state.extra as Topic;
 
-            return ChatScreen(topicId: topic.idDb);
-          }),
+          return ChatScreen(topicId: topic.idDb);
+        },
+      ),
       GoRoute(
-          path: '/quiz',
-          name: QuizLoadScreen.name,
-          builder: (context, state) {
-            return const QuizLoadScreen();
-          },
-          routes: [
-            GoRoute(
-              path: 'result',
-              name: ResultQuizScreen.name,
-              builder: (context, state) {
-                return const ResultQuizScreen();
-              },
-            ),
-          ]),
+        path: '/quiz',
+        name: QuizLoadScreen.name,
+        builder: (context, state) {
+          return const QuizLoadScreen();
+        },
+      ),
       GoRoute(
-          path: '/favorites',
-          name: QuestionsOfList.name,
-          builder: (context, state) {
-            return QuestionsOfList(
-              gorup: state.extra as GroupQuestions,
-            );
-          }),
+        path: '/favorites',
+        name: QuestionsOfList.name,
+        builder: (context, state) {
+          return QuestionsOfList(
+            gorup: state.extra as GroupQuestions,
+          );
+        },
+        routes: [
+          GoRoute(
+            path: 'take',
+            name: TakeQuizSaved.name,
+            builder: (context, state) {
+              final questiions = state.extra as GroupQuestions;
+
+              return TakeQuizSaved(
+                quiz: questiions,
+              );
+            },
+          ),
+        ],
+      ),
+      GoRoute(
+        path: '/result',
+        name: ResultQuizScreen.name,
+        builder: (context, state) {
+          final quiz = state.extra as List<Question>;
+          return ResultQuizScreen(quiz: quiz);
+        },
+      ),
       GoRoute(
         path: '/',
         redirect: (_, __) => '/home/0',

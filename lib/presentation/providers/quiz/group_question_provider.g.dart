@@ -78,7 +78,7 @@ final addQuestionInGroupProvider =
 
 typedef AddQuestionInGroupRef
     = AutoDisposeProviderRef<AddQuestionInGoroupUseCase>;
-String _$groupQuestionHash() => r'd1d353231323c22c62684598c33c80f437f9b731';
+String _$groupQuestionHash() => r'6646ccd6c50b1db30e1871dd89b6ab731bb41900';
 
 /// See also [GroupQuestion].
 @ProviderFor(GroupQuestion)

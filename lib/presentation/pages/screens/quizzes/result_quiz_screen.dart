@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ai_tutor_quiz/presentation/providers/providers.dart';
 import 'package:ai_tutor_quiz/presentation/widgets/widgets.dart';
-import 'package:go_router/go_router.dart';
+import 'package:ai_tutor_quiz/domain/entities/entities.dart';
 
 class ResultQuizScreen extends ConsumerWidget {
-  const ResultQuizScreen({super.key});
+  const ResultQuizScreen({super.key, required this.quiz});
+  final List<Question> quiz;
 
   static const name = 'resume-quiz';
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final quiz = ref.read(quizPProvider);
-
     final results =
         ref.read(quizUserResponseProvider.notifier).calculateResult(quiz);
     final List<Widget> questionWidget = interactiveQuestions(
@@ -37,7 +37,8 @@ class ResultQuizScreen extends ConsumerWidget {
         leading: BackButton(
           onPressed: () {
             ref.invalidate(quizUserResponseProvider);
-            context.go('/home/1');
+            context.pop();
+            // context.go('/home/1');
           },
         ),
         title: const Text('Result Quiz'),

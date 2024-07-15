@@ -7,8 +7,9 @@ import 'package:ai_tutor_quiz/presentation/widgets/widgets.dart';
 import 'package:ai_tutor_quiz/domain/entities/entities.dart';
 
 class TakeQuiz extends ConsumerStatefulWidget {
-  const TakeQuiz({super.key, required this.questions});
+  const TakeQuiz({super.key, required this.questions, required this.instaFeed});
   final List<Question> questions;
+  final bool instaFeed;
 
   @override
   ConsumerState<TakeQuiz> createState() => _TakeQuizState();
@@ -27,13 +28,14 @@ class _TakeQuizState extends ConsumerState<TakeQuiz> {
   @override
   Widget build(BuildContext context) {
     final List<Widget> questionWidget = interactiveQuestions(
-      instaFeed: ref.read(quizParamsProvider).instaFeedback,
+      instaFeed: widget.instaFeed,
       quiz: widget.questions,
       showNextButton: true,
       showAnswers: false,
       onNextPage: (Question question) {
         if (question == widget.questions.last) {
-          context.pushReplacementNamed(ResultQuizScreen.name);
+          context.pushReplacementNamed(ResultQuizScreen.name,
+              extra: widget.questions);
           return;
         }
         pageController.nextPage(
