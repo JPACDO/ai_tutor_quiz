@@ -1,7 +1,7 @@
-import 'package:ai_tutor_quiz/domain/entities/entities.dart';
 import 'package:go_router/go_router.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+import 'package:ai_tutor_quiz/domain/entities/entities.dart';
 import 'package:ai_tutor_quiz/presentation/pages/screens/screens.dart';
 
 part 'app_router.g.dart';
@@ -54,6 +54,14 @@ GoRouter appRouter(AppRouterRef ref) {
               },
             ),
           ]),
+      GoRoute(
+          path: '/favorites',
+          name: QuestionsOfList.name,
+          builder: (context, state) {
+            return QuestionsOfList(
+              gorup: state.extra as GroupQuestions,
+            );
+          }),
       GoRoute(
         path: '/',
         redirect: (_, __) => '/home/0',

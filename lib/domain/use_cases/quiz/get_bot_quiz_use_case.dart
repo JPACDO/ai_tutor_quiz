@@ -6,11 +6,11 @@ class GetBotQuizUseCase extends BaseUseCase<List<Question>, String> {
   final QuizRepository _quizRepository;
   GetBotQuizUseCase(this._quizRepository);
 
-  /// [prompt] = prompt
+  /// [data] = prompt
   @override
-  Future<List<Question>> call({required String prompt, Quiz? quiz}) async {
+  Future<List<Question>> call({required String data, Quiz? quiz}) async {
     if (quiz == null) throw Exception('Quiz null');
 
-    return await _quizRepository.getBotQuiz(prompt: prompt, quiz: quiz);
+    return await _quizRepository.getBotQuiz(prompt: data, quiz: quiz);
   }
 }

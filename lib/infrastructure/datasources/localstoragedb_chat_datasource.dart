@@ -7,7 +7,7 @@ import 'package:ai_tutor_quiz/domain/entities/entities.dart';
 import '../../domain/datasources/datasources.dart';
 
 class LocalStorageDbChatDatasource
-    implements MessageDatasource, TopicDatasource {
+    implements MessageDatasource, TopicDatasource, GroupQuestionsDatasource {
   // MessageDatasource
   @override
   Future<Message?> getMessage(
@@ -27,7 +27,7 @@ class LocalStorageDbChatDatasource
 
   // TopicDatasource
   @override
-  Future<bool> deleteAllTopicMessages({required String topicId}) {
+  Future<bool> deleteAllMessagesOfTopic({required String topicId}) {
     throw UnimplementedError();
   }
 
@@ -38,12 +38,6 @@ class LocalStorageDbChatDatasource
 
   @override
   Future<bool> deleteTopic({required String id}) {
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<bool> deleteTopicMessage(
-      {required String topicId, required String messageId}) {
     throw UnimplementedError();
   }
 
@@ -63,12 +57,6 @@ class LocalStorageDbChatDatasource
   }
 
   @override
-  Future<bool> saveTopicMessage(
-      {required String topicId, required String messageId}) {
-    throw UnimplementedError();
-  }
-
-  @override
   Future<bool> updateTopic({required Topic topic}) {
     // TODO: implement updateTopic
     throw UnimplementedError();
@@ -76,6 +64,49 @@ class LocalStorageDbChatDatasource
 
   @override
   Future<Topic> getTopic({required String topicId}) {
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<bool> deleteAllGroupQuestion({required String userId}) {
+    // TODO: implement deleteAllGroupQuiz
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<bool> deleteGroupQuestion({required String id}) {
+    // TODO: implement deleteGroupQuiz
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<List<GroupQuestions>> getAllGroupQuestion({required String userId}) {
+    // TODO: implement getAllGroupQuiz
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<GroupQuestions> getGroupQuestion({required String id}) {
+    // TODO: implement getGroupQuiz
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<bool> newGroupQuestion({required GroupQuestions group}) {
+    // TODO: implement saveGroupQuiz
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<bool> updateGroupQuestion({required GroupQuestions group}) {
+    // TODO: implement updateGroupQuiz
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<bool> addQuestionInGroup(
+      {required String groupId, required Question question}) {
+    // TODO: implement addQuestiontoGroup
     throw UnimplementedError();
   }
 }

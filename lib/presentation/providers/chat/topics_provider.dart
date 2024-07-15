@@ -7,11 +7,15 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'topics_provider.g.dart';
 
+// REPOSITORY PROVIDER  -----------------------------------------------------
+
 @riverpod
 TopicRepositoryImpl topicRepository(TopicRepositoryRef ref) {
   final localStorageDbChatDatasource = ref.read(fakeDatasourceProvider);
   return TopicRepositoryImpl(localStorageDbChatDatasource);
 }
+
+// USECASE PROVIDER  ---------------------------------------------------------
 
 @riverpod
 GetAllTopicsUseCase getAllTopics(GetAllTopicsRef ref) {
@@ -37,12 +41,12 @@ class Topics extends _$Topics {
     // es necesario el spread porque sino cuando lo llamo en addtopic
     // state es una funcion await por lo que lo llama y solo cuando le añado el nuevo topic
     // se vuelve una lista, por eso es que aparece un Topic de mas que es la BD cargada + el nuevo
-    state = [...await ref.read(getAllTopicsProvider)(prompt: userId)];
+    state = [...await ref.read(getAllTopicsProvider)(data: userId)];
   }
 
   void addTopic({required Topic topic}) async {
     try {
-      final newTopic = await ref.read(addNewTopicProvider).call(prompt: topic);
+      final newTopic = await ref.read(addNewTopicProvider).call(data: topic);
       // final newTopic =
       //     await ref.read(topicRepositoryProvider).addNewTopic(topic: topic);
       state = [...state, newTopic];

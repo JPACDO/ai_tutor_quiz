@@ -22,7 +22,7 @@ class CustomBottomNavigation extends StatelessWidget {
           BottomNavigationBarItem(
               icon: Icon(Icons.quiz_outlined), label: 'Quiz'),
           BottomNavigationBarItem(
-              icon: Icon(Icons.favorite_outline), label: 'Favoritos'),
+              icon: Icon(Icons.favorite_outline), label: 'Favorites'),
         ]);
   }
 }

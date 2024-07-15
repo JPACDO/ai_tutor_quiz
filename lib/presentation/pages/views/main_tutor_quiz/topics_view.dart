@@ -28,7 +28,7 @@ class TopicsViewState extends ConsumerState<TopicsView> {
     return Scaffold(
       endDrawer: const DrawerMenu(),
       appBar: AppBar(
-        title: const Text('Topics View'),
+        title: const Text('Topics'),
       ),
       body: GridView.builder(
         padding: const EdgeInsets.all(20),

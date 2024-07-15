@@ -10,7 +10,7 @@ part 'chat_provider.g.dart';
 
 // --  MESSAGE PROVIDER  --
 
-@Riverpod(keepAlive: true)
+@riverpod
 MessageRepositoryImpl messageRepository(MessageRepositoryRef ref) {
   final geminiChatDatasource = ref.read(geminiChatDatasourceProvider);
   final localStorageDbChatDatasource =
@@ -19,15 +19,15 @@ MessageRepositoryImpl messageRepository(MessageRepositoryRef ref) {
       geminiChatDatasource, localStorageDbChatDatasource);
 }
 
-@Riverpod(keepAlive: true)
+@riverpod
 GetBotMessageUseCase getBotMessage(GetBotMessageRef ref) {
   final messageRepository = ref.read(messageRepositoryProvider);
   return GetBotMessageUseCase(messageRepository);
 }
 
-// --  TOPIC PROVIDER  --
+// --  CHAT PROVIDER  --
 
-@Riverpod(keepAlive: true)
+@riverpod
 class Chat extends _$Chat {
   @override
   Topic build() {
@@ -73,7 +73,7 @@ class Chat extends _$Chat {
 
     final message = await ref
         .read(getBotMessageProvider) // useCase  getBotMessage
-        .call(prompt: prompt, imgUrl: imgUrl, topic: topic);
+        .call(data: prompt, imgUrl: imgUrl, topic: topic);
 
     // final message = await ref
     //     .read(chatStreamProvider.notifier)

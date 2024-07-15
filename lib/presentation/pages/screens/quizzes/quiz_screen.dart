@@ -27,10 +27,8 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final prompt = ref.read(promptQuizProvider);
-
     return FutureBuilder(
-        future: ref.read(quizPProvider.notifier).getQuiz(prompt: prompt),
+        future: ref.read(quizPProvider.notifier).getQuiz(),
         builder: (context, snapchot) {
           Widget body = const SizedBox();
           if (snapchot.connectionState == ConnectionState.waiting) {
@@ -50,36 +48,26 @@ class _QuizScreenState extends ConsumerState<QuizScreen> {
             final List<Question> questions = snapchot.data!;
 
             final List<Widget> questionWidget = interactiveQuestions(
-                quiz: questions,
-                showNextButton: true,
-                showAnswers: false,
-                onNextPage: (Question question) {
-                  if (question == questions.last) {
-                    context.pushNamed(ResultQuizScreen.name);
-                    return;
-                  }
-                  pageController.nextPage(
-                      duration: const Duration(milliseconds: 500),
-                      curve: Curves.ease);
-                });
+              instaFeed: ref.read(quizParamsProvider).instaFeedback,
+              quiz: questions,
+              showNextButton: true,
+              showAnswers: false,
+              onNextPage: (Question question) {
+                if (question == questions.last) {
+                  context.pushReplacementNamed(ResultQuizScreen.name);
+                  return;
+                }
+                pageController.nextPage(
+                    duration: const Duration(milliseconds: 500),
+                    curve: Curves.ease);
+              },
+              onPressAnswer: (index, response) {
+                ref
+                    .read(quizUserResponseProvider.notifier)
+                    .setResponse(index: index, response: response);
+              },
+            );
 
-            // for (var question in questions) {
-            //   questionWidget.add(InteractiveQuestion(
-            //     index: questions.indexOf(question),
-            //     question: question,
-            //     onNextPage: () {
-            //       if (question == questions.last) {
-            //         context.pushNamed(ResultQuizScreen.name);
-            //         return;
-            //       }
-            //       pageController.nextPage(
-            //           duration: const Duration(milliseconds: 500),
-            //           curve: Curves.ease);
-            //     },
-            //     showNextButton: true,
-            //     showAnswers: false,
-            //   ));
-            // }
             body = questions.isEmpty
                 ? const Center(child: CircularProgressIndicator())
                 : PageView(

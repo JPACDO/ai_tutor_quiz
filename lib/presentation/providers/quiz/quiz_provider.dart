@@ -6,6 +6,7 @@ import 'package:ai_tutor_quiz/presentation/providers/providers.dart';
 
 part 'quiz_provider.g.dart';
 
+// REPOSITORY PROVIDER  -----------------------------------------------------
 @riverpod
 QuizRepositoryImpl quizRepository(QuizRepositoryRef ref) {
   final geminiChatDatasource = ref.read(geminiChatDatasourceProvider);
@@ -13,12 +14,14 @@ QuizRepositoryImpl quizRepository(QuizRepositoryRef ref) {
   return QuizRepositoryImpl(geminiChatDatasource);
 }
 
+// USE CASE PROVIDER ---------------------------------------------------------
 @riverpod
 GetBotQuizUseCase getBotQuiz(GetBotQuizRef ref) {
   final quizRepository = ref.read(quizRepositoryProvider);
   return GetBotQuizUseCase(quizRepository);
 }
 
+// QUIZ PROVIDER / LIST OF QUESTIONS ------------------------------------------
 @Riverpod(keepAlive: true)
 class QuizP extends _$QuizP {
   @override
@@ -26,11 +29,13 @@ class QuizP extends _$QuizP {
     return [];
   }
 
-  Future<List<Question>> getQuiz({required String prompt}) async {
+  Future<List<Question>> getQuiz() async {
+    final prompt = ref.read(promptQuizProvider);
+
     final quiz = ref.read(quizParamsProvider);
     try {
       final quizList =
-          await ref.read(getBotQuizProvider)(prompt: prompt, quiz: quiz);
+          await ref.read(getBotQuizProvider)(data: prompt, quiz: quiz);
 
       state = [...quizList];
       ref.read(quizUserResponseProvider.notifier).reset();
@@ -42,6 +47,7 @@ class QuizP extends _$QuizP {
   }
 }
 
+// PROMPT PROVIDER ----------------------------------------------------------
 @Riverpod(keepAlive: true)
 class PromptQuiz extends _$PromptQuiz {
   @override
@@ -54,6 +60,7 @@ class PromptQuiz extends _$PromptQuiz {
   }
 }
 
+// QUIZ PARAMS PROVIDER -----------------------------------------------------
 @Riverpod(keepAlive: true)
 class QuizParams extends _$QuizParams {
   @override
@@ -69,11 +76,12 @@ class QuizParams extends _$QuizParams {
   }
 
   void setParams(Quiz quiz) {
-    print(quiz);
+    // print(quiz);
     state = quiz;
   }
 }
 
+// QUIZ USER RESPONSE PROVIDER ---------------------------------------------
 @Riverpod(keepAlive: true)
 class QuizUserResponse extends _$QuizUserResponse {
   @override
@@ -89,7 +97,7 @@ class QuizUserResponse extends _$QuizUserResponse {
     // Añade el valor al índice especificado
     state[index] = response;
     state = [...state];
-    print(state);
+    // print(state);
   }
 
   void reset() {

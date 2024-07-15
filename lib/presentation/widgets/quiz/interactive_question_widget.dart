@@ -1,13 +1,33 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ai_tutor_quiz/domain/entities/entities.dart';
-import 'package:ai_tutor_quiz/presentation/providers/providers.dart';
 
+/// Creates a list of [InteractiveQuestion] widgets from a list of [Question]s.
+///
+/// The function takes in several parameters:
+/// - [quiz]: the list of questions to be displayed.
+/// - [onNextPage]: an optional callback function that is called when the user
+///   clicks the 'Next' button.
+/// - [showNextButton]: a boolean indicating whether the 'Next' button should be
+///   visible.
+/// - [showAnswers]: a boolean indicating whether the answers should be shown inmediately.
+/// - [instaFeed]: a boolean indicating whether the feedback should be instant.
+/// - [onPressAnswer]: an optional callback function that is called when the user
+///   selects an answer. The function takes in two parameters: the index of the
+///   question and the index of the selected answer. Function (int index, int response)? onPressAnswer,
+/// - [userResponse]: a list of integers representing the user's responses to the
+///   questions.
+/// - [showSaveicon]: a boolean indicating whether the save icon should be shown.
+/// - [padding]: an optional padding value for the widget.
 List<InteractiveQuestion> interactiveQuestions(
     {required List<Question> quiz,
     Function(Question)? onNextPage,
     required bool showNextButton,
-    required bool showAnswers}) {
+    required bool showAnswers,
+    required bool instaFeed,
+    Function(int, int)? onPressAnswer,
+    List<int?>? userResponse,
+    bool? showSaveicon,
+    EdgeInsetsGeometry? padding}) {
   final List<InteractiveQuestion> questionWidget = [];
 
   for (var question in quiz) {
@@ -17,41 +37,60 @@ List<InteractiveQuestion> interactiveQuestions(
       onNextPage: () => {if (onNextPage != null) onNextPage(question)},
       showNextButton: showNextButton,
       showAnswers: showAnswers,
+      padding: padding ?? const EdgeInsets.all(30.0),
+      showSaveicon: showSaveicon ?? true,
+      instaFeed: instaFeed,
+      userResponse: userResponse,
+      onPressAnswer: onPressAnswer ?? (index, response) {},
     ));
   }
   return questionWidget;
 }
 
-class InteractiveQuestion extends ConsumerStatefulWidget {
+class InteractiveQuestion extends StatefulWidget {
   const InteractiveQuestion(
       {super.key,
+      required this.padding,
       required this.index,
       required this.question,
       required this.showAnswers,
       required this.onNextPage,
-      required this.showNextButton});
+      required this.showNextButton,
+      required this.showSaveicon,
+      required this.instaFeed,
+      required this.userResponse,
+      required this.onPressAnswer});
   final int index;
   final Question question;
   final bool showNextButton;
   final bool showAnswers;
   final VoidCallback onNextPage;
+  final EdgeInsetsGeometry padding;
+  final bool showSaveicon;
+  final bool instaFeed;
+  final List<int?>? userResponse;
+  final Function(int, int) onPressAnswer;
 
   @override
-  ConsumerState<InteractiveQuestion> createState() =>
-      _InteractiveQuestionState();
+  State<InteractiveQuestion> createState() => _InteractiveQuestionState();
 }
 
-class _InteractiveQuestionState extends ConsumerState<InteractiveQuestion> {
+class _InteractiveQuestionState extends State<InteractiveQuestion> {
   bool showOpenAnswer = false;
+  int? userResponseInt;
 
   @override
   Widget build(BuildContext context) {
-    final bool instaFeed = ref.read(quizParamsProvider).instaFeedback;
-    final userResponse = ref.watch(quizUserResponseProvider);
+    final bool instaFeed =
+        widget.instaFeed; //ref.read(quizParamsProvider).instaFeedback;
+    // final userResponse = widget.userResponse ??
+    // userResponseInt; //ref.watch(quizUserResponseProvider);
 
-    final int? selected = (userResponse.length > widget.index)
-        ? userResponse[widget.index]
-        : null;
+    final int? selected = widget.userResponse != null
+        ? (widget.userResponse!.length > widget.index)
+            ? widget.userResponse![widget.index]
+            : null
+        : userResponseInt;
 
     bool isLocked = (selected != null) && (instaFeed) || widget.showAnswers;
 
@@ -110,9 +149,19 @@ class _InteractiveQuestionState extends ConsumerState<InteractiveQuestion> {
           ),
           onTap: () {
             if (isLocked) return;
-            ref
-                .read(quizUserResponseProvider.notifier)
-                .setResponse(index: widget.index, response: indexAlternative);
+
+            widget.onPressAnswer(widget.index, indexAlternative);
+            setState(() {
+              userResponseInt = indexAlternative;
+              // if (userResponseInt.length <= widget.index) {
+              //   userResponseInt.addAll(List.filled(
+              //       widget.index - userResponseInt.length + 1, null));
+              // }
+              // userResponseInt[widget.index] = indexAlternative;
+            });
+            // ref
+            //     .read(quizUserResponseProvider.notifier)
+            //     .setResponse(index: widget.index, response: indexAlternative);
           },
         ),
       );
@@ -123,19 +172,22 @@ class _InteractiveQuestionState extends ConsumerState<InteractiveQuestion> {
     }
 
     return Container(
-      padding: const EdgeInsets.all(30.0),
+      padding: widget.padding,
       // color: Colors.grey.shade100,
+      // decoration: BoxDecoration(border: Border.all()),
       child: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Align(
-              alignment: Alignment.centerRight,
-              child: IconButton.outlined(
-                onPressed: () {},
-                icon: const Icon(Icons.save),
-              ),
-            ),
+            widget.showSaveicon
+                ? Align(
+                    alignment: Alignment.centerRight,
+                    child: IconButton.outlined(
+                      onPressed: () {},
+                      icon: const Icon(Icons.save),
+                    ),
+                  )
+                : Container(),
             const SizedBox(height: 20),
             Text(widget.question.question,
                 style: const TextStyle(fontSize: 20)),
@@ -144,16 +196,19 @@ class _InteractiveQuestionState extends ConsumerState<InteractiveQuestion> {
             const SizedBox(height: 20),
             // Text(widget.question.correctAnswerIndex.toString()),
             // Text(widget.question.type.toString()),
-            const SizedBox(height: 50),
+            widget.showNextButton ? const SizedBox(height: 50) : Container(),
             ((selected != null || isOpenAnswer) && widget.showNextButton)
                 ? Center(
                     child: FilledButton(
                         onPressed: () {
                           if (isOpenAnswer && !showOpenAnswer) {
                             showOpenAnswer = true;
-                            ref
-                                .read(quizUserResponseProvider.notifier)
-                                .setResponse(index: widget.index, response: 0);
+                            userResponseInt = 0;
+                            setState(() {});
+                            widget.onPressAnswer(widget.index, 0);
+                            // ref
+                            //     .read(quizUserResponseProvider.notifier)
+                            //     .setResponse(index: widget.index, response: 0);
                             return;
                           }
 

@@ -8,7 +8,7 @@ class TopicRepositoryImpl implements TopicRepository {
   TopicRepositoryImpl(this._localStorageDbChatDatasource);
 
   @override
-  Future<bool> deleteAllTopicMessages({required String topicId}) {
+  Future<bool> deleteAllMessagesOfTopic({required String topicId}) {
     throw UnimplementedError();
   }
 
@@ -33,20 +33,8 @@ class TopicRepositoryImpl implements TopicRepository {
   }
 
   @override
-  Future<bool> deleteTopicMessage(
-      {required String topicId, required String messageId}) {
-    throw UnimplementedError();
-  }
-
-  @override
   Future<Topic> getTopic({required String topicId}) {
     return _localStorageDbChatDatasource.getTopic(topicId: topicId);
-  }
-
-  @override
-  Future<bool> saveTopicMessage(
-      {required String topicId, required String messageId}) {
-    throw UnimplementedError();
   }
 
   @override

@@ -11,13 +11,7 @@ abstract class TopicRepository {
 
   Future<bool> deleteTopic({required String id});
 
-  Future<bool> saveTopicMessage(
-      {required String topicId, required String messageId});
-
-  Future<bool> deleteTopicMessage(
-      {required String topicId, required String messageId});
-
-  Future<bool> deleteAllTopicMessages({required String topicId});
+  Future<bool> deleteAllMessagesOfTopic({required String topicId});
 
   Future<bool> deleteAllTopics(String userId);
 }

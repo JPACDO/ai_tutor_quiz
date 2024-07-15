@@ -1,8 +1,6 @@
 import 'dart:io';
 
-import 'package:ai_tutor_quiz/domain/entities/chat/message.dart';
-
-import 'package:ai_tutor_quiz/domain/entities/chat/topic.dart';
+import 'package:ai_tutor_quiz/domain/entities/entities.dart';
 import 'package:ai_tutor_quiz/infrastructure/datasources/datasources.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
@@ -72,9 +70,58 @@ final dbTopics = <Topic>[
   Topic(idDb: '3', name: 'Topic 1', messages: []),
 ];
 
+final dbGroups = <GroupQuestions>[
+  GroupQuestions(
+    idDb: '1',
+    name: 'Group 1',
+    description: 'Description 1',
+    questions: [
+      Question(
+          question: 'Question 1',
+          alternatives: ['Answer 1', 'Answer 2', 'Answer 3'],
+          correctAnswerIndex: 1,
+          type: QuizType.multipleChoice),
+      Question(
+          question: 'Question 2',
+          alternatives: ['Answer 1', 'Answer 2'],
+          correctAnswerIndex: 1,
+          type: QuizType.trueFalse),
+      Question(
+          question: 'Question 3',
+          alternatives: ['Answer 1', 'Answer 2', 'Answer 3'],
+          correctAnswerIndex: 0,
+          type: QuizType.openAnswer),
+    ],
+  ),
+  GroupQuestions(
+    idDb: '2',
+    name: 'Group 2',
+    description: 'Description 2',
+    questions: [],
+  ),
+];
+
 class FakeDbDatasource extends LocalStorageDbChatDatasource {
+  // MESSAGE ----------------------------------------------------------------------
   @override
-  Future<bool> deleteAllTopicMessages({required String topicId}) {
+  Future<Message?> getMessage(
+      {required String prompt, required String? imgUrl, Topic? topic}) {
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<String> saveImageOfMessage({required XFile img}) async {
+    final Directory directory = await getApplicationDocumentsDirectory();
+    final name = DateTime.now().toString();
+    final imagePath = File('${directory.path}/$name.png');
+    await imagePath.writeAsBytes(await img.readAsBytes());
+
+    return imagePath.path;
+  }
+
+  // TOPICS -----------------------------------------------------------------------
+  @override
+  Future<bool> deleteAllMessagesOfTopic({required String topicId}) {
     throw UnimplementedError();
   }
 
@@ -90,37 +137,14 @@ class FakeDbDatasource extends LocalStorageDbChatDatasource {
   }
 
   @override
-  Future<bool> deleteTopicMessage(
-      {required String topicId, required String messageId}) {
-    throw UnimplementedError();
-  }
-
-  @override
   Future<List<Topic>> getAllTopics(String userId) {
-    print("CARGARRRRRR TOPIC DB");
     return Future.value(dbTopics);
-  }
-
-  @override
-  Future<Message?> getMessage(
-      {required String prompt, required String? imgUrl, Topic? topic}) {
-    throw UnimplementedError();
   }
 
   @override
   Future<Topic> getTopic({required String topicId}) {
     final topic = dbTopics.firstWhere((element) => element.idDb == topicId);
     return Future.value(topic);
-  }
-
-  @override
-  Future<String> saveImageOfMessage({required XFile img}) async {
-    final Directory directory = await getApplicationDocumentsDirectory();
-    final name = DateTime.now().toString();
-    final imagePath = File('${directory.path}/$name.png');
-    await imagePath.writeAsBytes(await img.readAsBytes());
-
-    return imagePath.path;
   }
 
   @override
@@ -134,16 +158,60 @@ class FakeDbDatasource extends LocalStorageDbChatDatasource {
   }
 
   @override
-  Future<bool> saveTopicMessage(
-      {required String topicId, required String messageId}) {
-    throw UnimplementedError();
-  }
-
-  @override
   Future<bool> updateTopic({required Topic topic}) {
     // print(topic.messages);
     final index = dbTopics.indexWhere((element) => element.idDb == topic.idDb);
     dbTopics[index] = topic;
+    return Future.value(true);
+  }
+
+  // GROUP OF QUESTIONS -----------------------------------------------------------
+  @override
+  Future<bool> deleteAllGroupQuestion({required String userId}) {
+    // TODO: implement deleteAllGroupQuiz
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<bool> deleteGroupQuestion({required String id}) {
+    dbGroups.removeWhere((element) => element.idDb == id);
+    return Future.value(true);
+  }
+
+  @override
+  Future<List<GroupQuestions>> getAllGroupQuestion({required String userId}) {
+    return Future.value(dbGroups);
+  }
+
+  @override
+  Future<GroupQuestions> getGroupQuestion({required String id}) {
+    final group = dbGroups.firstWhere((element) => element.idDb == id);
+    return Future.value(group);
+  }
+
+  @override
+  Future<bool> newGroupQuestion({required GroupQuestions group}) {
+    if (group.idDb != null) {
+      throw Exception('ID debe ser nulo o no existir');
+    }
+    final newGroup = group.copyWith(idDb: DateTime.now().toString());
+    dbGroups.add(newGroup);
+    return Future.value(true);
+  }
+
+  @override
+  Future<bool> updateGroupQuestion({required GroupQuestions group}) {
+    final index = dbGroups.indexWhere((element) => element.idDb == group.idDb);
+    dbGroups[index] = group;
+    return Future.value(true);
+  }
+
+  @override
+  Future<bool> addQuestionInGroup(
+      {required String groupId, required Question question}) {
+    final group = dbGroups.firstWhere((element) => element.idDb == groupId);
+    group.questions.add(question);
+    dbGroups[dbGroups.indexOf(group)] = group;
     return Future.value(true);
   }
 }

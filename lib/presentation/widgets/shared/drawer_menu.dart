@@ -14,18 +14,18 @@ class DrawerMenu extends ConsumerWidget {
     return Drawer(
       child: Column(
         children: [
-          DrawerHeader(
+          const DrawerHeader(
             decoration: BoxDecoration(
                 // color: seedColor,
                 ),
-            child: const Text('Drawer Header'),
+            child: Text('WELCOME TO AI TUTOR QUIZ'),
           ),
-          const ListTile(
-            title: Text('Item 1'),
-          ),
-          const ListTile(
-            title: Text('Item 2'),
-          ),
+          // const ListTile(
+          //   title: Text('Item 1'),
+          // ),
+          // const ListTile(
+          //   title: Text('Item 2'),
+          // ),
           const Spacer(),
           ListTile(
             title: const Text("Dark Mode"),

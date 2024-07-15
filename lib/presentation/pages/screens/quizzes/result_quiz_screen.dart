@@ -12,25 +12,25 @@ class ResultQuizScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final quiz = ref.read(quizPProvider);
+
     final results =
         ref.read(quizUserResponseProvider.notifier).calculateResult(quiz);
     final List<Widget> questionWidget = interactiveQuestions(
-        quiz: quiz, showNextButton: false, showAnswers: true);
-
-    // for (var question in quiz) {
-    //   questionWidget.add(InteractiveQuestion(
-    //     index: quiz.indexOf(question),
-    //     question: question,
-    //     onNextPage: () {},
-    //     showNextButton: false,
-    //     showAnswers: true,
-    //   ));
-    // }
+      instaFeed: true,
+      quiz: quiz,
+      showNextButton: false,
+      showAnswers: true,
+      userResponse: ref.read(quizUserResponseProvider),
+      onPressAnswer: (index, response) {},
+    );
 
     return Scaffold(
       appBar: AppBar(
         leading: BackButton(
-          onPressed: () => context.go('/home/1'),
+          onPressed: () {
+            ref.invalidate(quizUserResponseProvider);
+            context.go('/home/1');
+          },
         ),
         title: const Text('Result Quiz'),
       ),

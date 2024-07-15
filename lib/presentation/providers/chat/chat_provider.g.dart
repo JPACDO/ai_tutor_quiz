@@ -6,11 +6,12 @@ part of 'chat_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$messageRepositoryHash() => r'35e5def1a66b1e54c96a38646842dd39a9819ed0';
+String _$messageRepositoryHash() => r'5c7c5579640c2051b037641b7d9b7cdaa531a871';
 
 /// See also [messageRepository].
 @ProviderFor(messageRepository)
-final messageRepositoryProvider = Provider<MessageRepositoryImpl>.internal(
+final messageRepositoryProvider =
+    AutoDisposeProvider<MessageRepositoryImpl>.internal(
   messageRepository,
   name: r'messageRepositoryProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
@@ -20,12 +21,13 @@ final messageRepositoryProvider = Provider<MessageRepositoryImpl>.internal(
   allTransitiveDependencies: null,
 );
 
-typedef MessageRepositoryRef = ProviderRef<MessageRepositoryImpl>;
-String _$getBotMessageHash() => r'f67593547c809528d31759168757c2bd7529791f';
+typedef MessageRepositoryRef = AutoDisposeProviderRef<MessageRepositoryImpl>;
+String _$getBotMessageHash() => r'841540969ed1535437741d93153ee4e983d2ca51';
 
 /// See also [getBotMessage].
 @ProviderFor(getBotMessage)
-final getBotMessageProvider = Provider<GetBotMessageUseCase>.internal(
+final getBotMessageProvider =
+    AutoDisposeProvider<GetBotMessageUseCase>.internal(
   getBotMessage,
   name: r'getBotMessageProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
@@ -35,12 +37,12 @@ final getBotMessageProvider = Provider<GetBotMessageUseCase>.internal(
   allTransitiveDependencies: null,
 );
 
-typedef GetBotMessageRef = ProviderRef<GetBotMessageUseCase>;
-String _$chatHash() => r'e853a925a32f8e74789a146e3cd509f9bdc1b394';
+typedef GetBotMessageRef = AutoDisposeProviderRef<GetBotMessageUseCase>;
+String _$chatHash() => r'aa3f195240e8516e49a4be94491a74022db8b084';
 
 /// See also [Chat].
 @ProviderFor(Chat)
-final chatProvider = NotifierProvider<Chat, Topic>.internal(
+final chatProvider = AutoDisposeNotifierProvider<Chat, Topic>.internal(
   Chat.new,
   name: r'chatProvider',
   debugGetCreateSourceHash:
@@ -49,7 +51,7 @@ final chatProvider = NotifierProvider<Chat, Topic>.internal(
   allTransitiveDependencies: null,
 );
 
-typedef _$Chat = Notifier<Topic>;
+typedef _$Chat = AutoDisposeNotifier<Topic>;
 String _$chatScrollControllerHash() =>
     r'2acba7139ae6a315483a266d79bb57546bd05d1e';
 
