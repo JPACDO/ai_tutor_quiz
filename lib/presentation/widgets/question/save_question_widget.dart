@@ -1,3 +1,4 @@
+import 'package:ai_tutor_quiz/config/constants/values.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ai_tutor_quiz/domain/entities/entities.dart';
@@ -17,7 +18,7 @@ class _SaveQuestionWidgetState extends ConsumerState<SaveQuestionWidget> {
   @override
   void initState() {
     super.initState();
-    ref.read(groupQuestionProvider.notifier).getAllGroup(userId: '0');
+    ref.read(groupQuestionProvider.notifier).getAllGroup(userId: user.id);
   }
 
   @override
@@ -29,11 +30,15 @@ class _SaveQuestionWidgetState extends ConsumerState<SaveQuestionWidget> {
         ListTile(
           leading: const Icon(Icons.add),
           title: const Text('Add new list'),
-          onTap: () => dialogCreateNew(context, (name) {
-            ref.read(groupQuestionProvider.notifier).createGroup(
-                  GroupQuestions(questions: [], name: name, userId: '0'),
-                );
-          }),
+          onTap: () => dialogCreateNew(
+              context: context,
+              title: 'Create new list',
+              onSubmit: (name) {
+                ref.read(groupQuestionProvider.notifier).createGroup(
+                      GroupQuestions(
+                          questions: [], name: name, userId: user.id),
+                    );
+              }),
         ),
         Flexible(
           child: ListView.builder(

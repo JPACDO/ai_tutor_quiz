@@ -1,3 +1,4 @@
+import 'package:ai_tutor_quiz/config/constants/values.dart';
 import 'package:flutter/widgets.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -30,7 +31,7 @@ GetBotMessageUseCase getBotMessage(GetBotMessageRef ref) {
 class Chat extends _$Chat {
   @override
   Topic build() {
-    return Topic(id: '1', name: '', messages: [], userId: '0');
+    return Topic(id: '1', name: '', messages: [], userId: user.id);
   }
 
   void loadTopic({required Topic topic}) async {

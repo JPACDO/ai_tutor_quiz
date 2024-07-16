@@ -37,7 +37,12 @@ class _QuestionsOfListState extends ConsumerState<QuestionsOfList> {
             onPressed: () {
               context.pushNamed(TakeQuizSaved.name, extra: widget.group);
             },
-            icon: const Icon(Icons.more_vert),
+            icon: const Row(
+              children: [
+                Text('Take Quiz'),
+                Icon(Icons.restart_alt_outlined),
+              ],
+            ),
           ),
         ],
       ),
@@ -50,12 +55,20 @@ class _QuestionsOfListState extends ConsumerState<QuestionsOfList> {
               questionsWidget[index],
               IconButton(
                   onPressed: () {
-                    ref.read(groupQuestionProvider.notifier).deleteQuestion(
-                        groupId: widget.group.id!,
-                        questionId: widget.group.questions[index].id!);
-                    widget.group.questions.removeWhere((element) =>
-                        element.id == widget.group.questions[index].id);
-                    setState(() {});
+                    dialogDelete(
+                        context: context,
+                        name: '',
+                        onSubmit: () {
+                          ref
+                              .read(groupQuestionProvider.notifier)
+                              .removeQuestion(
+                                  groupId: widget.group.id!,
+                                  questionId:
+                                      widget.group.questions[index].id!);
+                          widget.group.questions.removeWhere((element) =>
+                              element.id == widget.group.questions[index].id);
+                          setState(() {});
+                        });
                   },
                   icon: const Icon(Icons.delete_outline)),
               const Divider(

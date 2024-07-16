@@ -1,3 +1,5 @@
+import 'package:ai_tutor_quiz/config/constants/values.dart';
+import 'package:ai_tutor_quiz/presentation/widgets/shared/tile_edit_delete.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -17,7 +19,7 @@ class TopicsViewState extends ConsumerState<TopicsView> {
   @override
   void initState() {
     super.initState();
-    ref.read(topicsProvider.notifier).getAllTopics(userId: '1');
+    ref.read(topicsProvider.notifier).getAllTopics(userId: user.id);
   }
 
   @override
@@ -30,48 +32,90 @@ class TopicsViewState extends ConsumerState<TopicsView> {
       appBar: AppBar(
         title: const Text('Topics'),
       ),
-      body: GridView.builder(
+      body: ListView.builder(
         padding: const EdgeInsets.all(20),
         itemCount: topics.length,
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          mainAxisSpacing: 10,
-          crossAxisSpacing: 10,
-        ),
         itemBuilder: (context, index) {
-          return _TopicCard(
-            topic: topics[index],
-          );
+          final topic = topics[index];
+          return TileEditDelete(
+              name: topic.name,
+              leading: const Icon(Icons.bubble_chart_sharp),
+              onTap: () {
+                context.pushNamed(ChatScreen.name, extra: topic);
+              },
+              onRename: (name) {
+                ref
+                    .read(topicsProvider.notifier)
+                    .updateTopic(topic: topic.copyWith(name: name));
+              },
+              onDelete: () {
+                ref.read(topicsProvider.notifier).removeTopic(topic: topic);
+              });
         },
       ),
       floatingActionButton: FloatingActionButton(
-          onPressed: () => dialogCreateNew(context, (name) {
+          onPressed: () => dialogCreateNew(
+              context: context,
+              title: 'Create new topic',
+              onSubmit: (name) {
                 ref.read(topicsProvider.notifier).addTopic(
-                    topic:
-                        Topic(id: null, name: name, messages: [], userId: '0'));
+                    topic: Topic(
+                        id: null, name: name, messages: [], userId: user.id));
               }),
           child: const Icon(Icons.add)),
     );
   }
 }
 
-class _TopicCard extends StatelessWidget {
-  const _TopicCard({required this.topic});
+// class _TopicCard extends StatelessWidget {
+//   const _TopicCard({required this.topic});
 
-  final Topic topic;
+//   final Topic topic;
 
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      child: Card(
-        child: ListTile(
-          title: Text(topic.name),
-          subtitle: Text(topic.id ?? 'null*'),
-        ),
-      ),
-      onTap: () {
-        context.pushNamed(ChatScreen.name, extra: topic);
-      },
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return Padding(
+//       padding: const EdgeInsets.all(8.0),
+//       child: ListTile(
+//         onTap: () {
+//           context.pushNamed(ChatScreen.name, extra: topic);
+//         },
+//         title: Text(topic.name),
+//         shape: RoundedRectangleBorder(
+//           side: BorderSide(
+//               color: Theme.of(context).colorScheme.secondary, width: 1),
+//           borderRadius: BorderRadius.circular(5),
+//         ),
+//         leading: const Icon(Icons.bubble_chart_sharp),
+//         trailing: PopupMenuButton(
+//           itemBuilder: (context) => [
+//             PopupMenuItem(
+//               onTap: () {},
+//               child: const Row(
+//                 children: [
+//                   Padding(
+//                     padding: EdgeInsets.only(right: 5.0),
+//                     child: Icon(Icons.edit),
+//                   ),
+//                   Text('Rename'),
+//                 ],
+//               ),
+//             ),
+//             PopupMenuItem(
+//               onTap: () {},
+//               child: const Row(
+//                 children: [
+//                   Padding(
+//                     padding: EdgeInsets.only(right: 5.0),
+//                     child: Icon(Icons.delete),
+//                   ),
+//                   Text('Delete'),
+//                 ],
+//               ),
+//             ),
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+// }

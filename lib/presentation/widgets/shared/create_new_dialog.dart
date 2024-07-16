@@ -1,21 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-Future<void> dialogCreateNew(BuildContext context, Function(String) onSubmit) {
+Future<void> dialogCreateNew(
+    {required BuildContext context,
+    required String title,
+    String? fieldText,
+    required Function(String) onSubmit}) {
   return showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-            title: const Text('Add new'),
+            title: Text(title),
             content: CreateGroupDialog(
               onSubmit: onSubmit,
+              text: fieldText,
             ));
       });
 }
 
 class CreateGroupDialog extends StatefulWidget {
-  const CreateGroupDialog({super.key, required this.onSubmit});
-
+  const CreateGroupDialog({super.key, required this.onSubmit, this.text});
+  final String? text;
   final Function(String) onSubmit;
 
   @override
@@ -24,6 +29,11 @@ class CreateGroupDialog extends StatefulWidget {
 
 class _NewGroupDialogState extends State<CreateGroupDialog> {
   final TextEditingController _controller = TextEditingController();
+  @override
+  void initState() {
+    super.initState();
+    _controller.text = widget.text ?? '';
+  }
 
   @override
   void dispose() {

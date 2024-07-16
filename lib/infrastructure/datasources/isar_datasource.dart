@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:ai_tutor_quiz/infrastructure/errors/localdb_errors.dart';
 import 'package:ai_tutor_quiz/infrastructure/mappers/mappers.dart';
 import 'package:ai_tutor_quiz/infrastructure/models/models.dart';
 import 'package:image_picker/image_picker.dart';
@@ -59,8 +60,15 @@ class IsarDatasource
   }
 
   @override
-  Future<bool> deleteTopic({required String id}) {
-    throw UnimplementedError();
+  Future<bool> deleteTopic({required String id}) async {
+    final isar = await db;
+    bool success = false;
+    final idParse = int.tryParse(id);
+    if (idParse == null) throw NoIntegerException();
+    return isar.writeTxn(() async {
+      success = await isar.topicResponseLocals.delete(idParse);
+      return success;
+    });
   }
 
   @override
@@ -73,9 +81,7 @@ class IsarDatasource
 
   @override
   Future<Topic> addTopic({required Topic topic}) async {
-    if (topic.id != null) {
-      throw Exception('ID debe ser nulo o no existir');
-    }
+    if (topic.id != null) throw IdNoNullException();
 
     final isar = await db;
 
@@ -130,7 +136,7 @@ class IsarDatasource
     final isar = await db;
     bool success = false;
     final idParse = int.tryParse(id);
-    if (idParse == null) return false;
+    if (idParse == null) throw NoIntegerException();
     await isar.writeTxn(() async {
       success = await isar.groupQuestionsResponseLocals.delete(idParse);
     });
@@ -154,18 +160,14 @@ class IsarDatasource
         .filter()
         .isarIdEqualTo(int.tryParse(id))
         .findFirst();
-    if (group == null) {
-      return null;
-    }
+    if (group == null) throw NoFoundException(element: 'Group');
     return group.toDomain();
   }
 
   @override
   Future<GroupQuestions> newGroupQuestion(
       {required GroupQuestions group}) async {
-    if (group.id != null) {
-      throw Exception('ID debe ser nulo o no existir');
-    }
+    if (group.id != null) throw IdNoNullException();
 
     final isar = await db;
 
@@ -214,17 +216,14 @@ class IsarDatasource
       {required String groupId, required Question question}) async {
     final groupDB = await getGroupQuestion(id: groupId);
 
-    if (groupDB == null) {
-      throw Exception('Group not found');
-    }
+    if (groupDB == null) throw NoFoundException();
     final newQuestion = question.copyWith(id: DateTime.now().toString());
     groupDB.questions.add(newQuestion);
 
     final resp = await updateGroupQuestion(group: groupDB);
 
-    if (!resp) {
-      throw Exception('Error saving question');
-    }
+    if (!resp) throw NoSaveException();
+
     return newQuestion;
   }
 
@@ -232,16 +231,13 @@ class IsarDatasource
   Future<bool> deleteQuestionOfGroup(
       {required String groupId, required String questionId}) async {
     final groupDB = await getGroupQuestion(id: groupId);
-    if (groupDB == null) {
-      throw Exception('Group not found');
-    }
+    if (groupDB == null) throw NoFoundException(element: 'Group');
 
     final index =
         groupDB.questions.indexWhere((element) => element.id == questionId);
 
-    if (index == -1) {
-      throw Exception('Question not found');
-    }
+    if (index == -1) throw NoFoundException(element: 'Question');
+
     groupDB.questions.removeAt(index);
 
     return await updateGroupQuestion(group: groupDB);

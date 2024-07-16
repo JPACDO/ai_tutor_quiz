@@ -65,6 +65,28 @@ class GroupQuestion extends _$GroupQuestion {
     state = [...state, result];
   }
 
+  void updateGroup(GroupQuestions groupQuestion) async {
+    final result = await ref
+        .read(groupQuestionRepositoryProvider)
+        .updateGroupQuestion(group: groupQuestion);
+    if (!result) return;
+    final newState = state
+        .map((group) => group.id == groupQuestion.id
+            ? group.copyWith(
+                name: groupQuestion.name, questions: groupQuestion.questions)
+            : group)
+        .toList();
+    state = [...newState];
+  }
+
+  void removeGroup(GroupQuestions groupQuestion) async {
+    final result = await ref
+        .read(groupQuestionRepositoryProvider)
+        .deleteGroupQuestion(id: groupQuestion.id!);
+    if (!result) return;
+    state = state.where((element) => element.id != groupQuestion.id).toList();
+  }
+
   Future<bool> insertQuestion(
       {required Question question, required String groupId}) async {
     try {
@@ -88,7 +110,7 @@ class GroupQuestion extends _$GroupQuestion {
     }
   }
 
-  Future<bool> deleteQuestion(
+  Future<bool> removeQuestion(
       {required String groupId, required String questionId}) async {
     final result = await ref
         .read(deleteQuestionOfGroupProvider)

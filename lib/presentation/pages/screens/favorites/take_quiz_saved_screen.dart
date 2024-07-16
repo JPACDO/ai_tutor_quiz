@@ -13,7 +13,7 @@ class TakeQuizSaved extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(quiz.name),
+        title: Text('Quiz: ${quiz.name}'),
       ),
       body: TakeQuiz(
         questions: quiz.questions,
