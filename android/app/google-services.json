@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "453931141309",
+    "project_id": "ai-tutor-quiz",
+    "storage_bucket": "ai-tutor-quiz.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:453931141309:android:43f6db9be436991bae0fd4",
+        "android_client_info": {
+          "package_name": "com.aplayt.ai_tutor_quiz"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDuC68Im1wreVchTJSqec5FnkcslpqhpoQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
