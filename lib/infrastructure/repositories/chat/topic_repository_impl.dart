@@ -3,7 +3,7 @@ import 'package:ai_tutor_quiz/domain/repositories/repositories.dart';
 import 'package:ai_tutor_quiz/infrastructure/datasources/datasources.dart';
 
 class TopicRepositoryImpl implements TopicRepository {
-  final LocalStorageDbChatDatasource _localStorageDbChatDatasource;
+  final IsarDatasource _localStorageDbChatDatasource;
 
   TopicRepositoryImpl(this._localStorageDbChatDatasource);
 

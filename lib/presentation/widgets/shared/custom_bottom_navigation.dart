@@ -20,7 +20,7 @@ class CustomBottomNavigation extends StatelessWidget {
           BottomNavigationBarItem(
               icon: Icon(Icons.chat_outlined), label: 'Tutor'),
           BottomNavigationBarItem(
-              icon: Icon(Icons.quiz_outlined), label: 'Quiz'),
+              icon: Icon(Icons.rocket_launch_outlined), label: 'Quiz'),
           BottomNavigationBarItem(
               icon: Icon(Icons.favorite_outline), label: 'Favorites'),
         ]);

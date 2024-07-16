@@ -5,7 +5,7 @@ abstract class GroupQuestionsDatasource {
 
   Future<bool> deleteAllGroupQuestion({required String userId});
 
-  Future<GroupQuestions> getGroupQuestion({required String id});
+  Future<GroupQuestions?> getGroupQuestion({required String id});
 
   Future<bool> deleteGroupQuestion({required String id});
 
@@ -13,6 +13,9 @@ abstract class GroupQuestionsDatasource {
 
   Future<bool> updateGroupQuestion({required GroupQuestions group});
 
-  Future<bool> addQuestionInGroup(
+  Future<Question> addQuestionInGroup(
       {required String groupId, required Question question});
+
+  Future<bool> deleteQuestionOfGroup(
+      {required String groupId, required String questionId});
 }

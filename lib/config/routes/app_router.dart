@@ -37,7 +37,7 @@ GoRouter appRouter(AppRouterRef ref) {
         builder: (context, state) {
           final topic = state.extra as Topic;
 
-          return ChatScreen(topicId: topic.idDb);
+          return ChatScreen(topicId: topic.id);
         },
       ),
       GoRoute(
@@ -52,7 +52,7 @@ GoRouter appRouter(AppRouterRef ref) {
         name: QuestionsOfList.name,
         builder: (context, state) {
           return QuestionsOfList(
-            gorup: state.extra as GroupQuestions,
+            group: state.extra as GroupQuestions,
           );
         },
         routes: [

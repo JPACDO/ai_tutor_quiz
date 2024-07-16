@@ -10,7 +10,7 @@ class AddNewTopicsUseCase implements BaseUseCase<Topic, Topic> {
 
   /// [data] is the topic to be added
   @override
-  Future<Topic> call({Topic? data}) {
-    return _topicRepository.addNewTopic(topic: data!);
+  Future<Topic> call({required Topic data}) {
+    return _topicRepository.addNewTopic(topic: data);
   }
 }

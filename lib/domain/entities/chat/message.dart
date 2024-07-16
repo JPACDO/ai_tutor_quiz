@@ -1,4 +1,12 @@
-enum SenderType { user, bot }
+// enum SenderType { user, bot }
+enum SenderType {
+  user("user"),
+  bot("bot");
+
+  const SenderType(this.myValue);
+
+  final String myValue;
+}
 
 class Message {
   String? id;
@@ -6,11 +14,7 @@ class Message {
   String? imgUrl;
   SenderType sender;
 
-  Message(
-      {required this.id,
-      required this.content,
-      required this.sender,
-      this.imgUrl});
+  Message({this.id, required this.content, required this.sender, this.imgUrl});
 
   copyWith({String? id, String? content, String? imgUrl, SenderType? sender}) {
     return Message(

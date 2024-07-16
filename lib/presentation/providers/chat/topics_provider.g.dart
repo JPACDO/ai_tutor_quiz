@@ -6,7 +6,7 @@ part of 'topics_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$topicRepositoryHash() => r'9d01b29075e478ebf3738e642a4eabf4ebc8c342';
+String _$topicRepositoryHash() => r'80e04dfd14ce28ce371208faebe3df1ab193a0f6';
 
 /// See also [topicRepository].
 @ProviderFor(topicRepository)
@@ -50,7 +50,7 @@ final addNewTopicProvider = AutoDisposeProvider<AddNewTopicsUseCase>.internal(
 );
 
 typedef AddNewTopicRef = AutoDisposeProviderRef<AddNewTopicsUseCase>;
-String _$topicsHash() => r'd728173b8d6cbcd94d9ee86ea89e2072c0252007';
+String _$topicsHash() => r'095198724177575909ba2cfef751be2ebb5bbad7';
 
 /// See also [Topics].
 @ProviderFor(Topics)

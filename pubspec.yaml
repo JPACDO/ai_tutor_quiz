@@ -45,6 +45,8 @@ dependencies:
   flutter_markdown: ^0.7.3
   url_launcher: ^6.3.0
   flex_color_picker: ^3.4.1
+  isar: ^3.1.0+1
+  isar_flutter_libs: ^3.1.0+1
 
 
 dev_dependencies:
@@ -61,7 +63,8 @@ dev_dependencies:
   build_runner: ^2.4.9
   riverpod_generator: ^2.4.0
   custom_lint: ^0.6.4
-  riverpod_lint: ^2.3.10
+  # riverpod_lint: ^2.3.10
+  isar_generator: ^3.1.0+1
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

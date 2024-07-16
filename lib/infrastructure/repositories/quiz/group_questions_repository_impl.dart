@@ -4,7 +4,7 @@ import 'package:ai_tutor_quiz/domain/repositories/repositories.dart';
 import 'package:ai_tutor_quiz/infrastructure/datasources/datasources.dart';
 
 class GroupQuestionsRepositoryImpl implements GroupQuestionsRepository {
-  final LocalStorageDbChatDatasource _localStorageDbChatDatasource;
+  final IsarDatasource _localStorageDbChatDatasource;
 
   GroupQuestionsRepositoryImpl(this._localStorageDbChatDatasource);
 
@@ -27,7 +27,7 @@ class GroupQuestionsRepositoryImpl implements GroupQuestionsRepository {
   }
 
   @override
-  Future<GroupQuestions> getGroupQuestion({required String id}) async {
+  Future<GroupQuestions?> getGroupQuestion({required String id}) async {
     return await _localStorageDbChatDatasource.getGroupQuestion(id: id);
   }
 
@@ -44,9 +44,16 @@ class GroupQuestionsRepositoryImpl implements GroupQuestionsRepository {
   }
 
   @override
-  Future<bool> addQuestiontoGroup(
+  Future<Question> addQuestiontoGroup(
       {required String groupId, required Question question}) async {
     return await _localStorageDbChatDatasource.addQuestionInGroup(
         groupId: groupId, question: question);
+  }
+
+  @override
+  Future<bool> deleteQuestionOfGroup(
+      {required String groupId, required String questionId}) async {
+    return await _localStorageDbChatDatasource.deleteQuestionOfGroup(
+        groupId: groupId, questionId: questionId);
   }
 }

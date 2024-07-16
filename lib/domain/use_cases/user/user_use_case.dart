@@ -8,7 +8,7 @@ class UserUseCase extends BaseUseCase<User, String> {
   UserUseCase(this._userRepository);
 
   @override
-  Future<User> call({String? data}) {
-    return _userRepository.getUser(userId: data!);
+  Future<User> call({required String data}) {
+    return _userRepository.getUser(userId: data);
   }
 }

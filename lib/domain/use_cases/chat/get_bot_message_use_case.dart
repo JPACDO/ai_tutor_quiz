@@ -9,8 +9,7 @@ class GetBotMessageUseCase implements BaseUseCase<Message?, String> {
 
   /// [data] is the prompt to get the bot response
   @override
-  Future<Message?> call({String? data, String? imgUrl, Topic? topic}) {
-    if (data == null) return Future.value(null);
+  Future<Message?> call({required String data, String? imgUrl, Topic? topic}) {
     return _messageRepository.getBotMessage(
         prompt: data, imgUrl: imgUrl, topic: topic!);
   }

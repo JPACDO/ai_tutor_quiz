@@ -17,7 +17,7 @@ class _SaveQuestionWidgetState extends ConsumerState<SaveQuestionWidget> {
   @override
   void initState() {
     super.initState();
-    ref.read(groupQuestionProvider.notifier).getAllGroupQuestions(userId: '0');
+    ref.read(groupQuestionProvider.notifier).getAllGroup(userId: '0');
   }
 
   @override
@@ -29,7 +29,11 @@ class _SaveQuestionWidgetState extends ConsumerState<SaveQuestionWidget> {
         ListTile(
           leading: const Icon(Icons.add),
           title: const Text('Add new list'),
-          onTap: () => dialogCreateGroup(context),
+          onTap: () => dialogCreateNew(context, (name) {
+            ref.read(groupQuestionProvider.notifier).createGroup(
+                  GroupQuestions(questions: [], name: name, userId: '0'),
+                );
+          }),
         ),
         Flexible(
           child: ListView.builder(
@@ -41,9 +45,9 @@ class _SaveQuestionWidgetState extends ConsumerState<SaveQuestionWidget> {
                   onTap: () async {
                     final result = await ref
                         .read(groupQuestionProvider.notifier)
-                        .insertQuestionInGroup(
+                        .insertQuestion(
                             question: widget.question,
-                            groupId: groupQuestions[index].idDb!);
+                            groupId: groupQuestions[index].id!);
 
                     if (!context.mounted) return;
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(

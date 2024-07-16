@@ -6,7 +6,7 @@ import '../../../domain/repositories/repositories.dart';
 
 class MessageRepositoryImpl extends MessageRepository {
   final GeminiChatDatasource _geminiChatDatasource;
-  final LocalStorageDbChatDatasource _localStorageDbChatDatasource;
+  final IsarDatasource _localStorageDbChatDatasource;
 
   MessageRepositoryImpl(
       this._geminiChatDatasource, this._localStorageDbChatDatasource);

@@ -1,26 +1,28 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:ai_tutor_quiz/domain/entities/entities.dart';
-import 'package:ai_tutor_quiz/presentation/providers/providers.dart';
 import 'package:go_router/go_router.dart';
 
-Future<void> dialogCreateGroup(BuildContext context) {
+Future<void> dialogCreateNew(BuildContext context, Function(String) onSubmit) {
   return showDialog(
       context: context,
       builder: (BuildContext context) {
-        return const AlertDialog(
-            title: Text('Add new list'), content: CreateGroupDialog());
+        return AlertDialog(
+            title: const Text('Add new'),
+            content: CreateGroupDialog(
+              onSubmit: onSubmit,
+            ));
       });
 }
 
-class CreateGroupDialog extends ConsumerStatefulWidget {
-  const CreateGroupDialog({super.key});
+class CreateGroupDialog extends StatefulWidget {
+  const CreateGroupDialog({super.key, required this.onSubmit});
+
+  final Function(String) onSubmit;
 
   @override
-  ConsumerState<CreateGroupDialog> createState() => _NewGroupDialogState();
+  State<CreateGroupDialog> createState() => _NewGroupDialogState();
 }
 
-class _NewGroupDialogState extends ConsumerState<CreateGroupDialog> {
+class _NewGroupDialogState extends State<CreateGroupDialog> {
   final TextEditingController _controller = TextEditingController();
 
   @override
@@ -40,7 +42,7 @@ class _NewGroupDialogState extends ConsumerState<CreateGroupDialog> {
             controller: _controller,
             decoration: const InputDecoration(
               border: OutlineInputBorder(),
-              labelText: 'List name',
+              labelText: 'Name',
             ),
           ),
           Row(
@@ -52,15 +54,8 @@ class _NewGroupDialogState extends ConsumerState<CreateGroupDialog> {
               TextButton(
                   onPressed: () {
                     if (_controller.text.isEmpty) return;
+                    widget.onSubmit(_controller.text);
 
-                    ref
-                        .read(groupQuestionProvider.notifier)
-                        .createGroupQuestion(
-                          GroupQuestions(
-                            questions: [],
-                            name: _controller.text,
-                          ),
-                        );
                     context.pop();
                   },
                   child: const Text('SAVE')),

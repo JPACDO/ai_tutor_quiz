@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ai_tutor_quiz/presentation/pages/screens/screens.dart';
 import 'package:ai_tutor_quiz/presentation/providers/providers.dart';
 import 'package:ai_tutor_quiz/presentation/widgets/widgets.dart';
+import 'package:ai_tutor_quiz/domain/entities/entities.dart';
 
 class FavoritesView extends ConsumerStatefulWidget {
   const FavoritesView({super.key});
@@ -16,7 +17,7 @@ class _SavedViewState extends ConsumerState<FavoritesView> {
   @override
   void initState() {
     super.initState();
-    ref.read(groupQuestionProvider.notifier).getAllGroupQuestions(userId: '0');
+    ref.read(groupQuestionProvider.notifier).getAllGroup(userId: '0');
   }
 
   @override
@@ -40,7 +41,14 @@ class _SavedViewState extends ConsumerState<FavoritesView> {
             );
           }),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => dialogCreateGroup(context),
+        onPressed: () => dialogCreateNew(
+          context,
+          (name) {
+            ref.read(groupQuestionProvider.notifier).createGroup(
+                  GroupQuestions(questions: [], name: name, userId: '0'),
+                );
+          },
+        ),
         child: const Icon(Icons.add),
       ),
     );

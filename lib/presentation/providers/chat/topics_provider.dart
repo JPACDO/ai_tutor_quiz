@@ -11,7 +11,7 @@ part 'topics_provider.g.dart';
 
 @riverpod
 TopicRepositoryImpl topicRepository(TopicRepositoryRef ref) {
-  final localStorageDbChatDatasource = ref.read(fakeDatasourceProvider);
+  final localStorageDbChatDatasource = ref.read(isarDatasourceProvider);
   return TopicRepositoryImpl(localStorageDbChatDatasource);
 }
 
@@ -59,13 +59,13 @@ class Topics extends _$Topics {
   Future<void> updateTopic({required Topic topic}) async {
     await ref.read(topicRepositoryProvider).updateTopic(topic: topic);
     state = state
-        .map((element) => element.idDb == topic.idDb ? topic : element)
+        .map((element) => element.id == topic.id ? topic : element)
         .toList();
   }
 
   void removeTopic({required Topic topic}) {
-    ref.read(topicRepositoryProvider).deleteTopic(id: topic.idDb!);
-    state = state.where((element) => element.idDb != topic.idDb).toList();
+    ref.read(topicRepositoryProvider).deleteTopic(id: topic.id!);
+    state = state.where((element) => element.id != topic.id).toList();
   }
 
   Future<Topic> getTopic({required String topicId}) async {

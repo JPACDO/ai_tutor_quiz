@@ -22,30 +22,26 @@ final geminiChatDatasourceProvider = Provider<GeminiChatDatasource>.internal(
 );
 
 typedef GeminiChatDatasourceRef = ProviderRef<GeminiChatDatasource>;
-String _$localStorageDbChatDatasourceHash() =>
-    r'd4ca6d0ee95586af56ebf67bd060292f46ad761c';
+String _$isarDatasourceHash() => r'c326b4516c73b39ace43cb86b193ccbd552be590';
 
-/// See also [localStorageDbChatDatasource].
-@ProviderFor(localStorageDbChatDatasource)
-final localStorageDbChatDatasourceProvider =
-    AutoDisposeProvider<LocalStorageDbChatDatasource>.internal(
-  localStorageDbChatDatasource,
-  name: r'localStorageDbChatDatasourceProvider',
+/// See also [isarDatasource].
+@ProviderFor(isarDatasource)
+final isarDatasourceProvider = AutoDisposeProvider<IsarDatasource>.internal(
+  isarDatasource,
+  name: r'isarDatasourceProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
-      : _$localStorageDbChatDatasourceHash,
+      : _$isarDatasourceHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef LocalStorageDbChatDatasourceRef
-    = AutoDisposeProviderRef<LocalStorageDbChatDatasource>;
-String _$fakeDatasourceHash() => r'230ab66b2cca33c57eff66d8c3f8f27a826d4e10';
+typedef IsarDatasourceRef = AutoDisposeProviderRef<IsarDatasource>;
+String _$fakeDatasourceHash() => r'9f9a4657f0c0c60e80fac47e4cff8ec2a29f6a98';
 
 /// See also [fakeDatasource].
 @ProviderFor(fakeDatasource)
-final fakeDatasourceProvider =
-    AutoDisposeProvider<LocalStorageDbChatDatasource>.internal(
+final fakeDatasourceProvider = AutoDisposeProvider<IsarDatasource>.internal(
   fakeDatasource,
   name: r'fakeDatasourceProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
@@ -55,7 +51,6 @@ final fakeDatasourceProvider =
   allTransitiveDependencies: null,
 );
 
-typedef FakeDatasourceRef
-    = AutoDisposeProviderRef<LocalStorageDbChatDatasource>;
+typedef FakeDatasourceRef = AutoDisposeProviderRef<IsarDatasource>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

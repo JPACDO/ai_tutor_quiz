@@ -13,8 +13,7 @@ part 'chat_provider.g.dart';
 @riverpod
 MessageRepositoryImpl messageRepository(MessageRepositoryRef ref) {
   final geminiChatDatasource = ref.read(geminiChatDatasourceProvider);
-  final localStorageDbChatDatasource =
-      ref.read(localStorageDbChatDatasourceProvider);
+  final localStorageDbChatDatasource = ref.read(isarDatasourceProvider);
   return MessageRepositoryImpl(
       geminiChatDatasource, localStorageDbChatDatasource);
 }
@@ -31,7 +30,7 @@ GetBotMessageUseCase getBotMessage(GetBotMessageRef ref) {
 class Chat extends _$Chat {
   @override
   Topic build() {
-    return Topic(idDb: '1', name: '', messages: []);
+    return Topic(id: '1', name: '', messages: [], userId: '0');
   }
 
   void loadTopic({required Topic topic}) async {
@@ -88,9 +87,7 @@ class Chat extends _$Chat {
   Future<String?> saveImageOfMessage({required XFile? img}) async {
     if (img == null) return null;
 
-    return await ref
-        .read(localStorageDbChatDatasourceProvider)
-        .saveImageOfMessage(img: img);
+    return await ref.read(isarDatasourceProvider).saveImageOfMessage(img: img);
   }
 }
 

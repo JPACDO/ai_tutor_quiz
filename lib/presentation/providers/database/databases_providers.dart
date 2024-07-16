@@ -10,12 +10,11 @@ GeminiChatDatasource geminiChatDatasource(GeminiChatDatasourceRef ref) {
 }
 
 @riverpod
-LocalStorageDbChatDatasource localStorageDbChatDatasource(
-    LocalStorageDbChatDatasourceRef ref) {
-  return LocalStorageDbChatDatasource();
+IsarDatasource isarDatasource(IsarDatasourceRef ref) {
+  return IsarDatasource();
 }
 
 @riverpod
-LocalStorageDbChatDatasource fakeDatasource(FakeDatasourceRef ref) {
+IsarDatasource fakeDatasource(FakeDatasourceRef ref) {
   return FakeDbDatasource();
 }

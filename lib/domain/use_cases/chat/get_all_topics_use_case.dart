@@ -10,8 +10,7 @@ class GetAllTopicsUseCase implements BaseUseCase<List<Topic>, String> {
 
   /// [data] is userId
   @override
-  Future<List<Topic>> call({String? data}) {
-    if (data == null) return Future.value([]);
+  Future<List<Topic>> call({required String data}) {
     return _topicRepository.getAllTopics(userId: data);
   }
 }

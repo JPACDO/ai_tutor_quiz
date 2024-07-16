@@ -7,7 +7,7 @@ part of 'group_question_provider.dart';
 // **************************************************************************
 
 String _$groupQuestionRepositoryHash() =>
-    r'59d4284757976ca13a50d2fa9e5f1c1bb15f5f29';
+    r'6933955eae672a5e44972b467e1805c8b3fd9a51';
 
 /// See also [groupQuestionRepository].
 @ProviderFor(groupQuestionRepository)
@@ -78,7 +78,25 @@ final addQuestionInGroupProvider =
 
 typedef AddQuestionInGroupRef
     = AutoDisposeProviderRef<AddQuestionInGoroupUseCase>;
-String _$groupQuestionHash() => r'6646ccd6c50b1db30e1871dd89b6ab731bb41900';
+String _$deleteQuestionOfGroupHash() =>
+    r'40115b2e0f869db695687f6f996daafd29f24225';
+
+/// See also [deleteQuestionOfGroup].
+@ProviderFor(deleteQuestionOfGroup)
+final deleteQuestionOfGroupProvider =
+    AutoDisposeProvider<DeleteQuestionOfGoroupUseCase>.internal(
+  deleteQuestionOfGroup,
+  name: r'deleteQuestionOfGroupProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$deleteQuestionOfGroupHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef DeleteQuestionOfGroupRef
+    = AutoDisposeProviderRef<DeleteQuestionOfGoroupUseCase>;
+String _$groupQuestionHash() => r'4855bfea5c52a842fceebd028e5dac51a41254f1';
 
 /// See also [GroupQuestion].
 @ProviderFor(GroupQuestion)

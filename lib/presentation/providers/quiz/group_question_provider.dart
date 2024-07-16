@@ -10,7 +10,7 @@ part 'group_question_provider.g.dart';
 @riverpod
 GroupQuestionsRepositoryImpl groupQuestionRepository(
     GroupQuestionRepositoryRef ref) {
-  final localDatasource = ref.read(fakeDatasourceProvider);
+  final localDatasource = ref.read(isarDatasourceProvider);
 
   return GroupQuestionsRepositoryImpl(localDatasource);
 }
@@ -37,6 +37,14 @@ AddQuestionInGoroupUseCase addQuestionInGroup(AddQuestionInGroupRef ref) {
   return AddQuestionInGoroupUseCase(groupRepository);
 }
 
+@riverpod
+DeleteQuestionOfGoroupUseCase deleteQuestionOfGroup(
+    DeleteQuestionOfGroupRef ref) {
+  final groupRepository = ref.read(groupQuestionRepositoryProvider);
+
+  return DeleteQuestionOfGoroupUseCase(groupRepository);
+}
+
 // GROUP QUESTION PROVIDER / FAVORITES -----------------------------------------
 @riverpod
 class GroupQuestion extends _$GroupQuestion {
@@ -45,11 +53,11 @@ class GroupQuestion extends _$GroupQuestion {
     return [];
   }
 
-  void getAllGroupQuestions({required String userId}) async {
+  void getAllGroup({required String userId}) async {
     state = [...await ref.read(getAllGroupQuestionsProvider)(data: userId)];
   }
 
-  void createGroupQuestion(GroupQuestions groupQuestion) async {
+  void createGroup(GroupQuestions groupQuestion) async {
     final result = await ref.read(createGroupQuestionProvider).call(
           data: groupQuestion,
         );
@@ -57,16 +65,45 @@ class GroupQuestion extends _$GroupQuestion {
     state = [...state, result];
   }
 
-  Future<bool> insertQuestionInGroup(
+  Future<bool> insertQuestion(
       {required Question question, required String groupId}) async {
+    try {
+      final result = await ref
+          .read(addQuestionInGroupProvider)
+          .call(data: question.copyWith(id: null), groupId: groupId);
+
+      final newState = state
+          .map((groupQuestion) => groupQuestion.id == groupId
+              ? groupQuestion.copyWith(
+                  id: groupQuestion.id,
+                  questions: [...groupQuestion.questions, result])
+              : groupQuestion)
+          .toList();
+      state = [...newState];
+
+      return true;
+    } catch (e) {
+      print(e.toString());
+      return false;
+    }
+  }
+
+  Future<bool> deleteQuestion(
+      {required String groupId, required String questionId}) async {
     final result = await ref
-        .read(addQuestionInGroupProvider)
-        .call(data: question, groupId: groupId);
+        .read(deleteQuestionOfGroupProvider)
+        .call(data: questionId, groupId: groupId);
 
     if (!result) return false;
 
-    final newState = state.map((groupQuestion) => groupQuestion
-        .copyWith(questions: [...groupQuestion.questions, question]));
+    final newState = state
+        .map((groupQuestion) => groupId == groupQuestion.id
+            ? groupQuestion.copyWith(
+                questions: groupQuestion.questions
+                    .where((element) => element.id != questionId)
+                    .toList())
+            : groupQuestion)
+        .toList();
     state = [...newState];
 
     return true;

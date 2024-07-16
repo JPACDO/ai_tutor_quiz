@@ -14,9 +14,8 @@ class ChatScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final Topic topic = ref
-        .read(topicsProvider)
-        .firstWhere((element) => element.idDb == topicId);
+    final Topic topic =
+        ref.read(topicsProvider).firstWhere((element) => element.id == topicId);
 
     return Scaffold(
       appBar: AppBar(
@@ -96,7 +95,6 @@ class _ChatViewState extends ConsumerState<_ChatView> {
                         );
                 ref.read(chatProvider.notifier).addMessage(
                     message: Message(
-                        id: '1',
                         content: value,
                         sender: SenderType.user,
                         imgUrl: imagepath));

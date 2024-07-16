@@ -6,7 +6,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 
 final dbTopics = <Topic>[
-  Topic(idDb: '1', name: 'Topic 1', messages: [
+  Topic(id: '1', name: 'Topic 1', userId: '0', messages: [
     Message(
       id: '1',
       content: "Hello, how are you?",
@@ -66,27 +66,31 @@ final dbTopics = <Topic>[
       sender: SenderType.user,
     ),
   ]),
-  Topic(idDb: '2', name: 'Topic 1', messages: []),
-  Topic(idDb: '3', name: 'Topic 1', messages: []),
+  Topic(id: '2', name: 'Topic 1', messages: [], userId: '0'),
+  Topic(id: '3', name: 'Topic 1', messages: [], userId: '0'),
 ];
 
 final dbGroups = <GroupQuestions>[
   GroupQuestions(
-    idDb: '1',
+    id: '1',
     name: 'Group 1',
     description: 'Description 1',
+    userId: '0',
     questions: [
       Question(
+          id: '1',
           question: 'Question 1',
           alternatives: ['Answer 1', 'Answer 2', 'Answer 3'],
           correctAnswerIndex: 1,
           type: QuizType.multipleChoice),
       Question(
+          id: '2',
           question: 'Question 2',
           alternatives: ['Answer 1', 'Answer 2'],
           correctAnswerIndex: 1,
           type: QuizType.trueFalse),
       Question(
+          id: '3',
           question: 'Question 3',
           alternatives: ['Answer 1', 'Answer 2', 'Answer 3'],
           correctAnswerIndex: 0,
@@ -94,14 +98,15 @@ final dbGroups = <GroupQuestions>[
     ],
   ),
   GroupQuestions(
-    idDb: '2',
+    id: '2',
     name: 'Group 2',
     description: 'Description 2',
     questions: [],
+    userId: '0',
   ),
 ];
 
-class FakeDbDatasource extends LocalStorageDbChatDatasource {
+class FakeDbDatasource extends IsarDatasource {
   // MESSAGE ----------------------------------------------------------------------
   @override
   Future<Message?> getMessage(
@@ -132,27 +137,27 @@ class FakeDbDatasource extends LocalStorageDbChatDatasource {
 
   @override
   Future<bool> deleteTopic({required String id}) {
-    dbTopics.removeWhere((element) => element.idDb == id);
+    dbTopics.removeWhere((element) => element.id == id);
     return Future.value(true);
   }
 
   @override
   Future<List<Topic>> getAllTopics(String userId) {
-    return Future.value(dbTopics);
+    return Future.value([...dbTopics]);
   }
 
   @override
   Future<Topic> getTopic({required String topicId}) {
-    final topic = dbTopics.firstWhere((element) => element.idDb == topicId);
+    final topic = dbTopics.firstWhere((element) => element.id == topicId);
     return Future.value(topic);
   }
 
   @override
   Future<Topic> addTopic({required Topic topic}) {
-    if (topic.idDb != null) {
+    if (topic.id != null) {
       throw Exception('ID debe ser nulo o no existir');
     }
-    final newTopic = topic.copyWith(idDb: DateTime.now().toString());
+    final newTopic = topic.copyWith(id: DateTime.now().toString());
     dbTopics.add(newTopic);
     return Future.value(newTopic);
   }
@@ -160,7 +165,7 @@ class FakeDbDatasource extends LocalStorageDbChatDatasource {
   @override
   Future<bool> updateTopic({required Topic topic}) {
     // print(topic.messages);
-    final index = dbTopics.indexWhere((element) => element.idDb == topic.idDb);
+    final index = dbTopics.indexWhere((element) => element.id == topic.id);
     dbTopics[index] = topic;
     return Future.value(true);
   }
@@ -174,44 +179,62 @@ class FakeDbDatasource extends LocalStorageDbChatDatasource {
 
   @override
   Future<bool> deleteGroupQuestion({required String id}) {
-    dbGroups.removeWhere((element) => element.idDb == id);
+    dbGroups.removeWhere((element) => element.id == id);
     return Future.value(true);
   }
 
   @override
   Future<List<GroupQuestions>> getAllGroupQuestion({required String userId}) {
-    return Future.value(dbGroups);
+    return Future.value([...dbGroups.map((e) => e.copyWith(id: e.id))]);
   }
 
   @override
   Future<GroupQuestions> getGroupQuestion({required String id}) {
-    final group = dbGroups.firstWhere((element) => element.idDb == id);
+    final group = dbGroups.firstWhere((element) => element.id == id);
     return Future.value(group);
   }
 
   @override
   Future<GroupQuestions> newGroupQuestion({required GroupQuestions group}) {
-    if (group.idDb != null) {
+    if (group.id != null) {
       throw Exception('ID debe ser nulo o no existir');
     }
-    final newGroup = group.copyWith(idDb: DateTime.now().toString());
+    final newGroup = group.copyWith(id: DateTime.now().toString());
     dbGroups.add(newGroup);
     return Future.value(newGroup);
   }
 
   @override
   Future<bool> updateGroupQuestion({required GroupQuestions group}) {
-    final index = dbGroups.indexWhere((element) => element.idDb == group.idDb);
+    final index = dbGroups.indexWhere((element) => element.id == group.id);
     dbGroups[index] = group;
     return Future.value(true);
   }
 
   @override
-  Future<bool> addQuestionInGroup(
+  Future<Question> addQuestionInGroup(
       {required String groupId, required Question question}) {
-    final group = dbGroups.firstWhere((element) => element.idDb == groupId);
-    group.questions.add(question);
+    if (question.id != null) {
+      throw Exception('ID question debe ser nulo o no existir');
+    }
+
+    final group = dbGroups.firstWhere((element) => element.id == groupId);
+    final newQuestion = question.copyWith(id: DateTime.now().toString());
+    group.questions.add(newQuestion);
     dbGroups[dbGroups.indexOf(group)] = group;
-    return Future.value(true);
+    return Future.value(newQuestion);
+  }
+
+  @override
+  Future<bool> deleteQuestionOfGroup(
+      {required String groupId, required String questionId}) {
+    try {
+      final group = dbGroups.firstWhere((element) => element.id == groupId);
+      group.questions.removeWhere((element) => element.id == questionId);
+      dbGroups[dbGroups.indexOf(group)] = group;
+      return Future.value(true);
+    } catch (e) {
+      rethrow;
+    }
   }
 }

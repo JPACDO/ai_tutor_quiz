@@ -45,12 +45,11 @@ class TopicsViewState extends ConsumerState<TopicsView> {
         },
       ),
       floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            ref
-                .read(topicsProvider.notifier)
-                .addTopic(topic: Topic(idDb: null, name: "name", messages: []));
-            // ref.read(topicsProvider.notifier).getAllTopics(userId: '1');
-          },
+          onPressed: () => dialogCreateNew(context, (name) {
+                ref.read(topicsProvider.notifier).addTopic(
+                    topic:
+                        Topic(id: null, name: name, messages: [], userId: '0'));
+              }),
           child: const Icon(Icons.add)),
     );
   }
@@ -67,7 +66,7 @@ class _TopicCard extends StatelessWidget {
       child: Card(
         child: ListTile(
           title: Text(topic.name),
-          subtitle: Text(topic.idDb ?? 'null*'),
+          subtitle: Text(topic.id ?? 'null*'),
         ),
       ),
       onTap: () {

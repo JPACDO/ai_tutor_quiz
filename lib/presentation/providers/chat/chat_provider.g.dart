@@ -6,7 +6,7 @@ part of 'chat_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$messageRepositoryHash() => r'5c7c5579640c2051b037641b7d9b7cdaa531a871';
+String _$messageRepositoryHash() => r'2f6dee4d02ffc96ef57fbef304020fc9087e190b';
 
 /// See also [messageRepository].
 @ProviderFor(messageRepository)
@@ -38,7 +38,7 @@ final getBotMessageProvider =
 );
 
 typedef GetBotMessageRef = AutoDisposeProviderRef<GetBotMessageUseCase>;
-String _$chatHash() => r'aa3f195240e8516e49a4be94491a74022db8b084';
+String _$chatHash() => r'8b2ae644411457f8ee445fda96305d914a75dc8b';
 
 /// See also [Chat].
 @ProviderFor(Chat)
