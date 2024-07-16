@@ -63,7 +63,7 @@ final promptQuizProvider = NotifierProvider<PromptQuiz, String>.internal(
 );
 
 typedef _$PromptQuiz = Notifier<String>;
-String _$quizParamsHash() => r'440fcea0eb30e7156423557d7ce6e5a08a1c970c';
+String _$quizParamsHash() => r'8baa08029247fe36fa525d54cb09ccca2a22b85b';
 
 /// See also [QuizParams].
 @ProviderFor(QuizParams)

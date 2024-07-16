@@ -18,7 +18,7 @@ import 'package:ai_tutor_quiz/domain/entities/entities.dart';
 ///   questions.
 /// - [showSaveicon]: a boolean indicating whether the save icon should be shown.
 /// - [padding]: an optional padding value for the widget.
-List<InteractiveQuestion> interactiveQuestions(
+List<Widget> interactiveQuestions(
     {required List<Question> quiz,
     Function(Question)? onNextPage,
     required bool showNextButton,
@@ -27,8 +27,9 @@ List<InteractiveQuestion> interactiveQuestions(
     Function(int, int)? onPressAnswer,
     List<int?>? userResponse,
     Function(Question)? onSave,
-    EdgeInsetsGeometry? padding}) {
-  final List<InteractiveQuestion> questionWidget = [];
+    EdgeInsetsGeometry? padding,
+    bool divider = false}) {
+  final List<Widget> questionWidget = [];
 
   for (var question in quiz) {
     questionWidget.add(InteractiveQuestion(
@@ -43,6 +44,10 @@ List<InteractiveQuestion> interactiveQuestions(
       userResponse: userResponse,
       onPressAnswer: onPressAnswer ?? (index, response) {},
     ));
+
+    if (divider) {
+      questionWidget.add(const Divider());
+    }
   }
   return questionWidget;
 }
@@ -153,15 +158,7 @@ class _InteractiveQuestionState extends State<InteractiveQuestion> {
             widget.onPressAnswer(widget.index, indexAlternative);
             setState(() {
               userResponseInt = indexAlternative;
-              // if (userResponseInt.length <= widget.index) {
-              //   userResponseInt.addAll(List.filled(
-              //       widget.index - userResponseInt.length + 1, null));
-              // }
-              // userResponseInt[widget.index] = indexAlternative;
             });
-            // ref
-            //     .read(quizUserResponseProvider.notifier)
-            //     .setResponse(index: widget.index, response: indexAlternative);
           },
         ),
       );
@@ -173,8 +170,6 @@ class _InteractiveQuestionState extends State<InteractiveQuestion> {
 
     return Container(
       padding: widget.padding,
-      // color: Colors.grey.shade100,
-      // decoration: BoxDecoration(border: Border.all()),
       child: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -182,7 +177,7 @@ class _InteractiveQuestionState extends State<InteractiveQuestion> {
             widget.onSave != null
                 ? Align(
                     alignment: Alignment.centerRight,
-                    child: IconButton.outlined(
+                    child: IconButton(
                       onPressed: () {
                         widget.onSave!(widget.question);
                       },

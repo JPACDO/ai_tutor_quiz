@@ -71,7 +71,7 @@ class GeminiChatDatasource implements MessageDatasource, QuestionDatasource {
       var content = await promtToContent(mainPrompt, imageUrl);
 
       var response = await chat.sendMessage(content);
-      print(response.text);
+      // print(response.text);
       if (response.text == null) return null;
 
       final String jsonExtractor =
@@ -81,8 +81,8 @@ class GeminiChatDatasource implements MessageDatasource, QuestionDatasource {
 
       return geminiMsgResponse.toDomain();
     } catch (e) {
-      print('ERROR RESPONSE:');
-      print(e);
+      // print('ERROR RESPONSE:');
+      // print(e);
       if (e.toString() ==
           "GenerativeAIException: Candidate was blocked due to recitation") {
         const String jsonExtractor =

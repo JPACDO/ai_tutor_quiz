@@ -13,3 +13,5 @@ export './chat/message_field_box.dart';
 export './shared/drawer_menu.dart';
 export './shared/expanded_icon.dart';
 export 'shared/dialog_delete.dart';
+
+export './update/update_dialog_widget.dart';

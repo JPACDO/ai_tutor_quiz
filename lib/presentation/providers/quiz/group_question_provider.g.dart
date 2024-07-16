@@ -96,7 +96,7 @@ final deleteQuestionOfGroupProvider =
 
 typedef DeleteQuestionOfGroupRef
     = AutoDisposeProviderRef<DeleteQuestionOfGoroupUseCase>;
-String _$groupQuestionHash() => r'4855bfea5c52a842fceebd028e5dac51a41254f1';
+String _$groupQuestionHash() => r'e49edc69006f1b2a02bdfadb685d66689fb2fa10';
 
 /// See also [GroupQuestion].
 @ProviderFor(GroupQuestion)

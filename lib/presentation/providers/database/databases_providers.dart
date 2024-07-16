@@ -18,3 +18,8 @@ IsarDatasource isarDatasource(IsarDatasourceRef ref) {
 IsarDatasource fakeDatasource(FakeDatasourceRef ref) {
   return FakeDbDatasource();
 }
+
+@riverpod
+UserPreferences sharePreferences(SharePreferencesRef ref) {
+  return UserPreferences();
+}

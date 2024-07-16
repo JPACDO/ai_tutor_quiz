@@ -4,3 +4,4 @@ export './quizzes/result_quiz_screen.dart';
 export './chat/chat_screen.dart';
 export './favorites/questions_of_list_screen.dart';
 export './favorites/take_quiz_saved_screen.dart';
+export './update_version/force_upgrade_page.dart';

@@ -1,25 +1,24 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'color_theme_provider.dart';
+part of 'prefs_provider.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$colorThemeHash() => r'78e7cb59153a852e8391b735e548d4efda75a8d4';
+String _$prefsHash() => r'96841747ab80254c9a84e2bac68bf47bedc13ca0';
 
-/// See also [ColorTheme].
-@ProviderFor(ColorTheme)
-final colorThemeProvider =
-    AutoDisposeNotifierProvider<ColorTheme, Color?>.internal(
-  ColorTheme.new,
-  name: r'colorThemeProvider',
+/// See also [prefs].
+@ProviderFor(prefs)
+final prefsProvider = AutoDisposeProvider<PrefsRepositoryImpl>.internal(
+  prefs,
+  name: r'prefsProvider',
   debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product') ? null : _$colorThemeHash,
+      const bool.fromEnvironment('dart.vm.product') ? null : _$prefsHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef _$ColorTheme = AutoDisposeNotifier<Color?>;
+typedef PrefsRef = AutoDisposeProviderRef<PrefsRepositoryImpl>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

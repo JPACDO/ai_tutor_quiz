@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ai_tutor_quiz/presentation/providers/providers.dart';
 import 'package:flex_color_picker/flex_color_picker.dart';
-import 'package:ai_tutor_quiz/presentation/providers/theme/color_theme_provider.dart';
 
 class DrawerMenu extends ConsumerWidget {
   const DrawerMenu({super.key});
@@ -20,12 +19,6 @@ class DrawerMenu extends ConsumerWidget {
                 ),
             child: Text('WELCOME TO AI TUTOR QUIZ'),
           ),
-          // const ListTile(
-          //   title: Text('Item 1'),
-          // ),
-          // const ListTile(
-          //   title: Text('Item 2'),
-          // ),
           const Spacer(),
           ListTile(
             title: const Text("Dark Mode"),

@@ -1,5 +1,6 @@
 import 'package:ai_tutor_quiz/domain/entities/entities.dart';
 import 'package:ai_tutor_quiz/domain/use_cases/use_case.dart';
+import 'package:ai_tutor_quiz/presentation/providers/prefs/prefs_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:ai_tutor_quiz/infrastructure/repositories/repositories.dart';
 import 'package:ai_tutor_quiz/presentation/providers/providers.dart';
@@ -65,18 +66,19 @@ class PromptQuiz extends _$PromptQuiz {
 class QuizParams extends _$QuizParams {
   @override
   Quiz build() {
-    return const Quiz(
+    return Quiz(
       type: {QuizType.multipleChoice},
       questions: [],
       language: 'From text',
       difficulty: 'medium',
       numberOfQuestions: 5,
-      instaFeedback: false,
+      instaFeedback: ref.read(prefsProvider).instafeed,
     );
   }
 
   void setParams(Quiz quiz) {
     // print(quiz);
+    ref.read(prefsProvider).instafeed = quiz.instaFeedback;
     state = quiz;
   }
 }

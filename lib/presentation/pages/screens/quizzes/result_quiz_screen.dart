@@ -21,6 +21,7 @@ class ResultQuizScreen extends ConsumerWidget {
       showNextButton: false,
       showAnswers: true,
       userResponse: ref.read(quizUserResponseProvider),
+      divider: true,
       onSave: (question) {
         return showModalBottomSheet(
             context: context,

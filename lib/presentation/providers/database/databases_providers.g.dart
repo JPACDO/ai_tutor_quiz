@@ -52,5 +52,20 @@ final fakeDatasourceProvider = AutoDisposeProvider<IsarDatasource>.internal(
 );
 
 typedef FakeDatasourceRef = AutoDisposeProviderRef<IsarDatasource>;
+String _$sharePreferencesHash() => r'4c1cd7cdc5c4d8f67ed55ce3dd763c68cf5c2327';
+
+/// See also [sharePreferences].
+@ProviderFor(sharePreferences)
+final sharePreferencesProvider = AutoDisposeProvider<UserPreferences>.internal(
+  sharePreferences,
+  name: r'sharePreferencesProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$sharePreferencesHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef SharePreferencesRef = AutoDisposeProviderRef<UserPreferences>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

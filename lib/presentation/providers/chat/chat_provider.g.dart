@@ -38,7 +38,7 @@ final getBotMessageProvider =
 );
 
 typedef GetBotMessageRef = AutoDisposeProviderRef<GetBotMessageUseCase>;
-String _$chatHash() => r'8b2ae644411457f8ee445fda96305d914a75dc8b';
+String _$chatHash() => r'934e5e5be3690d9add767f5e8017174458f28276';
 
 /// See also [Chat].
 @ProviderFor(Chat)

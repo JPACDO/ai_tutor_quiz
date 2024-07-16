@@ -1,5 +1,9 @@
 .env
 enviroment.g.dart
+/android
+key.properties
+android/app/src/main/AndroidManifest.xml
+firebase.json
 
 # Miscellaneous
 *.class
