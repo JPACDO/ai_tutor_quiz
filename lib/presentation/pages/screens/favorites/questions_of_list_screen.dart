@@ -35,6 +35,7 @@ class _QuestionsOfListState extends ConsumerState<QuestionsOfList> {
         actions: [
           IconButton(
             onPressed: () {
+              ref.read(quizUserResponseProvider.notifier).reset();
               context.pushNamed(TakeQuizSaved.name, extra: widget.group);
             },
             icon: const Row(

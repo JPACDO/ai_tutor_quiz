@@ -6,6 +6,8 @@ import 'package:ai_tutor_quiz/presentation/widgets/widgets.dart';
 class ForceUpgradePage extends StatefulWidget {
   const ForceUpgradePage({super.key});
 
+  static String get routeName => 'force_upgrade_page';
+
   @override
   State<ForceUpgradePage> createState() => _ForceUpgradeState();
 }

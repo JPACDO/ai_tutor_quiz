@@ -18,6 +18,7 @@ import 'package:ai_tutor_quiz/domain/entities/entities.dart';
 ///   questions.
 /// - [showSaveicon]: a boolean indicating whether the save icon should be shown.
 /// - [padding]: an optional padding value for the widget.
+/// - [divider]: a boolean indicating whether a divider should be shown between each question.
 List<Widget> interactiveQuestions(
     {required List<Question> quiz,
     Function(Question)? onNextPage,
@@ -86,11 +87,9 @@ class _InteractiveQuestionState extends State<InteractiveQuestion> {
 
   @override
   Widget build(BuildContext context) {
-    final bool instaFeed =
-        widget.instaFeed; //ref.read(quizParamsProvider).instaFeedback;
-    // final userResponse = widget.userResponse ??
-    // userResponseInt; //ref.watch(quizUserResponseProvider);
-
+    var brightness = Theme.of(context).brightness;
+    bool isDarkMode = brightness == Brightness.dark;
+    final bool instaFeed = widget.instaFeed;
     final int? selected = widget.userResponse != null
         ? (widget.userResponse!.length > widget.index)
             ? widget.userResponse![widget.index]
@@ -110,12 +109,14 @@ class _InteractiveQuestionState extends State<InteractiveQuestion> {
           Text(alternative, style: const TextStyle(fontSize: 18.0));
 
       if (selected == indexAlternative) {
-        color = Colors.orangeAccent.shade100;
+        color = isDarkMode
+            ? Colors.deepOrange.shade900
+            : Colors.orangeAccent.shade100;
       }
 
       if (isLocked &&
           (widget.question.correctAnswerIndex == indexAlternative)) {
-        color = Colors.green.shade100;
+        color = isDarkMode ? Colors.green.shade900 : Colors.green.shade100;
         alternativeWidget = Row(
           children: [
             const Icon(Icons.check),
@@ -132,7 +133,8 @@ class _InteractiveQuestionState extends State<InteractiveQuestion> {
                 const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
             margin: const EdgeInsets.all(5.0),
             decoration: BoxDecoration(
-                border: Border.all(),
+                border:
+                    Border.all(color: Theme.of(context).colorScheme.secondary),
                 // borderRadius: BorderRadius.circular(20.0),
                 color: color),
             child: Column(
@@ -191,8 +193,6 @@ class _InteractiveQuestionState extends State<InteractiveQuestion> {
             const SizedBox(height: 20),
             ...alternatives,
             const SizedBox(height: 20),
-            // Text(widget.question.correctAnswerIndex.toString()),
-            // Text(widget.question.type.toString()),
             widget.showNextButton ? const SizedBox(height: 50) : Container(),
             ((selected != null || isOpenAnswer) && widget.showNextButton)
                 ? Center(
@@ -203,9 +203,6 @@ class _InteractiveQuestionState extends State<InteractiveQuestion> {
                             userResponseInt = 0;
                             setState(() {});
                             widget.onPressAnswer(widget.index, 0);
-                            // ref
-                            //     .read(quizUserResponseProvider.notifier)
-                            //     .setResponse(index: widget.index, response: 0);
                             return;
                           }
 

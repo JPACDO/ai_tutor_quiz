@@ -18,6 +18,7 @@ class UserPreferences extends PreferencesDatasource {
     _prefs = await SharedPreferences.getInstance();
   }
 
+  // IS NEW USER
   @override
   bool get newUser {
     return _prefs.getBool('newUser') ?? true;
@@ -28,7 +29,7 @@ class UserPreferences extends PreferencesDatasource {
     _prefs.setBool('newUser', value);
   }
 
-  // DARK MODE
+  // IS DARK MODE
   @override
   bool get isDark {
     return _prefs.getBool('isDark') ?? false;
