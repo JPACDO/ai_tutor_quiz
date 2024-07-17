@@ -101,7 +101,7 @@ class _QuizGeneratorViewState extends ConsumerState<QuizGeneratorView> {
                       }
 
                       if (!context.mounted) return;
-                      ref.read(quizUserResponseProvider.notifier).reset();
+
                       context.pushNamed(QuizLoadScreen.name);
                     },
                     icon: const Icon(Icons.rocket_launch),

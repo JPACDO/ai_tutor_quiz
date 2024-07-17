@@ -20,6 +20,12 @@ class _TakeQuizState extends ConsumerState<TakeQuiz> {
       PageController(initialPage: 0, keepPage: true);
 
   @override
+  void initState() {
+    super.initState();
+    ref.read(quizUserResponseProvider.notifier).reset();
+  }
+
+  @override
   void dispose() {
     pageController.dispose();
     super.dispose();

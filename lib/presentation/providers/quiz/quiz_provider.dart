@@ -102,8 +102,8 @@ class QuizUserResponse extends _$QuizUserResponse {
     // print(state);
   }
 
-  void reset() {
-    state = [];
+  void reset() async {
+    state = await Future.value([]);
   }
 
   Map<String, int> calculateResult(List<Question> quiz) {
