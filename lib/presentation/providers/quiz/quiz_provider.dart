@@ -116,8 +116,12 @@ class QuizUserResponse extends _$QuizUserResponse {
     };
 
     results['total'] = state.length;
+    print('calculateResult');
+    print('state: $state, state.length: ${state.length}');
+    print('quiz: $quiz, quiz.length: ${quiz.length}');
 
     for (var i = 0; i < state.length; i++) {
+      print('i: $i');
       if (quiz[i].type == QuizType.openAnswer) {
         results['open'] = results['open']! + 1;
         results['correct'] = results['correct']! + 1;

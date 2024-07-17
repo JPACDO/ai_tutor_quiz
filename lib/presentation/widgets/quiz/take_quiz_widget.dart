@@ -20,6 +20,12 @@ class _TakeQuizState extends ConsumerState<TakeQuiz> {
       PageController(initialPage: 0, keepPage: true);
 
   @override
+  void initState() {
+    super.initState();
+    ref.read(quizUserResponseProvider.notifier).reset();
+  }
+
+  @override
   void dispose() {
     pageController.dispose();
     super.dispose();
@@ -34,6 +40,7 @@ class _TakeQuizState extends ConsumerState<TakeQuiz> {
       showAnswers: false,
       onNextPage: (Question question) {
         if (question == widget.questions.last) {
+          print(widget.questions);
           context.pushReplacementNamed(ResultQuizScreen.name,
               extra: widget.questions);
           return;
@@ -42,6 +49,7 @@ class _TakeQuizState extends ConsumerState<TakeQuiz> {
             duration: const Duration(milliseconds: 500), curve: Curves.ease);
       },
       onPressAnswer: (index, response) {
+        print('index: $index, response: $response');
         ref
             .read(quizUserResponseProvider.notifier)
             .setResponse(index: index, response: response);

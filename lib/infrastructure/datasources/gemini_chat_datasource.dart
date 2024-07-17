@@ -17,7 +17,7 @@ import '../../domain/entities/entities.dart';
 
 class GeminiChatDatasource implements MessageDatasource, QuestionDatasource {
   final model = GenerativeModel(
-    model: 'gemini-1.5-flash',
+    model: 'gemini-1.5-flash-latest',
     apiKey: Env.geminiKey,
     generationConfig: GenerationConfig(
       temperature: 1.0,
@@ -71,7 +71,7 @@ class GeminiChatDatasource implements MessageDatasource, QuestionDatasource {
       var content = await promtToContent(mainPrompt, imageUrl);
 
       var response = await chat.sendMessage(content);
-      // print(response.text);
+      print(response.text);
       if (response.text == null) return null;
 
       final String jsonExtractor =
@@ -81,8 +81,8 @@ class GeminiChatDatasource implements MessageDatasource, QuestionDatasource {
 
       return geminiMsgResponse.toDomain();
     } catch (e) {
-      // print('ERROR RESPONSE:');
-      // print(e);
+      print('ERROR RESPONSE:');
+      print(e);
       if (e.toString() ==
           "GenerativeAIException: Candidate was blocked due to recitation") {
         const String jsonExtractor =
@@ -145,11 +145,11 @@ class GeminiChatDatasource implements MessageDatasource, QuestionDatasource {
 
     final List<Question> questionsGenerated = [];
 
-    GenerateContentResponse response;
+    var response;
 
     try {
       response = await chat.sendMessage(content);
-      extraerJSON(response.text!);
+      extraerJSON(response.text);
     } catch (e) {
       print('ERROR RESPONSE:');
       print(e);
@@ -163,7 +163,7 @@ class GeminiChatDatasource implements MessageDatasource, QuestionDatasource {
               await chat.sendMessage(Content.text('one more question please'));
         }
 
-        final String? jsonExtractor = extraerJSON(response.text!);
+        final String? jsonExtractor = extraerJSON(response.text);
 
         if (jsonExtractor == null) continue;
 

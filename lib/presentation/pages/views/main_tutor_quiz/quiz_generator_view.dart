@@ -64,7 +64,7 @@ class _QuizGeneratorViewState extends ConsumerState<QuizGeneratorView> {
                 ),
                 Positioned(
                   right: -10,
-                  top: -10,
+                  top: -11,
                   child: IconButton(
                     onPressed: () {
                       _controller.clear();

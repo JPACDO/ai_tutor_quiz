@@ -15,6 +15,8 @@ class ResultQuizScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final results =
         ref.read(quizUserResponseProvider.notifier).calculateResult(quiz);
+
+    print('resut screen result: $results');
     final List<Widget> questionWidget = interactiveQuestions(
       instaFeed: true,
       quiz: quiz,
@@ -37,7 +39,7 @@ class ResultQuizScreen extends ConsumerWidget {
       appBar: AppBar(
         leading: BackButton(
           onPressed: () {
-            ref.invalidate(quizUserResponseProvider);
+            ref.read(quizUserResponseProvider.notifier).reset;
             context.pop();
             // context.go('/home/1');
           },
