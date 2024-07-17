@@ -4,21 +4,23 @@ import 'package:ai_tutor_quiz/domain/entities/entities.dart';
 /// Creates a list of [InteractiveQuestion] widgets from a list of [Question]s.
 ///
 /// The function takes in several parameters:
-/// - [quiz]: the list of questions to be displayed.
-/// - [onNextPage]: an optional callback function that is called when the user
+/// - [quiz] : the list of questions to be displayed.
+/// - [onNextPage] : an optional callback function that is called when the user
 ///   clicks the 'Next' button.
-/// - [showNextButton]: a boolean indicating whether the 'Next' button should be
+/// - [showNextButton] : a boolean indicating whether the 'Next' button should be
 ///   visible.
-/// - [showAnswers]: a boolean indicating whether the answers should be shown inmediately.
-/// - [instaFeed]: a boolean indicating whether the feedback should be instant.
-/// - [onPressAnswer]: an optional callback function that is called when the user
+/// - [showAnswers] : a boolean indicating whether the answers should be shown inmediately.
+/// - [instaFeed] : a boolean indicating whether the feedback should be instant.
+/// - [onPressAnswer] : an optional callback function that is called when the user
 ///   selects an answer. The function takes in two parameters: the index of the
 ///   question and the index of the selected answer. Function (int index, int response)? onPressAnswer,
-/// - [userResponse]: a list of integers representing the user's responses to the
+/// - [userResponse] : a list of integers representing the user's responses to the
 ///   questions.
-/// - [showSaveicon]: a boolean indicating whether the save icon should be shown.
-/// - [padding]: an optional padding value for the widget.
-/// - [divider]: a boolean indicating whether a divider should be shown between each question.
+/// - [onSave] : an optional callback function that is called when the user clicks
+///   the 'Save' button. If it is not provided, the button will not be displayed.
+/// - [padding] : an optional padding value for the widget.
+/// - [divider] : a boolean indicating whether a divider should be shown between
+///   each question.
 List<Widget> interactiveQuestions(
     {required List<Question> quiz,
     Function(Question)? onNextPage,

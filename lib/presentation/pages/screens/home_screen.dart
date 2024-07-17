@@ -1,4 +1,3 @@
-import 'package:ai_tutor_quiz/presentation/pages/views/main_tutor_quiz/favorites_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ai_tutor_quiz/presentation/pages/views/views.dart';

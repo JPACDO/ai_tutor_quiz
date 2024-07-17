@@ -1,5 +1,29 @@
 import 'package:flutter/material.dart';
 
+/// A button that shows a dropdown menu when pressed.
+///
+/// This widget is used to create a dropdown menu that appears when a button is
+/// pressed.
+///
+/// The [children] parameter is a list of widgets that will be displayed in the
+/// dropdown menu.
+///
+/// The [iconOpen] parameter is an optional icon that will be displayed when
+/// the dropdown menu is open. If not provided, a [iconClosed] will be used.
+///
+/// The [iconClosed] parameter is an required icon that will be displayed when
+/// the dropdown menu is closed.
+///
+/// The [decoration] parameter is an optional decoration that can be used to
+/// customize the appearance of the elements in the dropdown menu.
+///
+/// The [offset] parameter is an optional offset that can be used to customize
+/// the position of the dropdown menu.
+///
+/// The [separation] parameter is the distance between the elements in the
+/// dropdown menu.
+///
+/// The [elevation] parameter is the elevation of the dropdown menu.
 class IconButtonDropdown extends StatefulWidget {
   const IconButtonDropdown(
       {super.key,
@@ -10,12 +34,29 @@ class IconButtonDropdown extends StatefulWidget {
       this.offset,
       this.separation = 5.0,
       this.elevation = 2.0});
+
+  /// The list of widgets that will be displayed in the dropdown menu.
   final List<Widget> children;
+
+  /// An optional icon that will be displayed when the dropdown menu is open.
+  /// If not provided, a [iconClosed] will be used.
   final Icon? iconOpen;
+
+  /// An optional icon that will be displayed when the dropdown menu is closed.
   final Icon iconClosed;
+
+  /// An optional decoration that can be used to customize the appearance of the
+  /// elements in the dropdown menu.
   final BoxDecoration? decoration;
+
+  /// An optional offset that can be used to customize the position of the
+  /// dropdown menu.
   final Offset? offset;
+
+  /// The distance between the elements in the dropdown menu.
   final double separation;
+
+  /// The elevation of the dropdown menu.
   final double elevation;
 
   @override

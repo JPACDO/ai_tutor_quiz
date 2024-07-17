@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:ai_tutor_quiz/domain/entities/chat/message.dart';
+import 'package:ai_tutor_quiz/presentation/widgets/chat/image_viewer.dart';
 import 'package:flutter/material.dart';
 
 class MyMessageBubble extends StatelessWidget {
@@ -56,26 +57,7 @@ class _ImageBubble extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        showDialog(
-          context: context,
-          builder: (context) => AlertDialog(
-            content: InteractiveViewer(
-              panEnabled: false, // Set it to false
-              boundaryMargin: const EdgeInsets.all(100),
-              minScale: 0.5,
-              maxScale: 2,
-              child: Image.file(
-                File(imageUrl),
-              ),
-            ),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.of(context).pop(),
-                child: const Text('Ok'),
-              ),
-            ],
-          ),
-        );
+        showImagerViewer(context, imageUrl);
       },
       child: Image.file(
         File(imageUrl),

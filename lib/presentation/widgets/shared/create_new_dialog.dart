@@ -1,6 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+/// Shows a dialog to create a new item.
+///
+/// This function displays an [AlertDialog] with a title and a [CreateGroupDialog]
+/// widget as its content. The [title] parameter is the title of the dialog.
+/// The [fieldText] parameter is the initial text in the text field.
+/// The [onSubmit] parameter is the function that will be called when the submit button is pressed.
+///
+/// The [context] parameter is the build context of the widget that called this function.
+/// Returns a [Future] that completes when the dialog is dismissed.
 Future<void> dialogCreateNew(
     {required BuildContext context,
     required String title,
@@ -9,12 +18,14 @@ Future<void> dialogCreateNew(
   return showDialog(
       context: context,
       builder: (BuildContext context) {
+        // Create the content of the dialog
         return AlertDialog(
-            title: Text(title),
-            content: CreateGroupDialog(
-              onSubmit: onSubmit,
-              text: fieldText,
-            ));
+          title: Text(title), // Set the title of the dialog
+          content: CreateGroupDialog(
+            onSubmit: onSubmit, // Set the onSubmit function
+            text: fieldText, // Set the initial text
+          ),
+        );
       });
 }
 

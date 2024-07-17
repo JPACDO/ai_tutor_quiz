@@ -1,10 +1,10 @@
+import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ai_tutor_quiz/domain/entities/entities.dart';
 import 'package:ai_tutor_quiz/presentation/pages/screens/screens.dart';
 import 'package:ai_tutor_quiz/presentation/widgets/widgets.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ai_tutor_quiz/presentation/providers/providers.dart';
-import 'package:go_router/go_router.dart';
 
 class QuizGeneratorView extends ConsumerStatefulWidget {
   const QuizGeneratorView({super.key});
@@ -144,11 +144,6 @@ class _QuizGeneratorViewState extends ConsumerState<QuizGeneratorView> {
             ],
           );
         });
-    // return showModalBottomSheet(
-    //     context: context,
-    //     builder: (context) {
-    //       return const _ModalBottomSheet();
-    //     });
   }
 }
 

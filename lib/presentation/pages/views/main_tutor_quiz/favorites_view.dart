@@ -1,5 +1,3 @@
-import 'package:ai_tutor_quiz/config/constants/values.dart';
-import 'package:ai_tutor_quiz/presentation/widgets/shared/tile_edit_delete.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -7,6 +5,7 @@ import 'package:ai_tutor_quiz/presentation/pages/screens/screens.dart';
 import 'package:ai_tutor_quiz/presentation/providers/providers.dart';
 import 'package:ai_tutor_quiz/presentation/widgets/widgets.dart';
 import 'package:ai_tutor_quiz/domain/entities/entities.dart';
+import 'package:ai_tutor_quiz/config/constants/values.dart';
 
 class FavoritesView extends ConsumerStatefulWidget {
   const FavoritesView({super.key});

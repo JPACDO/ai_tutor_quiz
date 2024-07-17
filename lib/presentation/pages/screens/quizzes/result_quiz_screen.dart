@@ -16,7 +16,6 @@ class ResultQuizScreen extends ConsumerWidget {
     final results =
         ref.read(quizUserResponseProvider.notifier).calculateResult(quiz);
 
-    print('resut screen result: $results');
     final List<Widget> questionWidget = interactiveQuestions(
       instaFeed: true,
       quiz: quiz,

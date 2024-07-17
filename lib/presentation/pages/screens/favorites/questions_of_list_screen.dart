@@ -1,7 +1,7 @@
-import 'package:ai_tutor_quiz/presentation/providers/providers.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:ai_tutor_quiz/presentation/providers/providers.dart';
 import 'package:ai_tutor_quiz/presentation/pages/screens/screens.dart';
 import 'package:ai_tutor_quiz/domain/entities/entities.dart';
 import 'package:ai_tutor_quiz/presentation/widgets/widgets.dart';

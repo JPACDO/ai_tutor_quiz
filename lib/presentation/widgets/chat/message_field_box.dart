@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:ai_tutor_quiz/presentation/widgets/chat/image_viewer.dart';
 import 'package:ai_tutor_quiz/presentation/widgets/shared/expanded_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -172,26 +173,7 @@ class ImagePreview extends StatelessWidget {
     return Stack(children: [
       InkWell(
         onTap: () {
-          showDialog(
-            context: context,
-            builder: (context) => AlertDialog(
-              content: InteractiveViewer(
-                panEnabled: false, // Set it to false
-                boundaryMargin: const EdgeInsets.all(100),
-                minScale: 0.5,
-                maxScale: 2,
-                child: Image.file(
-                  File(image.path),
-                ),
-              ),
-              actions: [
-                TextButton(
-                  onPressed: () => Navigator.of(context).pop(),
-                  child: const Text('Ok'),
-                ),
-              ],
-            ),
-          );
+          showImagerViewer(context, image.path);
         },
         child: Image.file(
           File(image.path),
