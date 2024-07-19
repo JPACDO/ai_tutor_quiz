@@ -71,6 +71,8 @@ class GeminiChatDatasource implements MessageDatasource, QuestionDatasource {
       var content = await promtToContent(mainPrompt, imageUrl);
 
       var response = await chat.sendMessage(content);
+      print('RESPONSE:');
+      print(response);
       print(response.text);
       if (response.text == null) return null;
 

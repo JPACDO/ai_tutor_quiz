@@ -62,12 +62,6 @@ class Chat extends _$Chat {
 
   Future<void> getResponseMessage(
       {required String prompt, String? imgUrl, required Topic topic}) async {
-    // //////// GUARDAR IMAGEN ANTES DE ENVIAR MENSAJE EN EL CODIGO SCREEN
-    // addMessage(
-    //     message: Message(
-    //         id: '1', content: prompt, sender: SenderType.user, imgUrl: imgUrl));
-    // final chatsesson = ref.read(chatStreamProvider);
-
     loadingResponse();
     ref.read(chatScrollControllerProvider.notifier).moveScrollToBottom();
 
@@ -75,9 +69,6 @@ class Chat extends _$Chat {
         .read(getBotMessageProvider) // useCase  getBotMessage
         .call(data: prompt, imgUrl: imgUrl, topic: topic);
 
-    // final message = await ref
-    //     .read(chatStreamProvider.notifier)
-    //     .getSimpleResponseStream(prompt);
     removeLastMessage();
     if (message == null) return;
 
@@ -102,8 +93,6 @@ class ChatScrollController extends _$ChatScrollController {
   Future<void> moveScrollToBottom() async {
     await Future.delayed(const Duration(milliseconds: 100));
 
-    // state.animateTo(state.position.maxScrollExtent,
-    //     duration: const Duration(milliseconds: 300), curve: Curves.easeOut);
     state.animateTo(state.position.minScrollExtent,
         duration: const Duration(milliseconds: 300), curve: Curves.easeOut);
   }

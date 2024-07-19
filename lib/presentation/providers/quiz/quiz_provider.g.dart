@@ -77,7 +77,7 @@ final quizParamsProvider = NotifierProvider<QuizParams, Quiz>.internal(
 );
 
 typedef _$QuizParams = Notifier<Quiz>;
-String _$quizUserResponseHash() => r'8cc400da6031218f5f4b8ba9c099372f38b1d803';
+String _$quizUserResponseHash() => r'0f9aa2a47d5f82818291b3ea0900e20b324bfca9';
 
 /// See also [QuizUserResponse].
 @ProviderFor(QuizUserResponse)

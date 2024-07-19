@@ -164,10 +164,10 @@ class _ModalBottomSheetState extends ConsumerState<_MenuDialog> {
     const int maxNumberOfQuestions = 5;
 
     return SingleChildScrollView(
-      child: Container(
+      child: SizedBox(
         // height: 300,
         width: double.infinity,
-        padding: const EdgeInsets.all(20),
+        // padding: const EdgeInsets.all(20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

@@ -76,9 +76,14 @@ class _ChatViewState extends ConsumerState<_ChatView> {
                           ? MyMessageBubble(
                               message: message,
                               isLast: index == 0,
-                              onResent: () => _sendToIA(
-                                  message.content, chatTopic, message.imgUrl),
-                            )
+                              onResent: () {
+                                final history = [...chatTopic.messages];
+                                history.removeLast();
+                                _sendToIA(
+                                    'try to: ${message.content}',
+                                    chatTopic.copyWith(messages: history),
+                                    message.imgUrl);
+                              })
                           : NoMyMessageBubble(message: message);
                     })),
             const SizedBox(height: 5),
