@@ -9,10 +9,10 @@ part 'quiz_provider.g.dart';
 
 // REPOSITORY PROVIDER  -----------------------------------------------------
 @riverpod
-QuizRepositoryImpl quizRepository(QuizRepositoryRef ref) {
+QuiestionRepositoryImpl quizRepository(QuizRepositoryRef ref) {
   final geminiChatDatasource = ref.read(geminiChatDatasourceProvider);
 
-  return QuizRepositoryImpl(geminiChatDatasource);
+  return QuiestionRepositoryImpl(geminiChatDatasource);
 }
 
 // USE CASE PROVIDER ---------------------------------------------------------

@@ -10,7 +10,8 @@ String _$quizRepositoryHash() => r'668099836ab630d6ed45de25784ae363ddc72394';
 
 /// See also [quizRepository].
 @ProviderFor(quizRepository)
-final quizRepositoryProvider = AutoDisposeProvider<QuizRepositoryImpl>.internal(
+final quizRepositoryProvider =
+    AutoDisposeProvider<QuiestionRepositoryImpl>.internal(
   quizRepository,
   name: r'quizRepositoryProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
@@ -20,7 +21,7 @@ final quizRepositoryProvider = AutoDisposeProvider<QuizRepositoryImpl>.internal(
   allTransitiveDependencies: null,
 );
 
-typedef QuizRepositoryRef = AutoDisposeProviderRef<QuizRepositoryImpl>;
+typedef QuizRepositoryRef = AutoDisposeProviderRef<QuiestionRepositoryImpl>;
 String _$getBotQuizHash() => r'ad09d1bbc9ef19d7672108cc44cb6402dd43e18e';
 
 /// See also [getBotQuiz].

@@ -1,6 +1,6 @@
-import 'package:ai_tutor_quiz/domain/entities/entities.dart';
+import '../../entities/entities.dart';
 
-abstract class QuestionDatasource {
+abstract class QuestionRepository {
   Future<List<Question>> getQuestionsFromBot(
       {required String prompt, required Quiz quiz});
 }

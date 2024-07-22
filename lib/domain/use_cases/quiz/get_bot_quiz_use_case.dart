@@ -1,5 +1,5 @@
 import '../../entities/entities.dart';
-import '../../repositories/quiz/quiz_repository.dart';
+import '../../repositories/quiz/question_repository.dart';
 import '../base_usecase.dart';
 
 /// Use case to get a bot quiz based on a prompt and a quiz.
@@ -11,7 +11,7 @@ import '../base_usecase.dart';
 ///
 /// It returns a [Future] that completes with a list of [Question] objects.
 class GetBotQuizUseCase extends BaseUseCase<List<Question>, String> {
-  final QuizRepository _quizRepository;
+  final QuestionRepository _quizRepository;
   GetBotQuizUseCase(this._quizRepository);
 
   /// [data] = prompt
@@ -19,6 +19,6 @@ class GetBotQuizUseCase extends BaseUseCase<List<Question>, String> {
   Future<List<Question>> call({required String data, Quiz? quiz}) async {
     if (quiz == null) throw Exception('Quiz null');
 
-    return await _quizRepository.getBotQuiz(prompt: data, quiz: quiz);
+    return await _quizRepository.getQuestionsFromBot(prompt: data, quiz: quiz);
   }
 }

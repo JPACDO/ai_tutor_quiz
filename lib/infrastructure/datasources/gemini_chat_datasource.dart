@@ -122,7 +122,7 @@ class GeminiChatDatasource implements MessageDatasource, QuestionDatasource {
   }
 
   @override
-  Future<List<Question>> getQuizFromBot(
+  Future<List<Question>> getQuestionsFromBot(
       {required String prompt, required Quiz quiz}) async {
     final List<String> questionsType =
         quiz.type.map((e) => e.toString()).toList();
